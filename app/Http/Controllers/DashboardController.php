@@ -48,14 +48,14 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
         
-        // Monthly trends (last 6 months) - SQLite compatible
-        $monthlyIncome = Income::selectRaw('strftime("%Y-%m", income_date) as month, SUM(amount) as total')
+        // Monthly trends (last 6 months) - MySQL compatible
+        $monthlyIncome = Income::selectRaw("DATE_FORMAT(income_date, '%Y-%m') as month, SUM(amount) as total")
             ->where('income_date', '>=', now()->subMonths(6))
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-            
-        $monthlyExpenses = Expense::selectRaw('strftime("%Y-%m", expense_date) as month, SUM(amount) as total')
+
+        $monthlyExpenses = Expense::selectRaw("DATE_FORMAT(expense_date, '%Y-%m') as month, SUM(amount) as total")
             ->where('expense_date', '>=', now()->subMonths(6))
             ->groupBy('month')
             ->orderBy('month')
