@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customers - Al Nafi Travels</title>
+    <link rel="stylesheet" href="/css/responsive.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
@@ -17,8 +18,8 @@
         .btn-success:hover { background: #059669; }
         .btn-danger { background: #ef4444; color: white; }
         .btn-danger:hover { background: #dc2626; }
-        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; }
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; vertical-align: middle; }
         th { background: #f8fafc; font-weight: 600; color: #666; }
         .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
@@ -27,6 +28,27 @@
         .actions { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; }
         nav a { color: white; text-decoration: none; margin-right: 20px; opacity: 0.9; }
         nav a:hover { opacity: 1; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            header { flex-direction: column; align-items: flex-start; padding: 15px; }
+            header h1 { font-size: 20px; margin-bottom: 10px; }
+            nav { display: flex; flex-wrap: wrap; gap: 10px; }
+            nav a { margin-right: 0; font-size: 13px; }
+            .card { padding: 15px; }
+            table { font-size: 13px; }
+            th, td { padding: 8px 6px; }
+            .btn { padding: 4px 10px; font-size: 12px; }
+            .actions { gap: 5px; }
+        }
+        
+        @media (max-width: 480px) {
+            header h1 { font-size: 18px; }
+            nav a { font-size: 12px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px 4px; }
+            .btn { padding: 3px 8px; font-size: 11px; }
+        }
     </style>
 </head>
 <body>

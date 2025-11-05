@@ -1,0 +1,127 @@
+/* Mobile Responsive Styles for Al Nafi Travels */
+@media (max-width: 768px) {
+    .container { 
+        padding: 10px !important; 
+    }
+    
+    header { 
+        flex-direction: column !important; 
+        align-items: flex-start !important; 
+        padding: 15px !important; 
+    }
+    
+    header h1 { 
+        font-size: 20px !important; 
+        margin-bottom: 10px !important; 
+    }
+    
+    nav { 
+        display: flex !important; 
+        flex-wrap: wrap !important; 
+        gap: 10px !important; 
+    }
+    
+    nav a { 
+        margin-right: 0 !important; 
+        font-size: 13px !important; 
+    }
+    
+    .card { 
+        padding: 15px !important; 
+        overflow-x: auto !important;
+    }
+    
+    table { 
+        font-size: 13px !important; 
+        min-width: 600px !important;
+    }
+    
+    th, td { 
+        padding: 8px 6px !important; 
+    }
+    
+    .btn { 
+        padding: 4px 10px !important; 
+        font-size: 12px !important; 
+    }
+    
+    .actions { 
+        gap: 5px !important; 
+    }
+    
+    .summary { 
+        grid-template-columns: 1fr !important; 
+        gap: 15px !important; 
+    }
+    
+    .stats-grid { 
+        grid-template-columns: 1fr !important; 
+        gap: 15px !important; 
+    }
+    
+    .form-group { 
+        margin-bottom: 15px !important; 
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+        font-size: 16px !important; /* Prevents auto-zoom on iOS */
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 { 
+        font-size: 18px !important; 
+    }
+    
+    nav a { 
+        font-size: 12px !important; 
+    }
+    
+    table { 
+        font-size: 12px !important; 
+    }
+    
+    th, td { 
+        padding: 6px 4px !important; 
+    }
+    
+    .btn { 
+        padding: 3px 8px !important; 
+        font-size: 11px !important; 
+    }
+    
+    .stat-card { 
+        padding: 15px !important; 
+    }
+    
+    .stat-value { 
+        font-size: 20px !important; 
+    }
+}
+
+/* Ensure tables are scrollable on mobile */
+.card {
+    overflow-x: auto;
+}
+
+table {
+    min-width: 600px;
+}
+
+/* Better touch targets for mobile */
+@media (hover: none) and (pointer: coarse) {
+    .btn,
+    a,
+    button {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
