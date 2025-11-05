@@ -8,6 +8,7 @@
         flex-direction: column !important; 
         align-items: flex-start !important; 
         padding: 15px !important; 
+        gap: 15px !important;
     }
     
     header h1 { 
@@ -16,14 +17,29 @@
     }
     
     nav { 
-        display: flex !important; 
-        flex-wrap: wrap !important; 
-        gap: 10px !important; 
+        display: grid !important; 
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important; 
+        width: 100% !important;
     }
     
     nav a { 
         margin-right: 0 !important; 
         font-size: 13px !important; 
+        padding: 8px 12px !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 6px !important;
+        text-align: center !important;
+        display: block !important;
+    }
+    
+    header .btn-success,
+    header .btn-primary,
+    header .btn {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 10px 15px !important;
+        margin-top: 10px !important;
     }
     
     .card { 
@@ -78,8 +94,12 @@
         font-size: 18px !important; 
     }
     
+    nav { 
+        grid-template-columns: 1fr !important;
+    }
+    
     nav a { 
-        font-size: 12px !important; 
+        font-size: 13px !important; 
     }
     
     table { 
@@ -109,8 +129,55 @@
     overflow-x: auto;
 }
 
+.recent-section {
+    overflow-x: auto;
+}
+
 table {
     min-width: 600px;
+}
+
+/* Dashboard specific mobile styles */
+@media (max-width: 768px) {
+    .stats {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .menu {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    .menu-item {
+        padding: 15px 10px !important;
+    }
+    
+    .menu-item .icon {
+        font-size: 24px !important;
+    }
+    
+    .menu-item .label {
+        font-size: 13px !important;
+    }
+    
+    .recent-section {
+        padding: 15px !important;
+        overflow-x: auto !important;
+    }
+    
+    .recent-section h2 {
+        font-size: 18px !important;
+        margin-bottom: 15px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .stat-card .value {
+        font-size: 24px !important;
+    }
 }
 
 /* Better touch targets for mobile */
