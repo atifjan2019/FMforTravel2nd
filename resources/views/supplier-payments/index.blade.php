@@ -41,6 +41,4 @@
             </div>
             @endif
         </div>
-    </div>
-<script
 </x-layout>

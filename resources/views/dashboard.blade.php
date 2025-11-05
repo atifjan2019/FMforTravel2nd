@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al Nafi Travels - Financial Dashboard</title>
-    <link rel="stylesheet" href="/css/responsive.css">
+<x-layout title="Dashboard - Al Nafi Travels">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header h1 { font-size: 32px; margin-bottom: 5px; }
-        header p { opacity: 0.9; }
+        .dashboard-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
+        .dashboard-header h1 { font-size: 32px; margin-bottom: 5px; }
+        .dashboard-header p { opacity: 0.9; font-size: 14px; }
+        .hamburger-menu { position: absolute; top: 20px; right: 20px; }
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .stat-card h3 { color: #666; font-size: 14px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
@@ -27,6 +19,15 @@
         
         /* Override for mobile - force 2 columns */
         @media (max-width: 768px) {
+            .dashboard-header { padding: 20px; text-align: center; }
+            .dashboard-header h1 { display: none !important; } /* Hide main title on mobile */
+            .dashboard-header p { font-size: 16px !important; opacity: 1 !important; font-weight: 600 !important; }
+            
+            .stats { grid-template-columns: 1fr !important; gap: 15px; }
+            .stat-card { padding: 20px; }
+            .stat-card h3 { font-size: 12px !important; }
+            .stat-card .value { font-size: 24px !important; }
+            
             .menu { 
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 12px !important;
@@ -44,12 +45,23 @@
         }
         
         @media (max-width: 480px) {
+            .dashboard-header { padding: 15px; text-align: center; }
+            .dashboard-header h1 { display: none !important; } /* Hide main title on small mobile */
+            .dashboard-header p { font-size: 14px !important; opacity: 1 !important; font-weight: 600 !important; }
+            
+            .stat-card { padding: 15px; }
+            .stat-card h3 { font-size: 11px !important; }
+            .stat-card .value { font-size: 20px !important; }
+            
             .menu-item .icon {
                 font-size: 24px !important;
             }
             .menu-item .label {
                 font-size: 11px !important;
             }
+            
+            .recent-section { padding: 15px; }
+            .recent-section h2 { font-size: 16px !important; }
         }
         .recent-section { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .recent-section h2 { margin-bottom: 20px; color: #333; }
@@ -61,13 +73,11 @@
         .badge-warning { background: #fef3c7; color: #92400e; }
         footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
     </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🌍 Al Nafi Travels</h1>
-            <p>Financial Management System - Dashboard ({{ now()->format('F Y') }})</p>
-        </header>
+
+    <header class="dashboard-header">
+        <h1>🌍 Al Nafi Travels</h1>
+        <p>Financial Management System - Dashboard ({{ now()->format('F Y') }})</p>
+    </header>
 
         <div class="stats">
             <div class="stat-card">
@@ -160,7 +170,4 @@
         <footer>
             <p>&copy; 2025 Al Nafi Travels. Financial Management System.</p>
         </footer>
-    </div>
-<script src="/js/mobile-menu.js"></script>
-</body>
-</html>
+</x-layout>

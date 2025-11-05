@@ -50,6 +50,4 @@
                 </tbody>
             </table>
         </div>
-    </div>
-<script
 </x-layout>

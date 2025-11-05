@@ -1,45 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reports - Al Nafi Travels</title>
-    <link rel="stylesheet" href="/css/responsive.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; }
-        header h1 { font-size: 32px; margin-bottom: 5px; }
-        header p { opacity: 0.9; }
-        .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .report-card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-decoration: none; color: #333; transition: all 0.3s; display: block; }
-        .report-card:hover { transform: translateY(-5px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .report-card .icon { font-size: 48px; margin-bottom: 15px; }
-        .report-card h2 { font-size: 20px; margin-bottom: 10px; color: #333; }
-        .report-card p { color: #666; font-size: 14px; line-height: 1.6; }
-        nav a { color: white; text-decoration: none; margin-right: 20px; opacity: 0.9; }
-        nav a:hover { opacity: 1; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>📊 Reports</h1>
-            <p>Financial reports and analytics</p>
-            <nav style="margin-top: 15px;">
-                <a href="/">🏠 Dashboard</a>
-                <a href="/customers">Customers</a>
-                <a href="/suppliers">Suppliers</a>
-                <a href="/items">Items</a>
-                <a href="/purchases">Purchases</a>
-                <a href="/incomes">Incomes</a>
-                <a href="/expenses">Expenses</a>
-                <a href="/reports">Reports</a>
-            </nav>
-        </header>
+<x-layout title="📊 Reports Dashboard - Al Nafi Travels">
+    <x-page-header
+        title="📊 Reports Dashboard"
+        icon="📊"
+        backUrl="/"
+    />
 
-        <div class="report-grid">
+    <style>
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .report-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            display: block;
+        }
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .report-card .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .report-card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        .report-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .report-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .report-card {
+                padding: 20px;
+            }
+            .report-card .icon {
+                font-size: 36px;
+                margin-bottom: 10px;
+            }
+            .report-card h2 {
+                font-size: 18px;
+            }
+            .report-card p {
+                font-size: 13px;
+            }
+        }
+    </style>
+
+    <div class="report-grid">
             <a href="/reports/profit-loss" class="report-card">
                 <div class="icon">💹</div>
                 <h2>Profit & Loss Report</h2>
@@ -76,7 +99,4 @@
                 <p>Review purchases by supplier and item. Track spending patterns and supplier performance.</p>
             </a>
         </div>
-    </div>
-<script src="/js/mobile-menu.js"></script>
-</body>
-</html>
+</x-layout>
