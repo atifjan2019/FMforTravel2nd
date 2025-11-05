@@ -23,7 +23,34 @@
         .menu-item { background: white; padding: 20px; border-radius: 10px; text-align: center; text-decoration: none; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s; }
         .menu-item:hover { transform: translateY(-5px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
         .menu-item .icon { font-size: 32px; margin-bottom: 10px; }
-        .menu-item .label { font-weight: 600; }
+        .menu-item .label { font-weight: 600; font-size: 14px; }
+        
+        /* Override for mobile - force 2 columns */
+        @media (max-width: 768px) {
+            .menu { 
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+            .menu-item {
+                padding: 15px 10px !important;
+            }
+            .menu-item .icon {
+                font-size: 28px !important;
+                margin-bottom: 8px !important;
+            }
+            .menu-item .label {
+                font-size: 12px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .menu-item .icon {
+                font-size: 24px !important;
+            }
+            .menu-item .label {
+                font-size: 11px !important;
+            }
+        }
         .recent-section { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .recent-section h2 { margin-bottom: 20px; color: #333; }
         table { width: 100%; border-collapse: collapse; }
