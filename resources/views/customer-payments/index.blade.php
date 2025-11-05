@@ -63,5 +63,6 @@
             @endif
         </div>
     </div>
+<script src="/js/mobile-menu.js"></script>
 </body>
 </html>

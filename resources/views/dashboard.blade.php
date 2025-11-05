@@ -134,5 +134,6 @@
             <p>&copy; 2025 Al Nafi Travels. Financial Management System.</p>
         </footer>
     </div>
+<script src="/js/mobile-menu.js"></script>
 </body>
 </html>

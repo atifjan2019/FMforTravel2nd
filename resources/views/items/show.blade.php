@@ -32,5 +32,6 @@
             <div style="margin-top: 20px;"><a href="/items" class="btn btn-primary">Back to List</a></div>
         </div>
     </div>
+<script src="/js/mobile-menu.js"></script>
 </body>
 </html>
