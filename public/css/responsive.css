@@ -181,6 +181,23 @@ nav.mobile-menu a:active {
         margin: 0 !important;
     }
     
+    /* Shorten button text on mobile - keep only "Add" or "+" */
+    header .btn-success::after,
+    header .btn-primary::after {
+        content: '' !important;
+    }
+    
+    header a.btn-success,
+    header a.btn-primary {
+        font-size: 0 !important;
+    }
+    
+    header a.btn-success::before,
+    header a.btn-primary::before {
+        content: '+ Add' !important;
+        font-size: 13px !important;
+    }
+    
     .card { 
         padding: 15px !important; 
         overflow-x: auto !important;

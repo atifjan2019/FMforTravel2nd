@@ -1,7 +1,8 @@
 <x-layout title="Add Customer - Al Nafi Travels">
     <x-page-header 
         title="Add New Customer" 
-        icon="➕"
+        icon="➕" 
+        backUrl="/customers"
     />
 
     <div class="card">
