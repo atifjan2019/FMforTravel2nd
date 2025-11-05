@@ -1,0 +1,26 @@
+[phases.setup]
+nixPkgs = ["php82", "php82Packages.composer", "nodejs_20", "nginx", "supervisor"]
+
+[phases.install]
+cmds = [
+  "composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader",
+  "npm ci"
+]
+
+[phases.build]
+cmds = [
+  "npm run build"
+]
+
+[phases.start]
+cmds = [
+  "php artisan migrate --force",
+  "php artisan config:cache",
+  "php artisan route:cache",
+  "php artisan view:cache",
+  "php artisan storage:link || true",
+  "supervisord -c ./nixpacks-supervisord.conf"
+]
+
+[files]
+  include = ["public/build", "database/migrations", "database/seeders", "resources/views", "app", "routes", "config", ".env"]
