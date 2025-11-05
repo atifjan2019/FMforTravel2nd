@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReportController;
 Route::get('/', [DashboardController::class, 'index'])->middleware(['auth']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
@@ -36,6 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('expenses', App\Http\Controllers\ExpenseController::class);
     Route::resource('customer-payments', App\Http\Controllers\CustomerPaymentController::class);
     Route::resource('supplier-payments', App\Http\Controllers\SupplierPaymentController::class);
+
+    // Reports
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/profit-loss', [ReportController::class, 'profitLoss'])->name('reports.profit-loss');
+    Route::get('reports/customer-ledger', [ReportController::class, 'customerLedger'])->name('reports.customer-ledger');
+    Route::get('reports/supplier-ledger', [ReportController::class, 'supplierLedger'])->name('reports.supplier-ledger');
+    Route::get('reports/cash-flow', [ReportController::class, 'cashFlow'])->name('reports.cash-flow');
+    Route::get('reports/sales', [ReportController::class, 'salesReport'])->name('reports.sales');
+    Route::get('reports/purchases', [ReportController::class, 'purchaseReport'])->name('reports.purchases');
 });
 
 require __DIR__.'/auth.php';
