@@ -12,12 +12,24 @@
         nav a { color: white; text-decoration: none; margin-right: 20px; opacity: 0.9; }
         .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+    th, td { padding: 12px; text-align: left; border-bottom: 2px solid #d1d5db; vertical-align: middle; }
         th { background: #f8f9fa; font-weight: 600; color: #666; }
         .positive { color: #10b981; }
         .negative { color: #ef4444; }
-        a.customer-link { color: #667eea; text-decoration: none; font-weight: 600; }
-        a.customer-link:hover { text-decoration: underline; }
+        a.customer-link {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #667eea;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        a.customer-link:hover {
+            background: #764ba2;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
