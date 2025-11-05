@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
 
     // Resource routes for all main entities
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
+    Route::get('customers/{customer}/ledger', [App\Http\Controllers\CustomerController::class, 'ledger'])->name('customers.ledger');
     Route::resource('suppliers', App\Http\Controllers\SupplierController::class);
     Route::resource('items', App\Http\Controllers\ItemController::class);
     Route::resource('purchases', App\Http\Controllers\PurchaseController::class);
