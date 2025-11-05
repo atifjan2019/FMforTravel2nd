@@ -26,6 +26,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Resource routes for all main entities
+    Route::resource('customers', App\Http\Controllers\CustomerController::class);
+    Route::resource('suppliers', App\Http\Controllers\SupplierController::class);
+    Route::resource('items', App\Http\Controllers\ItemController::class);
+    Route::resource('purchases', App\Http\Controllers\PurchaseController::class);
+    Route::resource('incomes', App\Http\Controllers\IncomeController::class);
+    Route::resource('expenses', App\Http\Controllers\ExpenseController::class);
+    Route::resource('customer-payments', App\Http\Controllers\CustomerPaymentController::class);
+    Route::resource('supplier-payments', App\Http\Controllers\SupplierPaymentController::class);
 });
 
 require __DIR__.'/auth.php';

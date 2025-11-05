@@ -131,9 +131,6 @@
 
         <footer>
             <p>&copy; 2025 Al Nafi Travels. Financial Management System.</p>
-            <p style="margin-top: 10px;">
-                <strong>Login:</strong> admin@alnafi.com | <strong>Password:</strong> password
-            </p>
         </footer>
     </div>
 </body>
