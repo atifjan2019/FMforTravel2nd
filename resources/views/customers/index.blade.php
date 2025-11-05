@@ -54,7 +54,6 @@
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Email</th>
-                        <th>Address</th>
                         <th>Total Incomes</th>
                         <th>Total Payments</th>
                         <th>Status</th>
@@ -67,7 +66,6 @@
                         <td><strong>{{ $customer->name }}</strong></td>
                         <td>{{ $customer->phone ?? 'N/A' }}</td>
                         <td>{{ $customer->email ?? 'N/A' }}</td>
-                        <td>{{ $customer->address ?? 'N/A' }}</td>
                         <td>{{ $customer->incomes_count }}</td>
                         <td>{{ $customer->payments_count }}</td>
                         <td>
@@ -77,13 +75,7 @@
                         </td>
                         <td class="actions">
                             <a href="/customers/{{ $customer->id }}" class="btn btn-primary">View</a>
-                            <a href="/customers/{{ $customer->id }}/ledger" class="btn btn-primary">Ledger</a>
                             <a href="/customers/{{ $customer->id }}/edit" class="btn btn-primary">Edit</a>
-                            <form action="/customers/{{ $customer->id }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this customer?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
                         </td>
                     </tr>
                     @empty
