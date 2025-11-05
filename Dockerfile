@@ -1,40 +1,43 @@
-FROM php:8.1-fpm
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    nginx \
-    supervisor
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Install Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
-
-# Set working directory
-WORKDIR /var/www
-
-# Copy app files
+# ---- composer deps ----
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 COPY . .
 
-# Install dependencies
-RUN composer install --optimize-autoloader --no-dev
+# ---- vite build (remove this stage if public/build is already committed) ----
+FROM node:20 AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
 
-# Build frontend assets
-RUN npm ci && npm run build
+# ---- runtime (PHP 8.2) ----
+FROM php:8.2-fpm
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# system + php extensions
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nginx supervisor curl git zip unzip libpng-dev libjpeg62-turbo-dev libfreetype6-dev libzip-dev \
+ && rm -rf /var/lib/apt/lists/*
 
-# Expose port 80
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install -j$(nproc) pdo_mysql bcmath gd zip
+
+WORKDIR /var/www
+
+# app + vendor + built assets
+COPY --from=vendor /app /var/www
+COPY --from=frontend /app/public/build /var/www/public/build
+
+# configs (add these files)
+COPY .docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY .docker/php.ini    /usr/local/etc/php/conf.d/zz-app.ini
+COPY .docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+ && chmod -R ug+rw /var/www/storage /var/www/bootstrap/cache
+
 EXPOSE 80
-
-# Start services
-CMD ["supervisord", "-c", "/var/www/docker/supervisord.conf"]
+CMD ["/usr/bin/supervisord","-n","-c","/etc/supervisor/conf.d/supervisord.conf"]
