@@ -184,6 +184,10 @@
                 <h3>Current Month Net Profit</h3>
                 <div class="value {{ ($netProfit ?? 0) >= 0 ? 'positive' : 'negative' }}">Rs {{ number_format($netProfit ?? 0) }}</div>
             </div>
+                <div class="stat-card">
+                    <h3>Current Month Paid</h3>
+                    <div class="value info">Rs {{ number_format($totalPaidAmount ?? 0) }}</div>
+                </div>
         </div>
 
         <div class="menu">

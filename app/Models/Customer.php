@@ -40,7 +40,8 @@ class Customer extends Model
 
     public function getTotalPaidAttribute()
     {
-        return $this->payments()->sum('amount');
+        // Sum paid_amount from all related incomes (partial/full payments)
+        return $this->incomes()->sum('paid_amount');
     }
 
     public function getBalanceAttribute()

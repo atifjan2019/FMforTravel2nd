@@ -188,7 +188,7 @@
                         <th>Type</th>
                         <th>Description</th>
                         <th>Purchase (+)</th>
-                        <th>Payment (-)</th>
+                        <!-- Removed Payment (-) column -->
                         <th>Payment Status</th>
                         <th>Reference</th>
                     </tr>
@@ -202,7 +202,7 @@
                             'type' => 'Purchase',
                             'description' => $purchase->item->name ?? 'N/A',
                             'purchase' => $purchase->total_amount,
-                            'payment' => 0,
+                            // Removed payment column
                             'reference' => $purchase->reference_no,
                             'payment_status' => $purchase->payment_status,
                             'paid_amount' => $purchase->paid_amount,
@@ -236,7 +236,7 @@
                                 <br><small style="color: #3b82f6;">Paid: Rs {{ number_format($transaction['paid_amount']) }}</small>
                             @endif
                         </td>
-                        <td class="payment">{{ $transaction['payment'] > 0 ? 'Rs ' . number_format($transaction['payment']) : '' }}</td>
+                        <!-- Removed Payment (-) cell -->
                         <td>
                             @if($transaction['payment_status'] == 'paid')
                                 <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✓ Paid</span>

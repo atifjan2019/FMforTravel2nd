@@ -40,7 +40,8 @@ class Supplier extends Model
 
     public function getTotalPaidAttribute()
     {
-        return $this->payments()->sum('amount');
+        // Sum paid_amount from all related purchases (partial/full payments)
+        return $this->purchases()->sum('paid_amount');
     }
 
     public function getBalanceAttribute()
