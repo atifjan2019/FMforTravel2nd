@@ -27,7 +27,33 @@
         nav a:hover { opacity: 1; }
         .header-actions { display: flex; justify-content: space-between; align-items: center; }
         
+        .floating-print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .floating-print-btn:hover {
+            background: #059669;
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
+            transform: translateY(-2px);
+        }
+        
         .print-header { display: none; }
+        .supplier-details { display: none; }
         
         @media print {
             body { background: white; }
@@ -40,13 +66,15 @@
             .summary-item { border: 1px solid #ddd; flex: 1; }
             @page { margin: 1cm; }
             
+            .floating-print-btn { display: none !important; }
+            
             .print-header { 
                 display: flex !important; 
                 justify-content: space-between; 
                 align-items: center; 
                 padding: 20px 0; 
                 border-bottom: 3px solid #333; 
-                margin-bottom: 30px; 
+                margin-bottom: 20px; 
             }
             .print-header img { 
                 height: 60px; 
@@ -57,6 +85,39 @@
                 font-weight: bold; 
                 color: #333; 
             }
+            
+            .supplier-details {
+                display: block !important;
+                background: #f8fafc;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 25px;
+                border: 1px solid #ddd;
+            }
+            .supplier-details h3 {
+                margin: 0 0 15px 0;
+                font-size: 16px;
+                color: #333;
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 8px;
+            }
+            .details-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .detail-item {
+                display: flex;
+                gap: 10px;
+            }
+            .detail-label {
+                font-weight: 600;
+                color: #555;
+                min-width: 100px;
+            }
+            .detail-value {
+                color: #333;
+            }
         }
     </style>
 </head>
@@ -64,23 +125,44 @@
     <div class="container">
         <div class="print-header">
             <img src="/images/alnafi.png" alt="Al Nafi Travels Logo">
-            <div class="supplier-name">Supplier: {{ $supplier->name }}</div>
+            <div class="supplier-name">Invoice</div>
         </div>
         
         <header>
-            <div class="header-actions">
-                <div>
-                    <h1>📒 Supplier Ledger: {{ $supplier->name }}</h1>
-                    <nav style="margin-top: 10px;">
-                        <a href="/">🏠 Dashboard</a>
-                        <a href="/suppliers">← Back to Suppliers</a>
-                    </nav>
-                </div>
-                <div>
-                    <button onclick="window.print()" class="btn btn-print">🖨️ Print Ledger</button>
-                </div>
-            </div>
+            <h1>📒 Supplier Ledger: {{ $supplier->name }}</h1>
+            <nav style="margin-top: 10px;">
+                <a href="/">🏠 Dashboard</a>
+                <a href="/suppliers">← Back to Suppliers</a>
+            </nav>
         </header>
+
+        <div class="supplier-details">
+            <h3>Supplier Information</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Name:</span>
+                    <span class="detail-value">{{ $supplier->name }}</span>
+                </div>
+                @if($supplier->phone)
+                <div class="detail-item">
+                    <span class="detail-label">Phone:</span>
+                    <span class="detail-value">{{ $supplier->phone }}</span>
+                </div>
+                @endif
+                @if($supplier->email)
+                <div class="detail-item">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">{{ $supplier->email }}</span>
+                </div>
+                @endif
+                @if($supplier->address)
+                <div class="detail-item">
+                    <span class="detail-label">Address:</span>
+                    <span class="detail-value">{{ $supplier->address }}</span>
+                </div>
+                @endif
+            </div>
+        </div>
 
         <div class="summary">
             <div class="summary-item">
@@ -153,6 +235,11 @@
                 </tbody>
             </table>
         </div>
+        
+        <!-- Floating Print Button -->
+        <button onclick="window.print()" class="floating-print-btn">
+            🖨️ Print Ledger
+        </button>
     </div>
 <script src="/js/mobile-menu.js"></script>
 </body>
