@@ -133,6 +133,15 @@
     <div class="purchase-header">
         <div class="date">📅 {{ $purchase->purchase_date->format('d M Y') }}</div>
         <div class="amount">Rs {{ number_format($purchase->total_amount) }}</div>
+        <div style="margin-top: 10px;">
+            @if($purchase->payment_status == 'paid')
+                <span style="background: rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-size: 14px;">✓ Paid</span>
+            @elseif($purchase->payment_status == 'partial')
+                <span style="background: rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-size: 14px;">◐ Partial Payment</span>
+            @else
+                <span style="background: rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-size: 14px;">✗ Unpaid</span>
+            @endif
+        </div>
     </div>
 
     <div class="card">
@@ -172,6 +181,32 @@
             <div class="breakdown-item">
                 <div class="label">Total Amount</div>
                 <div class="value">Rs {{ number_format($purchase->total_amount) }}</div>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 20px;">💰 Payment Information</h3>
+        <div class="breakdown-grid">
+            <div class="breakdown-item">
+                <div class="label">Paid Amount</div>
+                <div class="value">Rs {{ number_format($purchase->paid_amount) }}</div>
+            </div>
+            
+            <div class="breakdown-item">
+                <div class="label">Balance Due</div>
+                <div class="value">Rs {{ number_format($purchase->remaining_amount) }}</div>
+            </div>
+            
+            <div class="breakdown-item">
+                <div class="label">Payment Status</div>
+                <div class="value" style="font-size: 18px;">
+                    @if($purchase->payment_status == 'paid')
+                        ✓ Paid
+                    @elseif($purchase->payment_status == 'partial')
+                        ◐ Partial
+                    @else
+                        ✗ Unpaid
+                    @endif
+                </div>
             </div>
         </div>
     </div>

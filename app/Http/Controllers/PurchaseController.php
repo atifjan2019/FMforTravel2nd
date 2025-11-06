@@ -31,11 +31,16 @@ class PurchaseController extends Controller
             'unit_price' => 'required|numeric|min:0',
             'purchase_date' => 'required|date',
             'reference_no' => 'nullable|string|max:255',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
+            'paid_amount' => 'nullable|numeric|min:0'
         ]);
 
         $validated['total_amount'] = $validated['quantity'] * $validated['unit_price'];
-        Purchase::create($validated);
+        $validated['paid_amount'] = $validated['paid_amount'] ?? 0;
+        $validated['remaining_amount'] = $validated['total_amount'] - $validated['paid_amount'];
+        
+        $purchase = Purchase::create($validated);
+        $purchase->updatePaymentStatus();
 
         return redirect()->route('purchases.index')
             ->with('success', 'Purchase created successfully');
@@ -63,11 +68,16 @@ class PurchaseController extends Controller
             'unit_price' => 'required|numeric|min:0',
             'purchase_date' => 'required|date',
             'reference_no' => 'nullable|string|max:255',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
+            'paid_amount' => 'nullable|numeric|min:0'
         ]);
 
         $validated['total_amount'] = $validated['quantity'] * $validated['unit_price'];
+        $validated['paid_amount'] = $validated['paid_amount'] ?? $purchase->paid_amount;
+        $validated['remaining_amount'] = $validated['total_amount'] - $validated['paid_amount'];
+        
         $purchase->update($validated);
+        $purchase->updatePaymentStatus();
 
         return redirect()->route('purchases.index')
             ->with('success', 'Purchase updated successfully');
@@ -78,5 +88,21 @@ class PurchaseController extends Controller
         $purchase->delete();
         return redirect()->route('purchases.index')
             ->with('success', 'Purchase deleted successfully');
+    }
+
+    public function addPayment(Request $request, Purchase $purchase)
+    {
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:0.01'
+        ]);
+
+        try {
+            $purchase->addPayment($validated['amount']);
+            return redirect()->back()
+                ->with('success', 'Payment added successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', $e->getMessage());
+        }
     }
 }

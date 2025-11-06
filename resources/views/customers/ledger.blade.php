@@ -171,11 +171,11 @@
                 <div class="value income">Rs {{ number_format($customer->total_income) }}</div>
             </div>
             <div class="summary-item">
-                <div class="label">Total Paid</div>
+                <div class="label">Customer Paid</div>
                 <div class="value payment">Rs {{ number_format($customer->total_paid) }}</div>
             </div>
             <div class="summary-item">
-                <div class="label">Balance</div>
+                <div class="label">Balance Due</div>
                 <div class="value">Rs {{ number_format($customer->balance) }}</div>
             </div>
         </div>

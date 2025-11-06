@@ -53,7 +53,7 @@
             <h2 style="margin-bottom: 20px;">All Customers Balance Summary</h2>
             <table>
                 <thead>
-                    <tr><th>Customer Name</th><th>Address</th><th>Total Income</th><th>Total Paid</th><th>Balance</th><th>Payment Status</th><th>Status</th></tr>
+                    <tr><th>Customer Name</th><th>Address</th><th>Total Amount</th><th>Customer Paid</th><th>Balance Due</th><th>Payment Status</th><th>Status</th></tr>
                 </thead>
                 <tbody>
                     @forelse($customers as $customer)

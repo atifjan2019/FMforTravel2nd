@@ -98,5 +98,34 @@
             </tbody>
         </table>
     </div>
+
+    <div class="report-table-card">
+        <div class="report-section-title">Recent Purchase Transactions</div>
+        <table>
+            <thead>
+                <tr><th>Date</th><th>Supplier</th><th>Item</th><th>Amount</th><th>Paid</th><th>Payment Status</th></tr>
+            </thead>
+            <tbody>
+                @foreach($recentPurchases as $purchase)
+                <tr>
+                    <td>{{ $purchase->purchase_date->format('d M Y') }}</td>
+                    <td><strong>{{ $purchase->supplier->name ?? 'N/A' }}</strong></td>
+                    <td>{{ $purchase->item->name ?? 'N/A' }}</td>
+                    <td class="purchases">Rs {{ number_format($purchase->total_amount) }}</td>
+                    <td style="color: #3b82f6; font-weight: 600;">Rs {{ number_format($purchase->paid_amount) }}</td>
+                    <td>
+                        @if($purchase->payment_status == 'paid')
+                            <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✓ Paid</span>
+                        @elseif($purchase->payment_status == 'partial')
+                            <span style="background: #f59e0b; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">◐ Partial</span>
+                        @else
+                            <span style="background: #ef4444; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✗ Unpaid</span>
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 <script src="/js/mobile-menu.js"></script>
 </x-layout>

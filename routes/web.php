@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('suppliers/{supplier}/ledger', [App\Http\Controllers\SupplierController::class, 'ledger'])->name('suppliers.ledger');
     Route::resource('items', App\Http\Controllers\ItemController::class);
     Route::resource('purchases', App\Http\Controllers\PurchaseController::class);
+    Route::post('purchases/{purchase}/add-payment', [App\Http\Controllers\PurchaseController::class, 'addPayment'])->name('purchases.add-payment');
     Route::resource('incomes', App\Http\Controllers\IncomeController::class);
     Route::post('incomes/{income}/add-payment', [App\Http\Controllers\IncomeController::class, 'addPayment'])->name('incomes.add-payment');
     Route::resource('expenses', App\Http\Controllers\ExpenseController::class);

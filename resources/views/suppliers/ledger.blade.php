@@ -189,6 +189,7 @@
                         <th>Description</th>
                         <th>Purchase (+)</th>
                         <th>Payment (-)</th>
+                        <th>Payment Status</th>
                         <th>Reference</th>
                     </tr>
                 </thead>
@@ -202,7 +203,10 @@
                             'description' => $purchase->item->name ?? 'N/A',
                             'purchase' => $purchase->total_amount,
                             'payment' => 0,
-                            'reference' => $purchase->reference_no
+                            'reference' => $purchase->reference_no,
+                            'payment_status' => $purchase->payment_status,
+                            'paid_amount' => $purchase->paid_amount,
+                            'remaining_amount' => $purchase->remaining_amount
                         ]);
                     }
                     foreach($supplier->payments as $payment) {
@@ -212,7 +216,10 @@
                             'description' => $payment->payment_method,
                             'purchase' => 0,
                             'payment' => $payment->amount,
-                            'reference' => $payment->reference_no
+                            'reference' => $payment->reference_no,
+                            'payment_status' => null,
+                            'paid_amount' => 0,
+                            'remaining_amount' => 0
                         ]);
                     }
                     $transactions = $transactions->sortByDesc('date');
@@ -223,13 +230,30 @@
                         <td>{{ $transaction['date']->format('d M Y') }}</td>
                         <td><strong>{{ $transaction['type'] }}</strong></td>
                         <td>{{ $transaction['description'] }}</td>
-                        <td class="purchase">{{ $transaction['purchase'] > 0 ? 'Rs ' . number_format($transaction['purchase']) : '' }}</td>
+                        <td class="purchase">
+                            {{ $transaction['purchase'] > 0 ? 'Rs ' . number_format($transaction['purchase']) : '' }}
+                            @if($transaction['purchase'] > 0 && isset($transaction['paid_amount']))
+                                <br><small style="color: #3b82f6;">Paid: Rs {{ number_format($transaction['paid_amount']) }}</small>
+                            @endif
+                        </td>
                         <td class="payment">{{ $transaction['payment'] > 0 ? 'Rs ' . number_format($transaction['payment']) : '' }}</td>
+                        <td>
+                            @if($transaction['payment_status'] == 'paid')
+                                <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✓ Paid</span>
+                            @elseif($transaction['payment_status'] == 'partial')
+                                <span style="background: #f59e0b; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">◐ Partial</span>
+                                <br><small style="color: #ef4444;">Due: Rs {{ number_format($transaction['remaining_amount']) }}</small>
+                            @elseif($transaction['payment_status'] == 'unpaid')
+                                <span style="background: #ef4444; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✗ Unpaid</span>
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td>{{ $transaction['reference'] ?? 'N/A' }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" style="text-align: center; color: #999; padding: 40px;">No transactions found</td>
+                        <td colspan="7" style="text-align: center; color: #999; padding: 40px;">No transactions found</td>
                     </tr>
                     @endforelse
                 </tbody>

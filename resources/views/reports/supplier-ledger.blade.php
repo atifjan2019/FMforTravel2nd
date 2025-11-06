@@ -53,7 +53,7 @@
             <h2 style="margin-bottom: 20px;">All Suppliers Balance Summary</h2>
             <table>
                 <thead>
-                    <tr><th>Supplier Name</th><th>Total Purchases</th><th>Total Paid</th><th>Balance</th><th>Status</th><th>Action</th></tr>
+                    <tr><th>Supplier Name</th><th>Total Purchases</th><th>We Paid</th><th>Balance Due</th><th>Payment Status</th><th>Status</th><th>Action</th></tr>
                 </thead>
                 <tbody>
                     @forelse($suppliers as $supplier)
@@ -65,11 +65,31 @@
                             <strong>Rs {{ number_format(abs($supplier->balance)) }}</strong>
                             @if($supplier->balance > 0) (Payable) @elseif($supplier->balance < 0) (Advance) @endif
                         </td>
+                        <td>
+                            @php
+                                $totalPurchases = $supplier->total_purchases;
+                                $totalPaid = $supplier->total_paid;
+                                if($totalPaid >= $totalPurchases && $totalPurchases > 0) {
+                                    $paymentStatus = 'paid';
+                                } elseif($totalPaid > 0 && $totalPaid < $totalPurchases) {
+                                    $paymentStatus = 'partial';
+                                } else {
+                                    $paymentStatus = 'unpaid';
+                                }
+                            @endphp
+                            @if($paymentStatus == 'paid')
+                                <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✓ Paid</span>
+                            @elseif($paymentStatus == 'partial')
+                                <span style="background: #f59e0b; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">◐ Partial</span>
+                            @else
+                                <span style="background: #ef4444; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✗ Unpaid</span>
+                            @endif
+                        </td>
                         <td>{{ ucfirst($supplier->status) }}</td>
                         <td><a href="/suppliers/{{ $supplier->id }}/ledger" class="supplier-link">View Ledger →</a></td>
                     </tr>
                     @empty
-                    <tr><td colspan="6" style="text-align: center; padding: 40px;">No suppliers found</td></tr>
+                    <tr><td colspan="7" style="text-align: center; padding: 40px;">No suppliers found</td></tr>
                     @endforelse
                 </tbody>
             </table>

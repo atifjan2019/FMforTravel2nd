@@ -42,8 +42,23 @@
                     <input type="date" id="purchase_date" name="purchase_date" value="{{ $purchase->purchase_date->format('Y-m-d') }}" required>
                 </div>
                 <div class="form-group">
+                    <label for="paid_amount">Paid Amount (Rs)</label>
+                    <input type="number" id="paid_amount" name="paid_amount" step="0.01" value="{{ $purchase->paid_amount }}" min="0">
+                    <small style="color: #666; display: block; margin-top: 5px;">Current: Rs {{ number_format($purchase->paid_amount) }} | Remaining: Rs {{ number_format($purchase->remaining_amount) }}</small>
+                </div>
+                <div class="form-group">
                     <label for="reference_no">Reference No</label>
                     <input type="text" id="reference_no" name="reference_no" value="{{ $purchase->reference_no }}">
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        Payment Status: 
+                        @if($purchase->payment_status == 'paid')
+                            <span style="color: #10b981; font-weight: bold;">✓ Paid</span>
+                        @elseif($purchase->payment_status == 'partial')
+                            <span style="color: #f59e0b; font-weight: bold;">◐ Partial</span>
+                        @else
+                            <span style="color: #ef4444; font-weight: bold;">✗ Unpaid</span>
+                        @endif
+                    </small>
                 </div>
                 <div class="form-group">
                     <label for="notes">Notes</label>

@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('purchases', function (Blueprint $table) {
-            //
+            $table->decimal('paid_amount', 10, 2)->default(0)->after('total_amount');
+            $table->decimal('remaining_amount', 10, 2)->default(0)->after('paid_amount');
+            $table->enum('payment_status', ['unpaid', 'partial', 'paid'])->default('unpaid')->after('remaining_amount');
         });
     }
 
@@ -22,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('purchases', function (Blueprint $table) {
-            //
+            $table->dropColumn(['paid_amount', 'remaining_amount', 'payment_status']);
         });
     }
 };

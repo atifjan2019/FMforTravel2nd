@@ -41,6 +41,11 @@
                     <input type="date" id="purchase_date" name="purchase_date" value="{{ date('Y-m-d') }}" required>
                 </div>
                 <div class="form-group">
+                    <label for="paid_amount">Paid Amount (Rs)</label>
+                    <input type="number" id="paid_amount" name="paid_amount" step="0.01" value="0" min="0">
+                    <small style="color: #666; display: block; margin-top: 5px;">Enter the amount paid to supplier. Leave 0 for unpaid, enter partial for partial payment, or full amount for paid.</small>
+                </div>
+                <div class="form-group">
                     <label for="reference_no">Reference No</label>
                     <input type="text" id="reference_no" name="reference_no" placeholder="Invoice/Reference number">
                 </div>

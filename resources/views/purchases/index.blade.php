@@ -16,6 +16,8 @@
                         <th>Quantity</th>
                         <th>Unit Price</th>
                         <th>Total Amount</th>
+                        <th>Paid</th>
+                        <th>Payment Status</th>
                         <th>Reference</th>
                         <th>Actions</th>
                     </tr>
@@ -29,6 +31,21 @@
                         <td>{{ $purchase->quantity }}</td>
                         <td>Rs {{ number_format($purchase->unit_price) }}</td>
                         <td><strong>Rs {{ number_format($purchase->total_amount) }}</strong></td>
+                        <td>
+                            <span style="color: #3b82f6;">Rs {{ number_format($purchase->paid_amount) }}</span>
+                            @if($purchase->remaining_amount > 0)
+                                <br><small style="color: #ef4444;">Due: Rs {{ number_format($purchase->remaining_amount) }}</small>
+                            @endif
+                        </td>
+                        <td>
+                            @if($purchase->payment_status == 'paid')
+                                <span class="badge badge-success">✓ Paid</span>
+                            @elseif($purchase->payment_status == 'partial')
+                                <span class="badge badge-warning">◐ Partial</span>
+                            @else
+                                <span class="badge badge-danger">✗ Unpaid</span>
+                            @endif
+                        </td>
                         <td>{{ $purchase->reference_no ?? 'N/A' }}</td>
                         <td class="actions">
                             <a href="/purchases/{{ $purchase->id }}" class="btn btn-primary">View</a>
@@ -42,7 +59,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" style="text-align: center; color: #999; padding: 40px;">No purchases found</td>
+                        <td colspan="10" style="text-align: center; color: #999; padding: 40px;">No purchases found</td>
                     </tr>
                     @endforelse
                 </tbody>

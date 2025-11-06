@@ -267,6 +267,12 @@ class ReportController extends Controller
             ->limit(10)
             ->get();
 
+        // Recent transactions with payment status
+        $recentPurchases = Purchase::with(['supplier', 'item'])
+            ->orderByDesc('purchase_date')
+            ->limit(20)
+            ->get();
+
         return view('reports.purchases', compact(
             'startDate',
             'endDate',
@@ -278,7 +284,8 @@ class ReportController extends Controller
             'topSuppliers',
             'currentMonthPurchases',
             'currentMonthTransactions',
-            'currentMonthAveragePurchase'
+            'currentMonthAveragePurchase',
+            'recentPurchases'
         ));
     }
 }
