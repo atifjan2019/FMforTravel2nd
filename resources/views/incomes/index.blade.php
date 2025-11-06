@@ -32,7 +32,7 @@
                                 {{ ucfirst($income->status) }}
                             </span>
                         </td>
-                        <td>
+                        <td class="actions">
                             <a href="/incomes/{{ $income->id }}" class="btn btn-primary">View</a>
                             <a href="/incomes/{{ $income->id }}/edit" class="btn btn-primary">Edit</a>
                             <form action="/incomes/{{ $income->id }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this income?');">

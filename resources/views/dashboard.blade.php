@@ -1,8 +1,33 @@
 <x-layout title="Dashboard - Al Nafi Travels">
     <style>
-        .dashboard-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
-        .dashboard-header h1 { font-size: 32px; margin-bottom: 5px; }
-        .dashboard-header p { opacity: 0.9; font-size: 14px; }
+        .dashboard-header { 
+            background: #ffffff; 
+            color: #333; 
+            padding: 25px 30px; 
+            border-radius: 10px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            position: relative; 
+            display: flex; 
+            flex-direction: row; 
+            align-items: center; 
+            gap: 20px;
+            border-left: 5px solid #667eea;
+        }
+        .dashboard-header .logo { 
+            height: 70px; 
+            width: auto; 
+        }
+        .dashboard-header .header-text {
+            flex: 1;
+            text-align: right;
+        }
+        .dashboard-header p { 
+            font-size: 16px; 
+            color: #333;
+            font-weight: 600;
+            margin: 0;
+        }
         .hamburger-menu { position: absolute; top: 20px; right: 20px; }
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -12,16 +37,51 @@
         .stat-card .value.negative { color: #ef4444; }
         .stat-card .value.info { color: #3b82f6; }
         .menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .menu-item { background: white; padding: 20px; border-radius: 10px; text-align: center; text-decoration: none; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s; }
+        .menu-item { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            text-align: center; 
+            text-decoration: none; 
+            color: #333; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
         .menu-item:hover { transform: translateY(-5px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
-        .menu-item .icon { font-size: 32px; margin-bottom: 10px; }
-        .menu-item .label { font-weight: 600; font-size: 14px; }
+        .menu-item .icon { 
+            font-size: 32px; 
+            margin-bottom: 10px;
+            display: block;
+        }
+        .menu-item .label { 
+            font-weight: 600; 
+            font-size: 14px;
+            display: block;
+        }
         
         /* Override for mobile - force 2 columns */
         @media (max-width: 768px) {
-            .dashboard-header { padding: 20px; text-align: center; }
-            .dashboard-header h1 { display: none !important; } /* Hide main title on mobile */
-            .dashboard-header p { font-size: 16px !important; opacity: 1 !important; font-weight: 600 !important; }
+            .dashboard-header { 
+                padding: 20px; 
+                text-align: center; 
+                flex-direction: column;
+                gap: 10px;
+            }
+            .dashboard-header .logo { 
+                display: none !important; /* Hide logo on mobile */
+            }
+            .dashboard-header .header-text {
+                text-align: center;
+            }
+            .dashboard-header p { 
+                font-size: 16px !important; 
+                font-weight: 600 !important; 
+                color: #333 !important;
+            }
             
             .stats { grid-template-columns: 1fr !important; gap: 15px; }
             .stat-card { padding: 20px; }
@@ -34,30 +94,53 @@
             }
             .menu-item {
                 padding: 15px 10px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
             }
             .menu-item .icon {
-                font-size: 28px !important;
+                font-size: 32px !important;
                 margin-bottom: 8px !important;
+                display: block !important;
             }
             .menu-item .label {
-                font-size: 12px !important;
+                font-size: 13px !important;
+                display: block !important;
+                text-align: center !important;
             }
         }
         
         @media (max-width: 480px) {
-            .dashboard-header { padding: 15px; text-align: center; }
-            .dashboard-header h1 { display: none !important; } /* Hide main title on small mobile */
-            .dashboard-header p { font-size: 14px !important; opacity: 1 !important; font-weight: 600 !important; }
+            .dashboard-header { 
+                padding: 15px; 
+                text-align: center; 
+            }
+            .dashboard-header .logo { 
+                display: none !important; /* Hide logo on small mobile */
+            }
+            .dashboard-header .header-text {
+                text-align: center;
+            }
+            .dashboard-header p { 
+                font-size: 14px !important; 
+                font-weight: 600 !important; 
+            }
             
             .stat-card { padding: 15px; }
             .stat-card h3 { font-size: 11px !important; }
             .stat-card .value { font-size: 20px !important; }
             
+            .menu-item {
+                padding: 12px 8px !important;
+            }
             .menu-item .icon {
-                font-size: 24px !important;
+                font-size: 28px !important;
+                margin-bottom: 6px !important;
             }
             .menu-item .label {
-                font-size: 11px !important;
+                font-size: 12px !important;
+                line-height: 1.3 !important;
             }
             
             .recent-section { padding: 15px; }
@@ -75,8 +158,10 @@
     </style>
 
     <header class="dashboard-header">
-        <h1>🌍 Al Nafi Travels</h1>
-        <p>Financial Management System - Dashboard ({{ now()->format('F Y') }})</p>
+        <img src="{{ asset('images/alnafi.png') }}" alt="Al Nafi Travels" class="logo">
+        <div class="header-text">
+            <p>Financial Management System - Dashboard ({{ now()->format('F Y') }})</p>
+        </div>
     </header>
 
         <div class="stats">

@@ -30,7 +30,7 @@
                         <td>Rs {{ number_format($purchase->unit_price) }}</td>
                         <td><strong>Rs {{ number_format($purchase->total_amount) }}</strong></td>
                         <td>{{ $purchase->reference_no ?? 'N/A' }}</td>
-                        <td>
+                        <td class="actions">
                             <a href="/purchases/{{ $purchase->id }}" class="btn btn-primary">View</a>
                             <a href="/purchases/{{ $purchase->id }}/edit" class="btn btn-primary">Edit</a>
                             <form action="/purchases/{{ $purchase->id }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this purchase?');">

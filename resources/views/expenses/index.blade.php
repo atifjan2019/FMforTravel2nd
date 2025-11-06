@@ -26,7 +26,7 @@
                         <td><strong>Rs {{ number_format($expense->amount) }}</strong></td>
                         <td>{{ $expense->reference_no ?? 'N/A' }}</td>
                         <td>{{ $expense->description ?? 'N/A' }}</td>
-                        <td>
+                        <td class="actions">
                             <a href="/expenses/{{ $expense->id }}" class="btn btn-primary">View</a>
                             <a href="/expenses/{{ $expense->id }}/edit" class="btn btn-primary">Edit</a>
                             <form action="/expenses/{{ $expense->id }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this expense?');">

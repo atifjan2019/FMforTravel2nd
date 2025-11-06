@@ -7,7 +7,7 @@
         @endif
     </div>
     <div class="header-center">
-        <h1>{{ $icon }} {{ $title }}</h1>
+        <h1>{{ $title }}</h1>
     </div>
     <div class="header-right">
         <!-- Hamburger menu will be inserted here by JavaScript -->

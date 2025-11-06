@@ -30,7 +30,7 @@
                                 {{ ucfirst($item->status) }}
                             </span>
                         </td>
-                        <td>
+                        <td class="actions">
                             <a href="/items/{{ $item->id }}" class="btn btn-primary">View</a>
                             <a href="/items/{{ $item->id }}/edit" class="btn btn-primary">Edit</a>
                             <form action="/items/{{ $item->id }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this item?');">

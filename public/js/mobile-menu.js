@@ -42,13 +42,19 @@ function initMobileMenu() {
     const mobileNav = nav.cloneNode(true);
     mobileNav.classList.add('mobile-menu');
     
+    // Create logo at top of mobile menu
+    const logoDiv = document.createElement('div');
+    logoDiv.className = 'mobile-menu-logo';
+    logoDiv.innerHTML = '<img src="/images/alnafi.png" alt="Al Nafi Travels">';
+    
     // Create close button
     const closeBtn = document.createElement('button');
     closeBtn.className = 'mobile-menu-close';
     closeBtn.innerHTML = '×';
     closeBtn.setAttribute('aria-label', 'Close menu');
     
-    // Add close button to mobile nav
+    // Add logo and close button to mobile nav
+    mobileNav.insertBefore(logoDiv, mobileNav.firstChild);
     mobileNav.insertBefore(closeBtn, mobileNav.firstChild);
     
     // Add hamburger to header-right

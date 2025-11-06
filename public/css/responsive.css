@@ -99,7 +99,7 @@ nav.mobile-menu {
     right: -70%;
     width: 70%;
     height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: white;
     z-index: 999;
     transition: right 0.3s ease;
     overflow-y: auto;
@@ -115,9 +115,9 @@ nav.mobile-menu.active {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: rgba(255, 255, 255, 0.2);
+    background: #f3f4f6;
     border: none;
-    color: white;
+    color: #333;
     font-size: 28px;
     width: 40px;
     height: 40px;
@@ -129,14 +129,27 @@ nav.mobile-menu.active {
     line-height: 1;
 }
 
+/* Mobile Menu Logo */
+.mobile-menu-logo {
+    text-align: center;
+    padding: 20px 0 30px 0;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 20px;
+}
+
+.mobile-menu-logo img {
+    height: 50px;
+    width: auto;
+}
+
 nav.mobile-menu a {
     display: block !important;
     padding: 15px 20px !important;
     margin-bottom: 2px !important;
     background: transparent !important;
     border-radius: 0 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: white !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    color: #333 !important;
     text-decoration: none !important;
     font-size: 16px !important;
     font-weight: 500 !important;
@@ -146,9 +159,10 @@ nav.mobile-menu a {
 
 nav.mobile-menu a:hover,
 nav.mobile-menu a:active {
-    background: rgba(255, 255, 255, 0.15) !important;
+    background: #f3f4f6 !important;
     padding-left: 25px !important;
     transform: none !important;
+    color: #667eea !important;
 }
 
 @media (max-width: 768px) {
@@ -350,6 +364,34 @@ nav.mobile-menu a:active {
 
 table {
     min-width: 600px;
+    border-collapse: collapse !important;
+}
+
+/* Fix table borders and actions column */
+table td {
+    border-bottom: 1px solid #eee !important;
+    vertical-align: middle !important;
+}
+
+table td.actions {
+    white-space: nowrap !important;
+    min-width: 200px;
+}
+
+table .actions {
+    display: flex !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+}
+
+table .actions .btn {
+    white-space: nowrap !important;
+}
+
+table .actions form {
+    display: inline-block !important;
+    margin: 0 !important;
 }
 
 /* Dashboard specific mobile styles */

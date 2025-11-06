@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Al Nafi Travels' }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/alnafi.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/alnafi.png') }}">
     <link rel="stylesheet" href="/css/responsive.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,11 +52,12 @@
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; vertical-align: middle; }
         th { background: #f8fafc; font-weight: 600; color: #666; }
+        td.actions { white-space: nowrap; }
         .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
         .badge-success { background: #d1fae5; color: #047857; }
         .badge-danger { background: #fee2e2; color: #991b1b; }
         .badge-warning { background: #fef3c7; color: #92400e; }
-        .actions { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; }
+        .actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
         nav a { color: white; text-decoration: none; margin-right: 20px; opacity: 0.9; }
         nav a:hover { opacity: 1; }
         .form-group { margin-bottom: 20px; }
