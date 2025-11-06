@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
     Route::get('customers/{customer}/ledger', [App\Http\Controllers\CustomerController::class, 'ledger'])->name('customers.ledger');
     Route::resource('suppliers', App\Http\Controllers\SupplierController::class);
+    Route::get('suppliers/{supplier}/ledger', [App\Http\Controllers\SupplierController::class, 'ledger'])->name('suppliers.ledger');
     Route::resource('items', App\Http\Controllers\ItemController::class);
     Route::resource('purchases', App\Http\Controllers\PurchaseController::class);
     Route::resource('incomes', App\Http\Controllers\IncomeController::class);
