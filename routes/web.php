@@ -39,8 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('incomes', App\Http\Controllers\IncomeController::class);
     Route::post('incomes/{income}/add-payment', [App\Http\Controllers\IncomeController::class, 'addPayment'])->name('incomes.add-payment');
     Route::resource('expenses', App\Http\Controllers\ExpenseController::class);
-    Route::resource('customer-payments', App\Http\Controllers\CustomerPaymentController::class);
-    Route::resource('supplier-payments', App\Http\Controllers\SupplierPaymentController::class);
 
     // Reports
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');

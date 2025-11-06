@@ -34,13 +34,25 @@ class DashboardController extends Controller
         $supplierPayables = $totalPurchases - $totalSupplierPayments;
         $netProfit = $totalIncome - $totalExpenses - $totalPurchases;
         
-        // Payment status breakdown for current month
+        // Payment status breakdown for current month - INCOMES
         $totalPaidAmount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])->sum('paid_amount');
         $paidIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
             ->where('payment_status', 'paid')->count();
         $partialIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
             ->where('payment_status', 'partial')->count();
         $unpaidIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
+            ->where('payment_status', 'unpaid')->count();
+        
+        // Payment status breakdown for current month - PURCHASES
+        $totalPurchasesPaid = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])->sum('paid_amount');
+        $supplierPayables = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
+            ->whereIn('payment_status', ['unpaid', 'partial'])
+            ->sum('remaining_amount');
+        $paidPurchasesCount = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
+            ->where('payment_status', 'paid')->count();
+        $partialPurchasesCount = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
+            ->where('payment_status', 'partial')->count();
+        $unpaidPurchasesCount = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
             ->where('payment_status', 'unpaid')->count();
         
         // Recent transactions - CURRENT MONTH ONLY
@@ -91,9 +103,13 @@ class DashboardController extends Controller
             'supplierPayables',
             'netProfit',
             'totalPaidAmount',
+            'totalPurchasesPaid',
             'paidIncomesCount',
             'partialIncomesCount',
             'unpaidIncomesCount',
+            'paidPurchasesCount',
+            'partialPurchasesCount',
+            'unpaidPurchasesCount',
             'recentIncomes',
             'recentExpenses',
             'recentPurchases',
