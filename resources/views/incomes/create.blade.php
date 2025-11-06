@@ -31,6 +31,11 @@
                     <input type="number" id="amount" name="amount" step="0.01" required>
                 </div>
                 <div class="form-group">
+                    <label for="paid_amount">Paid Amount (Rs)</label>
+                    <input type="number" id="paid_amount" name="paid_amount" step="0.01" value="0" min="0">
+                    <small style="color: #666; display: block; margin-top: 5px;">Enter 0 for unpaid, full amount for paid, or partial amount</small>
+                </div>
+                <div class="form-group">
                     <label for="income_date">Income Date *</label>
                     <input type="date" id="income_date" name="income_date" value="{{ date('Y-m-d') }}" required>
                 </div>
@@ -45,10 +50,11 @@
                 <div class="form-group">
                     <label for="status">Status *</label>
                     <select id="status" name="status" required>
-                        <option value="completed">Completed</option>
-                        <option value="pending">Pending</option>
+                        <option value="completed">Completed (Service Delivered)</option>
+                        <option value="pending">Pending (Service Not Delivered)</option>
                         <option value="cancelled">Cancelled</option>
                     </select>
+                    <small style="color: #666; display: block; margin-top: 5px;">Completed = Service delivered to customer</small>
                 </div>
                 <div style="margin-top: 30px;">
                     <button type="submit" class="btn btn-primary">💾 Save Income</button>

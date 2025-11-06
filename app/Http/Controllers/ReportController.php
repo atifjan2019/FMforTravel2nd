@@ -197,6 +197,12 @@ class ReportController extends Controller
             ->limit(10)
             ->get();
 
+        // Recent transactions with payment status
+        $recentTransactions = Income::with(['customer', 'item'])
+            ->orderByDesc('income_date')
+            ->limit(20)
+            ->get();
+
         return view('reports.sales', compact(
             'startDate',
             'endDate',
@@ -208,7 +214,8 @@ class ReportController extends Controller
             'topCustomers',
             'currentMonthSales',
             'currentMonthTransactions',
-            'currentMonthAverageSale'
+            'currentMonthAverageSale',
+            'recentTransactions'
         ));
     }
 

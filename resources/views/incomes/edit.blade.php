@@ -32,6 +32,11 @@
                     <input type="number" id="amount" name="amount" step="0.01" value="{{ $income->amount }}" required>
                 </div>
                 <div class="form-group">
+                    <label for="paid_amount">Paid Amount (Rs)</label>
+                    <input type="number" id="paid_amount" name="paid_amount" step="0.01" value="{{ $income->paid_amount }}" min="0">
+                    <small style="color: #666; display: block; margin-top: 5px;">Current: Rs {{ number_format($income->paid_amount) }} | Remaining: Rs {{ number_format($income->remaining_amount) }}</small>
+                </div>
+                <div class="form-group">
                     <label for="income_date">Income Date *</label>
                     <input type="date" id="income_date" name="income_date" value="{{ $income->income_date->format('Y-m-d') }}" required>
                 </div>
@@ -43,13 +48,23 @@
                     <label for="description">Description</label>
                     <textarea id="description" name="description">{{ $income->description }}</textarea>
                 </div>
-                <div class="form-group">
-                    <label for="status">Status *</label>
+                                <div class="form-group">
+                    <label for="status">Service Status *</label>
                     <select id="status" name="status" required>
-                        <option value="completed" {{ $income->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                        <option value="pending" {{ $income->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="pending" {{ $income->status == 'pending' ? 'selected' : '' }}>Pending (Service Not Delivered)</option>
+                        <option value="completed" {{ $income->status == 'completed' ? 'selected' : '' }}>Completed (Service Delivered)</option>
                         <option value="cancelled" {{ $income->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                     </select>
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        Payment Status: 
+                        @if($income->payment_status == 'paid')
+                            <span style="color: #10b981; font-weight: bold;">✓ Paid</span>
+                        @elseif($income->payment_status == 'partial')
+                            <span style="color: #f59e0b; font-weight: bold;">◐ Partial</span>
+                        @else
+                            <span style="color: #ef4444; font-weight: bold;">✗ Unpaid</span>
+                        @endif
+                    </small>
                 </div>
                 <div style="margin-top: 30px;">
                     <button type="submit" class="btn btn-primary">💾 Update Income</button>

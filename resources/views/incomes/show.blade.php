@@ -98,6 +98,13 @@
         <div class="amount">Rs {{ number_format($income->amount) }}</div>
         <div class="status">
             <span class="badge badge-success">{{ ucfirst($income->status) }}</span>
+            @if($income->payment_status == 'paid')
+                <span class="badge" style="background: #10b981; color: white; margin-left: 8px;">✓ Paid</span>
+            @elseif($income->payment_status == 'partial')
+                <span class="badge" style="background: #f59e0b; color: white; margin-left: 8px;">◐ Partial Payment</span>
+            @else
+                <span class="badge" style="background: #ef4444; color: white; margin-left: 8px;">✗ Unpaid</span>
+            @endif
         </div>
     </div>
 
@@ -118,6 +125,40 @@
             <div class="info-card">
                 <div class="info-label">🔖 Reference Number</div>
                 <div class="info-value">{{ $income->reference_no ?? 'Not provided' }}</div>
+            </div>
+        </div>
+
+        <h3 style="margin: 30px 0 20px; color: #10b981;">💰 Payment Information</h3>
+        
+        <div class="info-grid">
+            <div class="info-card" style="border-left-color: #10b981;">
+                <div class="info-label">💵 Total Amount</div>
+                <div class="info-value" style="color: #10b981;">Rs {{ number_format($income->amount) }}</div>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #3b82f6;">
+                <div class="info-label">✓ Paid Amount</div>
+                <div class="info-value" style="color: #3b82f6;">Rs {{ number_format($income->paid_amount) }}</div>
+            </div>
+            
+            <div class="info-card" style="border-left-color: {{ $income->remaining_amount > 0 ? '#ef4444' : '#10b981' }};">
+                <div class="info-label">📊 Remaining Amount</div>
+                <div class="info-value" style="color: {{ $income->remaining_amount > 0 ? '#ef4444' : '#10b981' }};">
+                    Rs {{ number_format($income->remaining_amount) }}
+                </div>
+            </div>
+            
+            <div class="info-card" style="border-left-color: {{ $income->payment_status == 'paid' ? '#10b981' : ($income->payment_status == 'partial' ? '#f59e0b' : '#ef4444') }};">
+                <div class="info-label">🏷️ Payment Status</div>
+                <div class="info-value">
+                    @if($income->payment_status == 'paid')
+                        <span style="color: #10b981; font-weight: bold;">✓ Fully Paid</span>
+                    @elseif($income->payment_status == 'partial')
+                        <span style="color: #f59e0b; font-weight: bold;">◐ Partially Paid</span>
+                    @else
+                        <span style="color: #ef4444; font-weight: bold;">✗ Unpaid</span>
+                    @endif
+                </div>
             </div>
         </div>
         

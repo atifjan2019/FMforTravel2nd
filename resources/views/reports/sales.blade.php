@@ -98,5 +98,39 @@
             </tbody>
         </table>
     </div>
+
+    <div class="report-table-card">
+        <div class="report-section-title">Recent Transactions</div>
+        <table>
+            <thead>
+                <tr><th>Date</th><th>Customer</th><th>Item</th><th>Amount</th><th>Paid</th><th>Payment Status</th><th>Service Status</th></tr>
+            </thead>
+            <tbody>
+                @foreach($recentTransactions as $transaction)
+                <tr>
+                    <td>{{ $transaction->income_date->format('d M Y') }}</td>
+                    <td><strong>{{ $transaction->customer->name ?? 'N/A' }}</strong></td>
+                    <td>{{ $transaction->item->name ?? 'N/A' }}</td>
+                    <td class="sales">Rs {{ number_format($transaction->amount) }}</td>
+                    <td style="color: #3b82f6; font-weight: 600;">Rs {{ number_format($transaction->paid_amount) }}</td>
+                    <td>
+                        @if($transaction->payment_status == 'paid')
+                            <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✓ Paid</span>
+                        @elseif($transaction->payment_status == 'partial')
+                            <span style="background: #f59e0b; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">◐ Partial</span>
+                        @else
+                            <span style="background: #ef4444; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✗ Unpaid</span>
+                        @endif
+                    </td>
+                    <td>
+                        <span style="color: {{ $transaction->status == 'completed' ? '#10b981' : ($transaction->status == 'cancelled' ? '#ef4444' : '#f59e0b') }}; font-weight: 600;">
+                            {{ ucfirst($transaction->status) }}
+                        </span>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 <script src="/js/mobile-menu.js"></script>
 </x-layout>

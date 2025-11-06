@@ -27,10 +27,21 @@ class DashboardController extends Controller
         $totalCustomerPayments = CustomerPayment::whereBetween('payment_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
         $totalSupplierPayments = SupplierPayment::whereBetween('payment_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
         
-        // Calculate balances
-        $customerReceivables = $totalIncome - $totalCustomerPayments;
+        // Calculate balances - using remaining_amount from incomes for accurate receivables
+        $customerReceivables = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
+            ->whereIn('payment_status', ['unpaid', 'partial'])
+            ->sum('remaining_amount');
         $supplierPayables = $totalPurchases - $totalSupplierPayments;
         $netProfit = $totalIncome - $totalExpenses - $totalPurchases;
+        
+        // Payment status breakdown for current month
+        $totalPaidAmount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])->sum('paid_amount');
+        $paidIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
+            ->where('payment_status', 'paid')->count();
+        $partialIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
+            ->where('payment_status', 'partial')->count();
+        $unpaidIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
+            ->where('payment_status', 'unpaid')->count();
         
         // Recent transactions - CURRENT MONTH ONLY
         $recentIncomes = Income::with(['customer', 'item'])
@@ -79,6 +90,10 @@ class DashboardController extends Controller
             'customerReceivables',
             'supplierPayables',
             'netProfit',
+            'totalPaidAmount',
+            'paidIncomesCount',
+            'partialIncomesCount',
+            'unpaidIncomesCount',
             'recentIncomes',
             'recentExpenses',
             'recentPurchases',

@@ -31,8 +31,25 @@ class IncomeController extends Controller
             'income_date' => 'required|date',
             'reference_no' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'required|in:pending,completed,cancelled'
+            'status' => 'required|in:pending,completed,cancelled',
+            'paid_amount' => 'nullable|numeric|min:0'
         ]);
+
+        // Calculate payment status
+        $amount = $validated['amount'];
+        $paidAmount = $validated['paid_amount'] ?? 0;
+        $validated['paid_amount'] = $paidAmount;
+        $validated['remaining_amount'] = $amount - $paidAmount;
+        
+        if ($paidAmount == 0) {
+            $validated['payment_status'] = 'unpaid';
+        } elseif ($paidAmount >= $amount) {
+            $validated['payment_status'] = 'paid';
+            $validated['paid_amount'] = $amount;
+            $validated['remaining_amount'] = 0;
+        } else {
+            $validated['payment_status'] = 'partial';
+        }
 
         Income::create($validated);
 
@@ -62,8 +79,25 @@ class IncomeController extends Controller
             'income_date' => 'required|date',
             'reference_no' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'required|in:pending,completed,cancelled'
+            'status' => 'required|in:pending,completed,cancelled',
+            'paid_amount' => 'nullable|numeric|min:0'
         ]);
+
+        // Calculate payment status
+        $amount = $validated['amount'];
+        $paidAmount = $validated['paid_amount'] ?? $income->paid_amount;
+        $validated['paid_amount'] = $paidAmount;
+        $validated['remaining_amount'] = $amount - $paidAmount;
+        
+        if ($paidAmount == 0) {
+            $validated['payment_status'] = 'unpaid';
+        } elseif ($paidAmount >= $amount) {
+            $validated['payment_status'] = 'paid';
+            $validated['paid_amount'] = $amount;
+            $validated['remaining_amount'] = 0;
+        } else {
+            $validated['payment_status'] = 'partial';
+        }
 
         $income->update($validated);
 
@@ -76,5 +110,17 @@ class IncomeController extends Controller
         $income->delete();
         return redirect()->route('incomes.index')
             ->with('success', 'Income deleted successfully');
+    }
+
+    public function addPayment(Request $request, Income $income)
+    {
+        $validated = $request->validate([
+            'payment_amount' => 'required|numeric|min:0.01|max:' . $income->remaining_amount
+        ]);
+
+        $income->addPayment($validated['payment_amount']);
+
+        return redirect()->back()
+            ->with('success', 'Payment added successfully');
     }
 }

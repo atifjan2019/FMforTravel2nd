@@ -176,6 +176,9 @@
             <div class="stat-card">
                 <h3>Current Month Receivables</h3>
                 <div class="value info">Rs {{ number_format($customerReceivables ?? 0) }}</div>
+                <small style="color: #666; font-size: 12px; margin-top: 5px;">
+                    Unpaid: {{ $unpaidIncomesCount ?? 0 }} | Partial: {{ $partialIncomesCount ?? 0 }}
+                </small>
             </div>
             <div class="stat-card">
                 <h3>Current Month Net Profit</h3>
@@ -231,6 +234,8 @@
                         <th>Customer</th>
                         <th>Item</th>
                         <th>Amount</th>
+                        <th>Paid</th>
+                        <th>Payment Status</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -241,11 +246,21 @@
                         <td>{{ $income->customer->name ?? 'N/A' }}</td>
                         <td>{{ $income->item->name ?? 'N/A' }}</td>
                         <td><strong>Rs {{ number_format($income->amount) }}</strong></td>
+                        <td style="color: #3b82f6; font-weight: 600;">Rs {{ number_format($income->paid_amount) }}</td>
+                        <td>
+                            @if($income->payment_status == 'paid')
+                                <span class="badge" style="background: #d1fae5; color: #047857;">✓ Paid</span>
+                            @elseif($income->payment_status == 'partial')
+                                <span class="badge" style="background: #fef3c7; color: #92400e;">◐ Partial</span>
+                            @else
+                                <span class="badge" style="background: #fee2e2; color: #991b1b;">✗ Unpaid</span>
+                            @endif
+                        </td>
                         <td><span class="badge badge-success">{{ ucfirst($income->status) }}</span></td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" style="text-align: center; color: #999;">No incomes this month</td>
+                        <td colspan="7" style="text-align: center; color: #999;">No incomes this month</td>
                     </tr>
                     @endforelse
                 </tbody>
