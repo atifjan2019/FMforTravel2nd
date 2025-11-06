@@ -97,9 +97,21 @@ class ReportController extends Controller
         $purchaseTransactions = Purchase::whereBetween('purchase_date', [$startDate, $endDate])->sum('total_amount');
         $expenses = Expense::whereBetween('expense_date', [$startDate, $endDate])->sum('amount');
 
-        $totalCashIn = $customerPayments + $incomeTransactions;
-        $totalCashOut = $supplierPayments + $purchaseTransactions + $expenses;
-        $netCashFlow = $totalCashIn - $totalCashOut;
+    $totalCashIn = $customerPayments + $incomeTransactions;
+    $totalCashOut = $supplierPayments + $purchaseTransactions + $expenses;
+    $netCashFlow = $totalCashIn - $totalCashOut;
+
+    // Current month metrics for top 3 cards
+    $currentMonthStart = now()->startOfMonth();
+    $currentMonthEnd = now()->endOfMonth();
+    $currentMonthCustomerPayments = CustomerPayment::whereBetween('payment_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
+    $currentMonthIncomeTransactions = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
+    $currentMonthSupplierPayments = SupplierPayment::whereBetween('payment_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
+    $currentMonthPurchaseTransactions = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])->sum('total_amount');
+    $currentMonthExpenses = Expense::whereBetween('expense_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
+    $currentMonthCashIn = $currentMonthCustomerPayments + $currentMonthIncomeTransactions;
+    $currentMonthCashOut = $currentMonthSupplierPayments + $currentMonthPurchaseTransactions + $currentMonthExpenses;
+    $currentMonthNetCashFlow = $currentMonthCashIn - $currentMonthCashOut;
 
         // Monthly data
         $monthlyData = [];
@@ -130,7 +142,10 @@ class ReportController extends Controller
             'totalCashIn',
             'totalCashOut',
             'netCashFlow',
-            'monthlyData'
+            'monthlyData',
+            'currentMonthCashIn',
+            'currentMonthCashOut',
+            'currentMonthNetCashFlow'
         ));
     }
 
@@ -139,9 +154,16 @@ class ReportController extends Controller
         $startDate = $request->input('start_date', now()->startOfMonth());
         $endDate = $request->input('end_date', now()->endOfMonth());
 
-        $totalSales = Income::whereBetween('income_date', [$startDate, $endDate])->sum('amount');
-        $totalTransactions = Income::whereBetween('income_date', [$startDate, $endDate])->count();
-        $averageSale = $totalTransactions > 0 ? $totalSales / $totalTransactions : 0;
+    $totalSales = Income::whereBetween('income_date', [$startDate, $endDate])->sum('amount');
+    $totalTransactions = Income::whereBetween('income_date', [$startDate, $endDate])->count();
+    $averageSale = $totalTransactions > 0 ? $totalSales / $totalTransactions : 0;
+
+    // Current month metrics for top 3 cards
+    $currentMonthStart = now()->startOfMonth();
+    $currentMonthEnd = now()->endOfMonth();
+    $currentMonthSales = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
+    $currentMonthTransactions = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])->count();
+    $currentMonthAverageSale = $currentMonthTransactions > 0 ? $currentMonthSales / $currentMonthTransactions : 0;
 
         // Monthly sales
         $monthlySales = [];
@@ -183,7 +205,10 @@ class ReportController extends Controller
             'averageSale',
             'monthlySales',
             'salesByItem',
-            'topCustomers'
+            'topCustomers',
+            'currentMonthSales',
+            'currentMonthTransactions',
+            'currentMonthAverageSale'
         ));
     }
 
@@ -192,9 +217,16 @@ class ReportController extends Controller
         $startDate = $request->input('start_date', now()->startOfMonth());
         $endDate = $request->input('end_date', now()->endOfMonth());
 
-        $totalPurchases = Purchase::whereBetween('purchase_date', [$startDate, $endDate])->sum('total_amount');
-        $totalTransactions = Purchase::whereBetween('purchase_date', [$startDate, $endDate])->count();
-        $averagePurchase = $totalTransactions > 0 ? $totalPurchases / $totalTransactions : 0;
+    $totalPurchases = Purchase::whereBetween('purchase_date', [$startDate, $endDate])->sum('total_amount');
+    $totalTransactions = Purchase::whereBetween('purchase_date', [$startDate, $endDate])->count();
+    $averagePurchase = $totalTransactions > 0 ? $totalPurchases / $totalTransactions : 0;
+
+    // Current month metrics for top 3 cards
+    $currentMonthStart = now()->startOfMonth();
+    $currentMonthEnd = now()->endOfMonth();
+    $currentMonthPurchases = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])->sum('total_amount');
+    $currentMonthTransactions = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])->count();
+    $currentMonthAveragePurchase = $currentMonthTransactions > 0 ? $currentMonthPurchases / $currentMonthTransactions : 0;
 
         // Monthly purchases
         $monthlyPurchases = [];
@@ -236,7 +268,10 @@ class ReportController extends Controller
             'averagePurchase',
             'monthlyPurchases',
             'purchasesByItem',
-            'topSuppliers'
+            'topSuppliers',
+            'currentMonthPurchases',
+            'currentMonthTransactions',
+            'currentMonthAveragePurchase'
         ));
     }
 }

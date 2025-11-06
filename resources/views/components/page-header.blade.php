@@ -1,12 +1,15 @@
 @props(['title', 'icon' => '📄', 'backUrl' => '/', 'actionUrl' => null, 'actionText' => '+ Add'])
 
+<style>
+    .header-center-left { text-align: left !important; justify-content: flex-start !important; }
+</style>
 <header>
     <div class="header-left">
         @if($actionUrl)
             <a href="{{ $actionUrl }}" class="btn btn-success">{{ $actionText }}</a>
         @endif
     </div>
-    <div class="header-center">
+    <div class="header-center @if(!$actionUrl) header-center-left @endif">
         <h1>{{ $title }}</h1>
     </div>
     <div class="header-right">
