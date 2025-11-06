@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="status">Status *</label>
                     <select id="status" name="status" required>
-                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
                         <option value="pending">Pending</option>
                         <option value="cancelled">Cancelled</option>
                     </select>

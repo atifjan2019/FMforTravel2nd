@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <label for="status">Status *</label>
                     <select id="status" name="status" required>
-                        <option value="confirmed" {{ $income->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                        <option value="completed" {{ $income->status == 'completed' ? 'selected' : '' }}>Completed</option>
                         <option value="pending" {{ $income->status == 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="cancelled" {{ $income->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                     </select>
