@@ -11,6 +11,8 @@
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; border-radius: 10px; margin-bottom: 30px; }
         header h1 { font-size: 24px; }
+        .btn { padding: 8px 18px; font-size: 14px; border-radius: 5px; text-decoration: none; font-weight: 600; display: inline-block; border: none; cursor: pointer; }
+        .btn-print { background: #10b981; color: white; margin-left: 10px; }
         .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
         .summary-item { text-align: center; padding: 20px; background: #f8fafc; border-radius: 8px; }
@@ -23,21 +25,66 @@
         .payment { color: #10b981; }
         nav a { color: white; text-decoration: none; margin-right: 20px; opacity: 0.9; }
         nav a:hover { opacity: 1; }
+        .header-actions { display: flex; justify-content: space-between; align-items: center; }
+        
+        .print-header { display: none; }
+        
+        @media print {
+            body { background: white; }
+            .container { padding: 0; max-width: 100%; }
+            header { display: none !important; }
+            nav, .btn-print { display: none !important; }
+            .card { box-shadow: none; border: 1px solid #ddd; }
+            th { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .summary { display: flex !important; flex-direction: row !important; gap: 15px !important; }
+            .summary-item { border: 1px solid #ddd; flex: 1; }
+            @page { margin: 1cm; }
+            
+            .print-header { 
+                display: flex !important; 
+                justify-content: space-between; 
+                align-items: center; 
+                padding: 20px 0; 
+                border-bottom: 3px solid #333; 
+                margin-bottom: 30px; 
+            }
+            .print-header img { 
+                height: 60px; 
+                width: auto; 
+            }
+            .print-header .supplier-name { 
+                font-size: 22px; 
+                font-weight: bold; 
+                color: #333; 
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="print-header">
+            <img src="/images/alnafi.png" alt="Al Nafi Travels Logo">
+            <div class="supplier-name">Supplier: {{ $supplier->name }}</div>
+        </div>
+        
         <header>
-            <h1>📒 Supplier Ledger: {{ $supplier->name }}</h1>
-            <nav style="margin-top: 10px;">
-                <a href="/">🏠 Dashboard</a>
-                <a href="/suppliers">← Back to Suppliers</a>
-            </nav>
+            <div class="header-actions">
+                <div>
+                    <h1>📒 Supplier Ledger: {{ $supplier->name }}</h1>
+                    <nav style="margin-top: 10px;">
+                        <a href="/">🏠 Dashboard</a>
+                        <a href="/suppliers">← Back to Suppliers</a>
+                    </nav>
+                </div>
+                <div>
+                    <button onclick="window.print()" class="btn btn-print">🖨️ Print Ledger</button>
+                </div>
+            </div>
         </header>
 
         <div class="summary">
             <div class="summary-item">
-                <div class="label">Total Purchases</div>
+                <div class="label">Total Amount</div>
                 <div class="value purchase">Rs {{ number_format($supplier->total_purchases) }}</div>
             </div>
             <div class="summary-item">

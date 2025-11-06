@@ -7,9 +7,11 @@
     <div class="header-left">
         @if($actionUrl)
             <a href="{{ $actionUrl }}" class="btn btn-success">{{ $actionText }}</a>
+        @elseif(isset($slot) && $slot->isNotEmpty())
+            {{ $slot }}
         @endif
     </div>
-    <div class="header-center @if(!$actionUrl) header-center-left @endif">
+    <div class="header-center @if(!$actionUrl && (!isset($slot) || $slot->isEmpty())) header-center-left @endif">
         <h1>{{ $title }}</h1>
     </div>
     <div class="header-right">
