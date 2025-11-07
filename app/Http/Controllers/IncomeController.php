@@ -115,12 +115,35 @@ class IncomeController extends Controller
     public function addPayment(Request $request, Income $income)
     {
         $validated = $request->validate([
-            'payment_amount' => 'required|numeric|min:0.01|max:' . $income->remaining_amount
+            'amount' => 'required|numeric|min:0.01|max:' . $income->remaining_amount,
+            'payment_method' => 'required|string|in:Cash,Online,Check',
+            'person_reference' => 'nullable|string|max:255',
+            'payment_date' => 'required|date'
         ]);
 
-        $income->addPayment($validated['payment_amount']);
+        try {
+            // Record payment history
+            $income->paymentHistory()->create([
+                'amount' => $validated['amount'],
+                'payment_method' => $validated['payment_method'],
+                'person_reference' => $validated['person_reference'] ?? null,
+                'payment_date' => $validated['payment_date']
+            ]);
+            
+            // Update income paid amount
+            $income->addPayment($validated['amount']);
 
-        return redirect()->back()
-            ->with('success', 'Payment added successfully');
+            return redirect()->back()
+                ->with('success', 'Payment added successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error adding payment: ' . $e->getMessage());
+        }
+    }
+    
+    public function paymentHistory(Income $income)
+    {
+        $income->load(['customer', 'item', 'paymentHistory']);
+        return view('incomes.payment-history', compact('income'));
     }
 }

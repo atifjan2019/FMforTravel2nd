@@ -69,21 +69,44 @@
         </div>
 
             <!-- Payment Modal -->
-            <div id="paymentModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:9999; align-items:center; justify-content:center;">
-                <div style="background:white; padding:30px 25px; border-radius:10px; min-width:320px; max-width:90vw; box-shadow:0 2px 8px rgba(0,0,0,0.2); position:relative;">
-                    <h3 style="margin-bottom:18px; color:#4f46e5;">Add Payment</h3>
+            <div id="paymentModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+                <div style="background:white; padding:30px; border-radius:10px; min-width:400px; max-width:90vw; box-shadow:0 4px 12px rgba(0,0,0,0.3); position:relative;">
+                    <h3 style="margin-bottom:20px; color:#4f46e5;">💸 Add Payment for Purchase</h3>
                     <form id="paymentForm" method="POST">
                         @csrf
-                        <label for="payment_amount">Amount to Pay</label>
-                        <input type="number" id="payment_amount" name="amount" min="1" step="0.01" required style="width:100%; margin-bottom:15px; padding:8px; border-radius:5px; border:1px solid #ddd;">
                         <input type="hidden" id="modal_purchase_id">
-                        <div style="margin-bottom:10px; color:#666; font-size:13px;">
-                            Remaining: Rs <span id="modal_remaining"></span>
+                        
+                        <div style="margin-bottom:15px;">
+                            <label for="payment_amount" style="display:block; margin-bottom:5px; font-weight:600;">Amount (Rs) *</label>
+                            <input type="number" id="payment_amount" name="amount" min="1" step="0.01" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
+                            <small style="color:#666; font-size:12px;">Remaining: Rs <span id="modal_remaining"></span></small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit Payment</button>
-                        <button type="button" class="btn btn-secondary" onclick="closePaymentModal()" style="margin-left:10px;">Cancel</button>
+                        
+                        <div style="margin-bottom:15px;">
+                            <label for="payment_method" style="display:block; margin-bottom:5px; font-weight:600;">Payment Method *</label>
+                            <select id="payment_method" name="payment_method" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
+                                <option value="Cash" selected>Cash</option>
+                                <option value="Online">Online</option>
+                                <option value="Check">Check</option>
+                            </select>
+                        </div>
+                        
+                        <div style="margin-bottom:15px;">
+                            <label for="person_reference" style="display:block; margin-bottom:5px; font-weight:600;">Person + Reference</label>
+                            <input type="text" id="person_reference" name="person_reference" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;" placeholder="e.g., John Doe - INV-123">
+                        </div>
+                        
+                        <div style="margin-bottom:20px;">
+                            <label for="payment_date" style="display:block; margin-bottom:5px; font-weight:600;">Date & Time *</label>
+                            <input type="datetime-local" id="payment_date" name="payment_date" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
+                        </div>
+                        
+                        <div style="display:flex; gap:10px;">
+                            <button type="submit" class="btn btn-primary" style="flex:1;">Submit Payment</button>
+                            <button type="button" class="btn btn-secondary" onclick="closePaymentModal()" style="flex:1;">Cancel</button>
+                        </div>
                     </form>
-                    <button onclick="closePaymentModal()" style="position:absolute; top:10px; right:15px; background:none; border:none; font-size:20px; color:#888; cursor:pointer;">&times;</button>
+                    <button onclick="closePaymentModal()" style="position:absolute; top:10px; right:15px; background:none; border:none; font-size:24px; color:#888; cursor:pointer;">&times;</button>
                 </div>
             </div>
 
@@ -94,6 +117,16 @@
                 document.getElementById('modal_remaining').innerText = Number(remaining).toLocaleString();
                 document.getElementById('payment_amount').max = remaining;
                 document.getElementById('payment_amount').value = '';
+                
+                // Set current date and time
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('payment_date').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+                
                 // Set form action
                 document.getElementById('paymentForm').action = '/purchases/' + purchaseId + '/add-payment';
             }

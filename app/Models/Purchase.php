@@ -43,6 +43,11 @@ class Purchase extends Model
         return $this->belongsTo(Item::class);
     }
 
+    public function paymentHistory()
+    {
+        return $this->hasMany(PurchasePaymentHistory::class)->orderBy('payment_date', 'desc');
+    }
+
     protected static function boot()
     {
         parent::boot();

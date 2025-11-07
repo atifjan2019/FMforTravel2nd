@@ -190,6 +190,7 @@
                         <th>Purchase (+)</th>
                         <!-- Removed Payment (-) column -->
                         <th>Payment Status</th>
+                        <th>Credit/Debit</th>
                         <th>Reference</th>
                     </tr>
                 </thead>
@@ -206,7 +207,8 @@
                             'reference' => $purchase->reference_no,
                             'payment_status' => $purchase->payment_status,
                             'paid_amount' => $purchase->paid_amount,
-                            'remaining_amount' => $purchase->remaining_amount
+                            'remaining_amount' => $purchase->remaining_amount,
+                            'purchase_id' => $purchase->id
                         ]);
                     }
                     foreach($supplier->payments as $payment) {
@@ -229,7 +231,15 @@
                     <tr>
                         <td>{{ $transaction['date']->format('d M Y') }}</td>
                         <td><strong>{{ $transaction['type'] }}</strong></td>
-                        <td>{{ $transaction['description'] }}</td>
+                        <td>
+                            @if($transaction['type'] == 'Purchase' && isset($transaction['purchase_id']))
+                                <a href="/purchases/{{ $transaction['purchase_id'] }}/payment-history" style="color: #667eea; text-decoration: underline;">
+                                    {{ $transaction['description'] }}
+                                </a>
+                            @else
+                                {{ $transaction['description'] }}
+                            @endif
+                        </td>
                         <td class="purchase">
                             {{ $transaction['purchase'] > 0 ? 'Rs ' . number_format($transaction['purchase']) : '' }}
                             @if($transaction['purchase'] > 0 && isset($transaction['paid_amount']))
@@ -249,6 +259,17 @@
                                 -
                             @endif
                         </td>
+                        <td>
+                            @if($transaction['type'] == 'Purchase')
+                                @if($transaction['payment_status'] == 'partial')
+                                    <button class="btn btn-info btn-sm" onclick="openSupplierPaymentModal({{ $supplier->id }}, {{ $transaction['remaining_amount'] ?? 0 }})" style="padding: 4px 10px; font-size: 12px;">Add Payment</button>
+                                @elseif($transaction['payment_status'] == 'unpaid')
+                                    <button class="btn btn-warning btn-sm" onclick="openSupplierPaymentModal({{ $supplier->id }}, {{ $transaction['remaining_amount'] ?? 0 }})" style="padding: 4px 10px; font-size: 12px;">Pay Now</button>
+                                @else
+                                    <span style="color: #10b981;">✓</span>
+                                @endif
+                            @endif
+                        </td>
                         <td>{{ $transaction['reference'] ?? 'N/A' }}</td>
                     </tr>
                     @empty
@@ -264,6 +285,76 @@
         <button onclick="window.print()" class="floating-print-btn">
             🖨️ Print Ledger
         </button>
+        
+        <!-- Supplier Payment Modal -->
+        <div id="supplierPaymentModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+            <div style="background:white; padding:30px; border-radius:10px; min-width:400px; max-width:90vw; box-shadow:0 4px 12px rgba(0,0,0,0.3); position:relative;">
+                <h3 style="margin-bottom:20px; color:#4f46e5;">💸 Add Payment to Supplier</h3>
+                <form id="supplierPaymentForm" action="/supplier-payments/create-direct" method="POST">
+                    @csrf
+                    <input type="hidden" name="supplier_id" id="supplier_payment_supplier_id" value="{{ $supplier->id }}">
+                    
+                    <div style="margin-bottom:15px;">
+                        <label for="supplier_payment_amount" style="display:block; margin-bottom:5px; font-weight:600;">Amount (Rs) *</label>
+                        <input type="number" id="supplier_payment_amount" name="amount" min="1" step="0.01" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
+                        <small style="color:#666; font-size:12px;">Remaining: Rs <span id="supplier_modal_remaining"></span></small>
+                    </div>
+                    
+                    <div style="margin-bottom:15px;">
+                        <label for="supplier_payment_method" style="display:block; margin-bottom:5px; font-weight:600;">Payment Method *</label>
+                        <select id="supplier_payment_method" name="payment_method" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
+                            <option value="Cash" selected>Cash</option>
+                            <option value="Online">Online</option>
+                            <option value="Check">Check</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom:15px;">
+                        <label for="supplier_payment_person" style="display:block; margin-bottom:5px; font-weight:600;">Person + Reference</label>
+                        <input type="text" id="supplier_payment_person" name="person_reference" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;" placeholder="e.g., John Doe - INV-123">
+                    </div>
+                    
+                    <div style="margin-bottom:20px;">
+                        <label for="supplier_payment_date" style="display:block; margin-bottom:5px; font-weight:600;">Date & Time *</label>
+                        <input type="datetime-local" id="supplier_payment_date" name="payment_date" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
+                    </div>
+                    
+                    <div style="display:flex; gap:10px;">
+                        <button type="submit" class="btn btn-primary" style="flex:1;">Submit Payment</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeSupplierPaymentModal()" style="flex:1;">Cancel</button>
+                    </div>
+                </form>
+                <button onclick="closeSupplierPaymentModal()" style="position:absolute; top:10px; right:15px; background:none; border:none; font-size:24px; color:#888; cursor:pointer;">&times;</button>
+            </div>
+        </div>
+        
+        <script>
+        function openSupplierPaymentModal(supplierId, remaining) {
+            document.getElementById('supplierPaymentModal').style.display = 'flex';
+            document.getElementById('supplier_payment_supplier_id').value = supplierId;
+            document.getElementById('supplier_modal_remaining').innerText = Number(remaining).toLocaleString();
+            document.getElementById('supplier_payment_amount').max = remaining;
+            document.getElementById('supplier_payment_amount').value = '';
+            
+            // Set current date and time
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('supplier_payment_date').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+        
+        function closeSupplierPaymentModal() {
+            document.getElementById('supplierPaymentModal').style.display = 'none';
+        }
+        
+        // Close modal on ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeSupplierPaymentModal();
+        });
+        </script>
     </div>
 <script src="/js/mobile-menu.js"></script>
 </body>

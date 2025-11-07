@@ -36,8 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('items', App\Http\Controllers\ItemController::class);
     Route::resource('purchases', App\Http\Controllers\PurchaseController::class);
     Route::post('purchases/{purchase}/add-payment', [App\Http\Controllers\PurchaseController::class, 'addPayment'])->name('purchases.add-payment');
+    Route::get('purchases/{purchase}/payment-history', [App\Http\Controllers\PurchaseController::class, 'paymentHistory'])->name('purchases.payment-history');
     Route::resource('incomes', App\Http\Controllers\IncomeController::class);
     Route::post('incomes/{income}/add-payment', [App\Http\Controllers\IncomeController::class, 'addPayment'])->name('incomes.add-payment');
+    Route::get('incomes/{income}/payment-history', [App\Http\Controllers\IncomeController::class, 'paymentHistory'])->name('incomes.payment-history');
     Route::resource('expenses', App\Http\Controllers\ExpenseController::class);
 
     // Reports

@@ -12,7 +12,7 @@
         
         @media print {
             body { background: white; }
-            header, nav, .page-header .btn, button { display: none !important; }
+            header, nav, .page-header .btn, button, .no-print { display: none !important; }
             .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
             table { page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
@@ -53,7 +53,7 @@
             <h2 style="margin-bottom: 20px;">All Customers Balance Summary</h2>
             <table>
                 <thead>
-                    <tr><th>Customer Name</th><th>Address</th><th>Total Amount</th><th>Customer Paid</th><th>Balance Due</th><th>Payment Status</th><th>Status</th></tr>
+                    <tr><th>Customer Name</th><th>Address</th><th>Total Amount</th><th>Customer Paid</th><th>Balance Due</th><th>Payment Status</th><th>Status</th><th class="no-print">Actions</th></tr>
                 </thead>
                 <tbody>
                     @forelse($customers as $customer)
@@ -87,9 +87,12 @@
                             @endif
                         </td>
                         <td>{{ ucfirst($customer->status) }}</td>
+                        <td class="no-print">
+                            <a href="/customers/{{ $customer->id }}/ledger" class="btn btn-primary" style="background: #667eea; color: white; padding: 6px 12px; border-radius: 5px; text-decoration: none; font-size: 12px; display: inline-block; margin-right: 5px;">📋 View Ledger</a>
+                        </td>
                     </tr>
                     @empty
-                    <tr><td colspan="7" style="text-align: center; padding: 40px;">No customers found</td></tr>
+                    <tr><td colspan="8" style="text-align: center; padding: 40px;">No customers found</td></tr>
                     @endforelse
                 </tbody>
             </table>

@@ -39,6 +39,11 @@ class Income extends Model
         return $this->belongsTo(Item::class);
     }
 
+    public function paymentHistory()
+    {
+        return $this->hasMany(IncomePaymentHistory::class)->orderBy('payment_date', 'desc');
+    }
+
     // Calculate and update payment status
     public function updatePaymentStatus()
     {

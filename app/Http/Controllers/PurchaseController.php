@@ -93,16 +93,35 @@ class PurchaseController extends Controller
     public function addPayment(Request $request, Purchase $purchase)
     {
         $validated = $request->validate([
-            'amount' => 'required|numeric|min:0.01'
+            'amount' => 'required|numeric|min:0.01',
+            'payment_method' => 'required|string|in:Cash,Online,Check',
+            'person_reference' => 'nullable|string|max:255',
+            'payment_date' => 'required|date'
         ]);
 
         try {
+            // Record payment history
+            $purchase->paymentHistory()->create([
+                'amount' => $validated['amount'],
+                'payment_method' => $validated['payment_method'],
+                'person_reference' => $validated['person_reference'] ?? null,
+                'payment_date' => $validated['payment_date']
+            ]);
+            
+            // Update purchase paid amount
             $purchase->addPayment($validated['amount']);
+            
             return redirect()->back()
                 ->with('success', 'Payment added successfully');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', $e->getMessage());
         }
+    }
+    
+    public function paymentHistory(Purchase $purchase)
+    {
+        $purchase->load(['supplier', 'item', 'paymentHistory']);
+        return view('purchases.payment-history', compact('purchase'));
     }
 }
