@@ -16,7 +16,11 @@
                     @forelse($payments as $payment)
                     <tr>
                         <td>{{ $payment->payment_date->format('d M Y') }}</td>
-                        <td><a href="/customers/{{ $payment->customer->id }}" style="color: #667eea; text-decoration: none; font-weight: 600;">{{ $payment->customer->name }}</a></td>
+                        <td>
+                            <a href="{{ route('customers.ledger', $payment->customer->id) }}" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                                {{ $payment->customer->name }}
+                            </a>
+                        </td>
                         <td><strong style="color: #10b981;">Rs {{ number_format($payment->amount) }}</strong></td>
                         <td><span style="background: #e0e7ff; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">{{ ucfirst($payment->payment_method) }}</span></td>
                         <td>{{ $payment->reference_no ?? 'N/A' }}</td>

@@ -102,7 +102,11 @@
         <div class="purchase-details">
             <div class="detail-item">
                 <div class="detail-label">Supplier</div>
-                <div class="detail-value">{{ $purchase->supplier->name }}</div>
+                <div class="detail-value">
+                    <a href="{{ route('suppliers.ledger', $purchase->supplier->id) }}" style="color:#2563eb; text-decoration:none;">
+                        {{ $purchase->supplier->name }}
+                    </a>
+                </div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Item</div>

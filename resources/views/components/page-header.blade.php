@@ -23,7 +23,7 @@
         <a href="/suppliers">🏢 Suppliers</a>
         <a href="/items">📦 Items</a>
         <a href="/purchases">🛒 Purchases</a>
-        <a href="/incomes">💰 Incomes</a>
+        <a href="/incomes">💰 Incomes (Sell)</a>
         <a href="/expenses">💸 Expenses</a>
         <a href="/reports">📊 Reports</a>
     </nav>

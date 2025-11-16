@@ -13,7 +13,7 @@
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Email</th>
-                    <th>Total Incomes</th>
+                    <th>Total Incomes (Sell)</th>
                     <th>Total Payments</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -22,7 +22,13 @@
             <tbody>
                 @forelse($customers as $customer)
                 <tr>
-                    <td><strong>{{ $customer->name }}</strong></td>
+                    <td>
+                        <strong>
+                            <a href="{{ route('customers.ledger', $customer->id) }}" style="color:#2563eb; text-decoration:none;">
+                                {{ $customer->name }}
+                            </a>
+                        </strong>
+                    </td>
                     <td>{{ $customer->phone ?? 'N/A' }}</td>
                     <td>{{ $customer->email ?? 'N/A' }}</td>
                     <td>{{ $customer->incomes_count }}</td>

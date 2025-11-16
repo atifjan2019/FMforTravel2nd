@@ -13,30 +13,32 @@
         @media print {
             body { background: white; }
             header, nav, .page-header .btn, button, .no-print { display: none !important; }
-            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
-            table { page-break-inside: auto; }
+            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; padding: 16px; }
+            table { page-break-inside: auto; font-size: 12px; }
             tr { page-break-inside: avoid; page-break-after: auto; }
             thead { display: table-header-group; }
-            th { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            th { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 0.72rem; padding: 10px 8px; }
+            td { padding: 10px 8px; }
             @page { margin: 1cm; size: landscape; }
             .print-title { display: none !important; }
             
             .print-header { 
                 display: flex !important; 
                 justify-content: space-between; 
-                align-items: center; 
-                padding: 20px 0; 
-                border-bottom: 3px solid #333; 
-                margin-bottom: 30px; 
+                align-items: flex-start; 
+                gap: 20px;
+                padding: 10px 0; 
+                border-bottom: 2px solid #333; 
+                margin-bottom: 16px; 
             }
             .print-header img { 
                 height: 60px; 
                 width: auto; 
             }
-            .print-header .report-title { 
-                font-size: 22px; 
-                font-weight: bold; 
-                color: #333; 
+            .print-header .report-meta { 
+                font-size: 12px; 
+                color: #475569; 
+                line-height: 1.4; 
             }
         }
         .print-title { display: none; }
@@ -44,7 +46,14 @@
 
     <div class="print-header">
         <img src="/images/alnafi.png" alt="Al Nafi Travels Logo">
-        <div class="report-title">Customer Ledger Report</div>
+        <div style="flex:1;">
+            <div class="report-title" style="font-size:22px; font-weight:700; color:#111827; margin:0;">Customer Ledger Report</div>
+            <div class="report-meta">
+                <div>+92 312 544 6922</div>
+                <div>alnafitravels24@gmail.com</div>
+                <div>Office no C9, 3rd Floor, Abbas Khan Block, Ghafoor Market Charsadda, Pakistan</div>
+            </div>
+        </div>
     </div>
 
     <h1 class="print-title">📒 Customer Ledger Report - Al Nafi Travels</h1>
@@ -58,7 +67,13 @@
                 <tbody>
                     @forelse($customers as $customer)
                     <tr>
-                        <td><strong>{{ $customer->name }}</strong></td>
+                        <td>
+                            <strong>
+                                <a href="{{ route('customers.ledger', $customer->id) }}" style="color:#4f46e5; text-decoration:none;">
+                                    {{ $customer->name }}
+                                </a>
+                            </strong>
+                        </td>
                         <td>{{ $customer->address ?? '-' }}</td>
                         <td>Rs {{ number_format($customer->total_income) }}</td>
                         <td class="positive">Rs {{ number_format($customer->total_paid) }}</td>

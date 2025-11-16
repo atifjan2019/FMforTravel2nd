@@ -109,7 +109,17 @@
                 @foreach($recentPurchases as $purchase)
                 <tr>
                     <td>{{ $purchase->purchase_date->format('d M Y') }}</td>
-                    <td><strong>{{ $purchase->supplier->name ?? 'N/A' }}</strong></td>
+                    <td>
+                        @if($purchase->supplier)
+                            <strong>
+                                <a href="{{ route('suppliers.ledger', $purchase->supplier->id) }}" style="color:#4f46e5; text-decoration:none;">
+                                    {{ $purchase->supplier->name }}
+                                </a>
+                            </strong>
+                        @else
+                            N/A
+                        @endif
+                    </td>
                     <td>{{ $purchase->item->name ?? 'N/A' }}</td>
                     <td class="purchases">Rs {{ number_format($purchase->total_amount) }}</td>
                     <td style="color: #3b82f6; font-weight: 600;">Rs {{ number_format($purchase->paid_amount) }}</td>

@@ -6,7 +6,7 @@
     />
 
     <div style="margin-bottom: 20px; text-align: right;">
-        <a href="/incomes/create" class="btn btn-primary" style="background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600; font-size: 14px; margin-right: 10px;">+ New Income</a>
+        <a href="/incomes/create" class="btn btn-primary" style="background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600; font-size: 14px; margin-right: 10px;">+ New Income (Sell)</a>
         @if($income->remaining_amount > 0)
             <button onclick="openIncomePaymentModal()" class="btn btn-warning" style="background: #f59e0b; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; margin-right: 10px;">💰 Receive Payment</button>
         @endif
@@ -98,11 +98,15 @@
     </style>
 
     <div class="income-info">
-        <h2>Income Details</h2>
+        <h2>Income (Sell) Details</h2>
         <div class="income-details">
             <div class="detail-item">
                 <div class="detail-label">Customer</div>
-                <div class="detail-value">{{ $income->customer->name }}</div>
+                <div class="detail-value">
+                    <a href="{{ route('customers.ledger', $income->customer->id) }}" style="color:#2563eb; text-decoration:none;">
+                        {{ $income->customer->name }}
+                    </a>
+                </div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Item/Service</div>
@@ -174,7 +178,7 @@
 
     <div class="card" style="margin-top: 20px;">
         <a href="/customers/{{ $income->customer_id }}/ledger" class="btn btn-secondary">← Back to Customer Ledger</a>
-        <a href="/incomes/{{ $income->id }}" class="btn btn-primary" style="margin-left: 10px;">View Income Details</a>
+        <a href="/incomes/{{ $income->id }}" class="btn btn-primary" style="margin-left: 10px;">View Income (Sell) Details</a>
     </div>
 
     <!-- Income Payment Modal -->

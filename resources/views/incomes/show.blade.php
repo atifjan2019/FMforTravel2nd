@@ -1,6 +1,6 @@
-<x-layout title="💰 Income Details - Al Nafi Travels">
+<x-layout title="💰 Income (Sell) Details - Al Nafi Travels">
     <x-page-header
-        title="💰 Income Details"
+        title="💰 Income (Sell) Details"
         icon="💰"
         backUrl="/incomes"
     />
@@ -114,7 +114,11 @@
         <div class="info-grid">
             <div class="info-card">
                 <div class="info-label">👤 Customer</div>
-                <div class="info-value">{{ $income->customer->name }}</div>
+                <div class="info-value">
+                    <a href="{{ route('customers.ledger', $income->customer->id) }}" style="color:#2563eb; text-decoration:none;">
+                        {{ $income->customer->name }}
+                    </a>
+                </div>
             </div>
             
             <div class="info-card">
@@ -172,8 +176,8 @@
 
     <div class="card">
         <div class="action-buttons">
-            <a href="/incomes/{{ $income->id }}/edit" class="btn btn-success">✏️ Edit Income</a>
-            <a href="/incomes" class="btn btn-secondary">← Back to Incomes</a>
+            <a href="/incomes/{{ $income->id }}/edit" class="btn btn-success">✏️ Edit Income (Sell)</a>
+            <a href="/incomes" class="btn btn-secondary">← Back to Incomes (Sell)</a>
         </div>
     </div>
 </x-layout>

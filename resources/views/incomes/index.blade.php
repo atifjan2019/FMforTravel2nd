@@ -1,9 +1,9 @@
-<x-layout title="Incomes - Al Nafi Travels">
+<x-layout title="Income (Sell) - Al Nafi Travels">
     <x-page-header 
-        title="Incomes" 
+        title="Income (Sell)" 
         icon="💰" 
         actionUrl="/incomes/create" 
-        actionText="+ Add Income" 
+        actionText="+ Add Income (Sell)" 
     />
 
     @if(session('success'))
@@ -48,7 +48,15 @@
                     @forelse($incomes as $income)
                     <tr>
                         <td>{{ $income->income_date->format('d M Y') }}</td>
-                        <td>{{ $income->customer->name ?? 'N/A' }}</td>
+                        <td>
+                            @if($income->customer)
+                                <a href="{{ route('customers.ledger', $income->customer->id) }}" style="color:#2563eb; text-decoration:none;">
+                                    {{ $income->customer->name }}
+                                </a>
+                            @else
+                                N/A
+                            @endif
+                        </td>
                         <td>{{ $income->item->name ?? 'N/A' }}</td>
                         <td><strong>Rs {{ number_format($income->amount) }}</strong></td>
                         <td>

@@ -99,7 +99,7 @@
 
     <div class="report-section">
         <div class="report-card-metric income">
-            <span class="metric-label">Total Income</span>
+            <span class="metric-label">Total Income (Sell)</span>
             <span class="metric-value">Rs {{ number_format($totalIncome) }}</span>
             <span class="metric-icon">💰</span>
         </div>
@@ -124,7 +124,7 @@
         <div class="report-section-title">Monthly Breakdown</div>
         <table>
             <thead>
-                <tr><th>Month</th><th>Income</th><th>Expenses</th><th>Purchases</th><th>Net Profit</th></tr>
+                <tr><th>Month</th><th>Income (Sell)</th><th>Expenses</th><th>Purchases</th><th>Net Profit</th></tr>
             </thead>
             <tbody>
                 @foreach($monthlyData as $data)

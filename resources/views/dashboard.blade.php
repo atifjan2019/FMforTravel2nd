@@ -188,7 +188,7 @@
         <!-- Stats Tabs -->
         <div class="recent-section" style="margin-bottom: 20px;">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchStatsTab('income-stats')">💰 Income Stats</button>
+                <button class="tab-btn active" onclick="switchStatsTab('income-stats')">💰 Income (Sell) Stats</button>
                 <button class="tab-btn" onclick="switchStatsTab('purchase-stats')">🛒 Purchase Stats</button>
             </div>
 
@@ -196,7 +196,7 @@
             <div id="income-stats-tab" class="tab-content active">
                 <div class="stats">
                     <div class="stat-card">
-                        <h3>Current Month Income</h3>
+                        <h3>Current Month Income (Sell)</h3>
                         <div class="value positive">Rs {{ number_format($totalIncome ?? 0) }}</div>
                     </div>
                     <div class="stat-card">
@@ -258,7 +258,7 @@
             </a>
             <a href="/incomes" class="menu-item">
                 <div class="icon">💰</div>
-                <div class="label">Incomes</div>
+                <div class="label">Incomes (Sell)</div>
             </a>
             <a href="/expenses" class="menu-item">
                 <div class="icon">💸</div>
@@ -272,13 +272,13 @@
 
         <div class="recent-section">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('incomes')">💰 Incomes (Sales)</button>
+                <button class="tab-btn active" onclick="switchTab('incomes')">💰 Incomes (Sell)</button>
                 <button class="tab-btn" onclick="switchTab('purchases')">🛒 Purchases</button>
             </div>
 
             <!-- Incomes Tab -->
             <div id="incomes-tab" class="tab-content active">
-                <h2 style="margin-bottom: 20px;">💰 Current Month Incomes - Sales to Customers ({{ now()->format('F Y') }})</h2>
+                <h2 style="margin-bottom: 20px;">💰 Current Month Incomes (Sell) - Sales to Customers ({{ now()->format('F Y') }})</h2>
                 <table>
                     <thead>
                         <tr>
@@ -295,7 +295,15 @@
                         @forelse($recentIncomes ?? [] as $income)
                         <tr>
                             <td>{{ $income->income_date->format('d M Y') }}</td>
-                            <td>{{ $income->customer->name ?? 'N/A' }}</td>
+                            <td>
+                                @if($income->customer)
+                                    <a href="{{ route('customers.ledger', $income->customer->id) }}" style="color:#2563eb; text-decoration:none;">
+                                        {{ $income->customer->name }}
+                                    </a>
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                             <td>{{ $income->item->name ?? 'N/A' }}</td>
                             <td><strong>Rs {{ number_format($income->amount) }}</strong></td>
                             <td style="color: #3b82f6; font-weight: 600;">Rs {{ number_format($income->paid_amount) }}</td>
@@ -338,7 +346,15 @@
                         @forelse($recentPurchases ?? [] as $purchase)
                         <tr>
                             <td>{{ $purchase->purchase_date->format('d M Y') }}</td>
-                            <td>{{ $purchase->supplier->name ?? 'N/A' }}</td>
+                            <td>
+                                @if($purchase->supplier)
+                                    <a href="{{ route('suppliers.ledger', $purchase->supplier->id) }}" style="color:#2563eb; text-decoration:none;">
+                                        {{ $purchase->supplier->name }}
+                                    </a>
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                             <td>{{ $purchase->item->name ?? 'N/A' }}</td>
                             <td>{{ $purchase->quantity }}</td>
                             <td><strong>Rs {{ number_format($purchase->total_amount) }}</strong></td>

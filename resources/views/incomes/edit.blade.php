@@ -1,6 +1,6 @@
-<x-layout title="✏️ Edit Income - Al Nafi Travels">
+<x-layout title="✏️ Edit Income (Sell) - Al Nafi Travels">
     <x-page-header
-        title="✏️ Edit Income"
+        title="✏️ Edit Income (Sell)"
         icon="💰"
         backUrl="/incomes"
     />
@@ -67,7 +67,7 @@
                     </small>
                 </div>
                 <div style="margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary">💾 Update Income</button>
+                    <button type="submit" class="btn btn-primary">💾 Update Income (Sell)</button>
                     <a href="/incomes" class="btn btn-secondary">Cancel</a>
                 </div>
             </form>
@@ -75,7 +75,7 @@
             <form action="/incomes/{{ $income->id }}" method="POST" style="margin-top: 30px; padding-top: 30px; border-top: 2px solid #eee;" onsubmit="return confirm('Are you sure you want to delete this income? This action cannot be undone.');">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger">🗑️ Delete Income</button>
+                <button type="submit" class="btn btn-danger">🗑️ Delete Income (Sell)</button>
             </form>
         </div>
     </div>

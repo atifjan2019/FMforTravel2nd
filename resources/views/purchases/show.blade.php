@@ -150,7 +150,11 @@
         <div class="info-grid">
             <div class="info-card">
                 <div class="info-label">🏢 Supplier</div>
-                <div class="info-value">{{ $purchase->supplier->name }}</div>
+                <div class="info-value">
+                    <a href="{{ route('suppliers.ledger', $purchase->supplier->id) }}" style="color:#2563eb; text-decoration:none;">
+                        {{ $purchase->supplier->name }}
+                    </a>
+                </div>
             </div>
             
             <div class="info-card">

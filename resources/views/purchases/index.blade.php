@@ -26,7 +26,15 @@
                     @forelse($purchases as $purchase)
                     <tr>
                         <td>{{ $purchase->purchase_date->format('d M Y') }}</td>
-                        <td>{{ $purchase->supplier->name ?? 'N/A' }}</td>
+                        <td>
+                            @if($purchase->supplier)
+                                <a href="{{ route('suppliers.ledger', $purchase->supplier->id) }}" style="color:#2563eb; text-decoration:none;">
+                                    {{ $purchase->supplier->name }}
+                                </a>
+                            @else
+                                N/A
+                            @endif
+                        </td>
                         <td>{{ $purchase->item->name ?? 'N/A' }}</td>
                         <td>{{ $purchase->quantity }}</td>
                         <td>Rs {{ number_format($purchase->unit_price) }}</td>

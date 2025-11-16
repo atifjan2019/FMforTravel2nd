@@ -109,7 +109,17 @@
                 @foreach($recentTransactions as $transaction)
                 <tr>
                     <td>{{ $transaction->income_date->format('d M Y') }}</td>
-                    <td><strong>{{ $transaction->customer->name ?? 'N/A' }}</strong></td>
+                    <td>
+                        @if($transaction->customer)
+                            <strong>
+                                <a href="{{ route('customers.ledger', $transaction->customer->id) }}" style="color:#4f46e5; text-decoration:none;">
+                                    {{ $transaction->customer->name }}
+                                </a>
+                            </strong>
+                        @else
+                            N/A
+                        @endif
+                    </td>
                     <td>{{ $transaction->item->name ?? 'N/A' }}</td>
                     <td class="sales">Rs {{ number_format($transaction->amount) }}</td>
                     <td style="color: #3b82f6; font-weight: 600;">Rs {{ number_format($transaction->paid_amount) }}</td>

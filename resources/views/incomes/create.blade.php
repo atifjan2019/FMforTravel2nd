@@ -1,6 +1,6 @@
-<x-layout title="➕ Add New Income - Al Nafi Travels">
+<x-layout title="➕ Add Income (Sell) - Al Nafi Travels">
     <x-page-header
-        title="➕ Add New Income"
+        title="➕ Add Income (Sell)"
         icon="💰"
         backUrl="/incomes"
     />
@@ -57,7 +57,7 @@
                     <small style="color: #666; display: block; margin-top: 5px;">Completed = Service delivered to customer</small>
                 </div>
                 <div style="margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary">💾 Save Income</button>
+                    <button type="submit" class="btn btn-primary">💾 Save Income (Sell)</button>
                     <a href="/incomes" class="btn btn-secondary">Cancel</a>
                 </div>
             </form>

@@ -23,7 +23,13 @@
                 <tbody>
                     @forelse($suppliers as $supplier)
                     <tr>
-                        <td><strong>{{ $supplier->name }}</strong></td>
+                        <td>
+                            <strong>
+                                <a href="{{ route('suppliers.ledger', $supplier->id) }}" style="color:#2563eb; text-decoration:none;">
+                                    {{ $supplier->name }}
+                                </a>
+                            </strong>
+                        </td>
                         <td>{{ $supplier->phone ?? 'N/A' }}</td>
                         <td>{{ $supplier->email ?? 'N/A' }}</td>
                         <td>{{ $supplier->address ?? 'N/A' }}</td>

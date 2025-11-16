@@ -104,7 +104,11 @@
     </style>
 
     <div class="supplier-header">
-        <h2>{{ $supplier->name }}</h2>
+        <h2>
+            <a href="{{ route('suppliers.ledger', $supplier->id) }}" style="color:inherit; text-decoration:none;">
+                {{ $supplier->name }}
+            </a>
+        </h2>
         <div class="status">
             <span class="badge badge-success">{{ ucfirst($supplier->status) }}</span>
         </div>

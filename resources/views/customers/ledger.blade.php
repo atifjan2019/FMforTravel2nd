@@ -54,7 +54,31 @@
         }
         
         .print-header { display: none; }
+        .income-column .print-label { display: none; }
+        .print-footer {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            font-size: 11px;
+            color: #475569;
+            border-top: 1px solid #ddd;
+            padding-top: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
         .customer-details { display: none; }
+        .developer-credit {
+            text-align: center;
+            margin: 40px 0 0;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .developer-credit a {
+            color: inherit;
+            text-decoration: none;
+        }
         
         @media print {
             body { background: white; }
@@ -62,9 +86,16 @@
             header { display: none !important; }
             nav, .btn-print { display: none !important; }
             .card { box-shadow: none; border: 1px solid #ddd; }
-            th { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            table { font-size: 12px; }
+            th { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 0.72rem; padding: 10px 8px; }
+            td { padding: 10px 8px; }
             .summary { display: flex !important; flex-direction: row !important; gap: 15px !important; }
             .summary-item { border: 1px solid #ddd; flex: 1; }
+            .print-footer { display: flex !important; }
+            .print-hide { display: none !important; }
+            .income-column .screen-label { display: none; }
+            .income-column .print-label { display: inline; }
+            .developer-credit { display: none !important; }
             @page { margin: 1cm; }
             
             .floating-print-btn { display: none !important; }
@@ -72,19 +103,20 @@
             .print-header { 
                 display: flex !important; 
                 justify-content: space-between; 
-                align-items: center; 
-                padding: 20px 0; 
-                border-bottom: 3px solid #333; 
-                margin-bottom: 20px; 
+                align-items: flex-start; 
+                gap: 20px;
+                padding: 10px 0; 
+                border-bottom: 2px solid #333; 
+                margin-bottom: 16px; 
             }
             .print-header img { 
                 height: 60px; 
                 width: auto; 
             }
-            .print-header .customer-name { 
-                font-size: 22px; 
-                font-weight: bold; 
-                color: #333; 
+            .print-header .customer-meta { 
+                font-size: 12px; 
+                color: #475569; 
+                line-height: 1.4; 
             }
             
             .customer-details {
@@ -126,7 +158,9 @@
     <div class="container">
         <div class="print-header">
             <img src="/images/alnafi.png" alt="Al Nafi Travels Logo">
-            <div class="customer-name">Invoice</div>
+            <div style="flex:1; text-align:right;">
+                <h2 style="margin:0;">Invoice</h2>
+            </div>
         </div>
         
         <header>
@@ -186,13 +220,16 @@
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Type</th>
+                        <th class="print-hide">Type</th>
                         <th>Description</th>
-                        <th>Income (+)</th>
+                        <th class="income-column">
+                            <span class="screen-label">Income (+)</span>
+                            <span class="print-label">Payment</span>
+                        </th>
                         <!-- Removed Payment (-) column -->
-                        <th>Payment Status</th>
-                        <th>Credit/Debit</th>
-                        <th>Reference</th>
+                        <th class="print-hide">Payment Status</th>
+                        <th class="print-hide">Credit/Debit</th>
+                        <th class="print-hide">Reference</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -231,7 +268,7 @@
                     @forelse($transactions as $transaction)
                     <tr>
                         <td>{{ $transaction['date']->format('d M Y') }}</td>
-                        <td><strong>{{ $transaction['type'] }}</strong></td>
+                        <td class="print-hide"><strong>{{ $transaction['type'] }}</strong></td>
                         <td>
                             @if($transaction['type'] == 'Income' && isset($transaction['income_id']))
                                 <a href="/incomes/{{ $transaction['income_id'] }}/payment-history" style="color: #667eea; text-decoration: underline;">
@@ -244,11 +281,11 @@
                         <td class="income">
                             {{ $transaction['income'] > 0 ? 'Rs ' . number_format($transaction['income']) : '' }}
                             @if($transaction['income'] > 0 && isset($transaction['paid_amount']))
-                                <br><small style="color: #3b82f6;">Paid: Rs {{ number_format($transaction['paid_amount']) }}</small>
+                                <br><small class="print-hide" style="color: #3b82f6;">Paid: Rs {{ number_format($transaction['paid_amount']) }}</small>
                             @endif
                         </td>
                         <!-- Removed Payment (-) cell -->
-                        <td>
+                        <td class="print-hide">
                             @if($transaction['payment_status'] == 'paid')
                                 <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✓ Paid</span>
                             @elseif($transaction['payment_status'] == 'partial')
@@ -260,7 +297,7 @@
                                 -
                             @endif
                         </td>
-                        <td>
+                        <td class="print-hide">
                             @if($transaction['type'] == 'Income')
                                 @if($transaction['payment_status'] == 'partial')
                                     <button class="btn btn-success btn-sm" onclick="openCustomerPaymentModal({{ $transaction['income_id'] ?? 0 }}, {{ $transaction['remaining_amount'] ?? 0 }})" style="padding: 4px 10px; font-size: 12px;">Receive Payment</button>
@@ -271,7 +308,7 @@
                                 @endif
                             @endif
                         </td>
-                        <td>{{ $transaction['reference'] ?? 'N/A' }}</td>
+                        <td class="print-hide">{{ $transaction['reference'] ?? 'N/A' }}</td>
                     </tr>
                     @empty
                     <tr>
@@ -357,6 +394,17 @@
             if (e.key === 'Escape') closeCustomerPaymentModal();
         });
         </script>
+    </div>
+
+    <div class="print-footer">
+        <span>Al Nafi Travels</span>
+        <span>+92 312 544 6922 · alnafitravels24@gmail.com</span>
+        <span>Office no C9, 3rd Floor, Abbas Khan Block, Ghafoor Market Charsadda, Pakistan</span>
+        <span style="font-size:10px; color:#94a3b8; display:inline-block; width:100%;">Developed by webspires.com.pk</span>
+    </div>
+
+    <div class="developer-credit">
+        Developed by <a href="https://webspires.com.pk" target="_blank" rel="noopener">webspires.com.pk</a>
     </div>
 </body>
 </html>

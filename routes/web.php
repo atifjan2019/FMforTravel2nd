@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Resource routes for all main entities
+    Route::resource('supplier-payments', App\Http\Controllers\SupplierPaymentController::class);
+    Route::post('supplier-payments/create-direct', [App\Http\Controllers\SupplierPaymentController::class, 'store'])->name('supplier-payments.create-direct');
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
     Route::get('customers/{customer}/ledger', [App\Http\Controllers\CustomerController::class, 'ledger'])->name('customers.ledger');
     Route::resource('suppliers', App\Http\Controllers\SupplierController::class);

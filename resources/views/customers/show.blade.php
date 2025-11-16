@@ -104,7 +104,11 @@
     </style>
 
     <div class="customer-header">
-        <h2>{{ $customer->name }}</h2>
+        <h2>
+            <a href="{{ route('customers.ledger', $customer->id) }}" style="color:inherit; text-decoration:none;">
+                {{ $customer->name }}
+            </a>
+        </h2>
         <div class="status">
             <span class="badge badge-success">{{ ucfirst($customer->status) }}</span>
         </div>
@@ -135,7 +139,7 @@
         <h3>💰 Financial Summary</h3>
         <div class="financial-grid">
             <div class="financial-item">
-                <div class="label">Total Income</div>
+                <div class="label">Total Income (Sell)</div>
                 <div class="amount">Rs {{ number_format($customer->total_income) }}</div>
             </div>
             
