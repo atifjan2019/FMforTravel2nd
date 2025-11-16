@@ -65,7 +65,7 @@
             color: #475569;
             border-top: 1px solid #ddd;
             padding-top: 8px;
-            margin-top: 20px;
+            margin-top: auto;
             text-align: center;
         }
         .customer-details { display: none; }
@@ -82,7 +82,7 @@
         
         @media print {
             body { background: white; }
-            .container { padding: 0; max-width: 100%; }
+            .container { padding: 0; max-width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
             header { display: none !important; }
             nav, .btn-print { display: none !important; }
             .card { box-shadow: none; border: 1px solid #ddd; }
@@ -91,7 +91,7 @@
             td { padding: 10px 8px; }
             .summary { display: flex !important; flex-direction: row !important; gap: 15px !important; }
             .summary-item { border: 1px solid #ddd; flex: 1; }
-            .print-footer { display: flex !important; }
+            .print-footer { display: flex !important; margin-top: auto; }
             .print-hide { display: none !important; }
             .income-column .screen-label { display: none; }
             .income-column .print-label { display: inline; }
@@ -365,6 +365,13 @@
                 <button onclick="closeCustomerPaymentModal()" style="position:absolute; top:10px; right:15px; background:none; border:none; font-size:24px; color:#888; cursor:pointer;">&times;</button>
             </div>
         </div>
+
+        <div class="print-footer">
+            <span>📞 +92 312 544 6922</span>
+            <span>✉️ alnafitravels24@gmail.com</span>
+            <span>📍 Office no C9, 3rd Floor, Abbas Khan Block, Ghafoor Market Charsadda, Pakistan</span>
+            <span style="font-size:10px; color:#94a3b8; display:inline-block; width:100%;">Developed by webspires.com.pk</span>
+        </div>
         
         <script>
         function openCustomerPaymentModal(incomeId, remaining) {
@@ -394,13 +401,6 @@
             if (e.key === 'Escape') closeCustomerPaymentModal();
         });
         </script>
-    </div>
-
-    <div class="print-footer">
-        <span>Al Nafi Travels</span>
-        <span>+92 312 544 6922 · alnafitravels24@gmail.com</span>
-        <span>Office no C9, 3rd Floor, Abbas Khan Block, Ghafoor Market Charsadda, Pakistan</span>
-        <span style="font-size:10px; color:#94a3b8; display:inline-block; width:100%;">Developed by webspires.com.pk</span>
     </div>
 
     <div class="developer-credit">

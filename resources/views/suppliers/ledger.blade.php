@@ -29,6 +29,25 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 32px 20px 80px;
+            position: relative;
+            transition: opacity 0.2s ease;
+        }
+        .page.is-loading {
+            opacity: 0.55;
+            pointer-events: none;
+        }
+        .page.is-loading::after {
+            content: 'Updating...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15,23,42,0.9);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
         }
         a { text-decoration: none; color: inherit; }
         .hero {
@@ -54,6 +73,9 @@
         }
         .hero__text {
             max-width: 600px;
+        }
+        .hero__details {
+            display: none;
         }
         .eyebrow {
             font-size: 0.88rem;
@@ -245,7 +267,7 @@
             color: #475569;
             border-top: 1px solid #cbd5f5;
             padding-top: 8px;
-            margin-top: 20px;
+            margin-top: auto;
             text-align: center;
         }
         .floating-print-btn {
@@ -278,6 +300,71 @@
             color: inherit;
             text-decoration: none;
         }
+        .filter-panel {
+            margin: 20px 0 16px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 22px;
+            box-shadow: 0 18px 30px rgba(15,23,42,0.08);
+        }
+        .filter-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+        .filter-form .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .filter-form label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+        }
+        .filter-form select,
+        .filter-form input[type="date"] {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid #cbd5f5;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+        .custom-date-fields {
+            display: none;
+            gap: 12px;
+        }
+        .custom-date-fields.active {
+            display: flex;
+        }
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-status {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #475569;
+            font-weight: 600;
+        }
+        @media (max-width: 720px) {
+            .filter-form {
+                grid-template-columns: 1fr;
+            }
+            .filter-actions {
+                width: 100%;
+            }
+            .filter-actions .btn {
+                flex: 1;
+                justify-content: center;
+                text-align: center;
+            }
+            .custom-date-fields {
+                flex-direction: column;
+            }
+        }
         @media (max-width: 640px) {
             .hero { padding: 24px; }
             .hero__actions { width: 100%; }
@@ -288,16 +375,17 @@
         }
         @media print {
             body { background: #fff; }
-            .page { padding: 0 12px; }
+            .page { padding: 0 10px; min-height: 100vh; display: flex; flex-direction: column; color: #111827; }
             .hero, .floating-print-btn { display: none !important; }
-            .card { box-shadow: none; border: 1px solid #cbd5f5; border-radius: 6px; margin-top: 16px; padding: 18px; }
-            .summary-card { border: 1px solid #cbd5f5; box-shadow: none; }
+            .card { box-shadow: none; border: 1px solid #cbd5f5; border-radius: 6px; margin-top: 12px; padding: 14px; background: #fff !important; color: #111827 !important; }
+            .summary-card { border: 1px solid #cbd5f5; box-shadow: none; padding: 14px; background: #fff !important; color: #111827 !important; }
+            .summary-card h3, .summary-card strong, .summary-card small { color: #111827 !important; }
             .summary-card::after { display: none; }
             .print-header { display: flex !important; margin-bottom: 12px; }
-            table { font-size: 12px; }
-            thead th { font-size: 0.72rem; padding: 10px 8px; }
-            tbody td { padding: 10px 8px; }
-            .print-footer { display: flex !important; }
+            table { font-size: 12px; color: #111827; }
+            thead th { font-size: 0.72rem; padding: 9px 6px; color: #111827; background: #f5f5f5 !important; }
+            tbody td { padding: 9px 6px; color: #111827; }
+            .print-footer { display: flex !important; justify-content: center; }
             .print-hide { display: none !important; }
             .developer-credit { display: none !important; }
             a { color: inherit !important; text-decoration: none !important; }
@@ -352,13 +440,33 @@
             }
             return ($b['sort_secondary'] ?? 0) <=> ($a['sort_secondary'] ?? 0);
         })->values();
+        $selectedRange = $activeRange ?? 'all';
+        $filterStartValue = $filterStart ?? '';
+        $filterEndValue = $filterEnd ?? '';
+        $displayRangeLabel = $rangeLabel ?? 'All time';
     @endphp
 
-    <div class="page">
+    <div class="page" id="ledgerPage">
         <div class="print-header">
             <img src="/images/alnafi.png" alt="Al Nafi Travels logo">
             <div style="flex:1; text-align:right;">
                 <h2 style="margin:0;">Supplier Ledger</h2>
+                @if($supplier->name || $supplier->phone || $supplier->email || $supplier->address)
+                    <div class="print-meta">
+                        @if($supplier->name)
+                            <div><strong>{{ $supplier->name }}</strong></div>
+                        @endif
+                        @if($supplier->phone)
+                            <div>📞 {{ $supplier->phone }}</div>
+                        @endif
+                        @if($supplier->email)
+                            <div>✉️ {{ $supplier->email }}</div>
+                        @endif
+                        @if($supplier->address)
+                            <div>📍 {{ $supplier->address }}</div>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -367,6 +475,7 @@
                 <p class="eyebrow">Suppliers / Ledger</p>
                 <h1>Ledger for {{ $supplier->name }}</h1>
                 <p class="hero__subtitle">Complete breakdown of purchases, payments, and outstanding exposure.</p>
+                <div class="hero__details"></div>
             </div>
             <div class="hero__actions">
                 <a href="/" class="btn btn-ghost">🏠 Dashboard</a>
@@ -378,6 +487,36 @@
                 @endif
             </div>
         </header>
+
+        <div class="filter-panel">
+            <form method="GET" action="{{ route('suppliers.ledger', $supplier) }}" class="filter-form" id="supplierFilterForm">
+                <div class="form-group">
+                    <label for="filterRange">Filter By</label>
+                    <select name="range" id="filterRange">
+                        <option value="all" {{ $selectedRange === 'all' ? 'selected' : '' }}>All Time</option>
+                        <option value="today" {{ $selectedRange === 'today' ? 'selected' : '' }}>Today</option>
+                        <option value="yesterday" {{ $selectedRange === 'yesterday' ? 'selected' : '' }}>Yesterday</option>
+                        <option value="last7" {{ $selectedRange === 'last7' ? 'selected' : '' }}>Last 7 Days</option>
+                        <option value="last30" {{ $selectedRange === 'last30' ? 'selected' : '' }}>Last 30 Days</option>
+                        <option value="custom" {{ $selectedRange === 'custom' ? 'selected' : '' }}>Custom Range</option>
+                    </select>
+                </div>
+                <div id="customDateFields" class="custom-date-fields {{ $selectedRange === 'custom' ? 'active' : '' }}">
+                    <div class="form-group">
+                        <label for="start_date">From</label>
+                        <input type="date" id="start_date" name="start_date" value="{{ $filterStartValue }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">To</label>
+                        <input type="date" id="end_date" name="end_date" value="{{ $filterEndValue }}">
+                    </div>
+                </div>
+                <input type="hidden" name="instant" value="1">
+            </form>
+            <div class="filter-status">
+                Showing: {{ $displayRangeLabel }}
+            </div>
+        </div>
 
         <section class="card card--glass">
             <div class="summary-grid">
@@ -477,13 +616,13 @@
                 </table>
             </div>
         </section>
-    </div>
 
-    <div class="print-footer">
-        <span>Al Nafi Travels</span>
-        <span>+92 312 544 6922 · alnafitravels24@gmail.com</span>
-        <span>Office no C9, 3rd Floor, Abbas Khan Block, Ghafoor Market Charsadda, Pakistan</span>
-        <span style="font-size:10px; color:#94a3b8; display:inline-block; width:100%;">Developed by webspires.com.pk</span>
+        <div class="print-footer">
+            <span>📞 +92 312 544 6922</span>
+            <span>✉️ alnafitravels24@gmail.com</span>
+            <span>📍 Office no C9, 3rd Floor, Abbas Khan Block, Ghafoor Market Charsadda, Pakistan</span>
+            <span style="font-size:10px; color:#94a3b8; display:inline-block; width:100%;">Developed by webspires.com.pk</span>
+        </div>
     </div>
 
     <div class="developer-credit">
@@ -566,6 +705,68 @@
             if (e.key === 'Escape') {
                 closeSupplierPaymentModal();
             }
+        });
+
+        function initSupplierFilter(root = document) {
+            const form = root.getElementById ? root.getElementById('supplierFilterForm') : document.getElementById('supplierFilterForm');
+            const rangeSelect = root.getElementById ? root.getElementById('filterRange') : document.getElementById('filterRange');
+            const customFields = root.getElementById ? root.getElementById('customDateFields') : document.getElementById('customDateFields');
+            if (!form || !rangeSelect || !customFields) {
+                return;
+            }
+            const toggleCustom = () => {
+                if (rangeSelect.value === 'custom') {
+                    customFields.classList.add('active');
+                } else {
+                    customFields.classList.remove('active');
+                }
+            };
+            toggleCustom();
+            rangeSelect.addEventListener('change', toggleCustom);
+
+            const triggerSubmit = () => {
+                submitSupplierFilter(new FormData(form), form.getAttribute('action'));
+            };
+
+            rangeSelect.addEventListener('change', triggerSubmit);
+            const startInput = document.getElementById('start_date');
+            const endInput = document.getElementById('end_date');
+            if (startInput) startInput.addEventListener('change', triggerSubmit);
+            if (endInput) endInput.addEventListener('change', triggerSubmit);
+        }
+
+        async function submitSupplierFilter(formData, actionUrl) {
+            try {
+            const query = params.toString();
+                const url = query ? `${actionUrl}?${query}` : actionUrl;
+                const pageEl = document.getElementById('ledgerPage');
+                if (pageEl) pageEl.classList.add('is-loading');
+                const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!response.ok) throw new Error('Network error');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newPage = doc.getElementById('ledgerPage');
+                if (newPage && pageEl) {
+                    pageEl.replaceWith(newPage);
+                    history.replaceState({}, '', url);
+                    initSupplierFilter(document);
+                } else {
+                    window.location = url;
+                }
+            } catch (error) {
+                console.error(error);
+                const params = new URLSearchParams(formData);
+                const fallbackUrl = params.toString() ? `${actionUrl}?${params.toString()}` : actionUrl;
+                window.location = fallbackUrl;
+            } finally {
+                const pageEl = document.getElementById('ledgerPage');
+                if (pageEl) pageEl.classList.remove('is-loading');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initSupplierFilter();
         });
     </script>
 </body>
