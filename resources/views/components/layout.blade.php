@@ -1,77 +1,688 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Al Nafi Travels' }}</title>
+    <title>{{ $title ?? 'FM Travel Manager' }}</title>
     <link rel="icon" type="image/png" href="{{ asset('images/alnafi.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/alnafi.png') }}">
-    <link rel="stylesheet" href="/css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        
-        /* Responsive Typography */
-        h1 { font-size: 24px; line-height: 1.3; }
-        h2 { font-size: 20px; line-height: 1.4; }
-        h3 { font-size: 18px; line-height: 1.4; }
-        h4 { font-size: 16px; line-height: 1.5; }
-        p { font-size: 14px; line-height: 1.6; }
-        
+        :root {
+            --primary: #d4a017;
+            --primary-light: #f5c518;
+            --primary-dark: #b8860b;
+            --accent: #2d2d2d;
+            --accent-light: #3d3d3d;
+            --success: #4caf50;
+            --success-light: #81c784;
+            --warning: #ff9800;
+            --danger: #e74c3c;
+            --bg: #f9f5eb;
+            --bg-light: #fffdf7;
+            --card-bg: #ffffff;
+            --text: #2d2d2d;
+            --text-light: #666666;
+            --border: #e8e4d9;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 13px;
+        }
+
+        /* Main Container */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: var(--accent);
+            padding: 15px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 8px 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            color: var(--primary-light);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .sidebar-header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 3px 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--primary);
+            color: var(--accent);
+            transform: translateX(3px);
+        }
+
+        .nav-link .icon {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 15px;
+        }
+
+        .nav-section-title {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 15px 3px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 220px;
+            padding: 20px;
+            min-height: 100vh;
+            background: var(--bg);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #f5f0e1 100%);
+            padding: 15px 20px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .page-subtitle {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: var(--primary);
+            color: var(--accent);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(45, 45, 45, 0.2);
+        }
+
+        .btn-success {
+            background: var(--primary);
+            color: var(--accent);
+        }
+
+        .btn-success:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 160, 23, 0.3);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f0e1;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 11px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #f9f5eb;
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #fffdf7;
+        }
+
+        td {
+            font-size: 12px;
+            color: var(--text);
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge-warning {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .badge-danger {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .badge-info {
+            background: #fff8e1;
+            color: #f57c00;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Search & Filters */
+        .search-box {
+            position: relative;
+            max-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 14px 8px 36px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 12px;
+            background: white;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: 48px;
+            height: 48px;
+            background: var(--accent);
+            border: none;
+            border-radius: 50%;
+            color: var(--primary-light);
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+
         @media (max-width: 768px) {
-            .container { padding: 15px; }
-            h1 { font-size: 20px; }
-            h2 { font-size: 18px; }
-            h3 { font-size: 16px; }
-            h4 { font-size: 15px; }
-            p { font-size: 14px; }
+            .main-content {
+                padding: 15px 12px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .page-title {
+                font-size: 18px;
+            }
+
+            th,
+            td {
+                padding: 8px 10px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
-        
-        @media (max-width: 480px) {
-            .container { padding: 10px; }
-            h1 { font-size: 18px; }
-            h2 { font-size: 16px; }
-            h3 { font-size: 15px; }
-            h4 { font-size: 14px; }
-            p { font-size: 13px; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 15px;
         }
-        
-        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; border-radius: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        header h1 { font-size: 24px; }
-        .btn { padding: 5px 15px; border-radius: 5px; text-decoration: none; font-weight: 600; transition: all 0.3s; display: inline-block; border: none; cursor: pointer; font-size: 14px; }
-        .btn-primary { background: #667eea; color: white; }
-        .btn-primary:hover { background: #5568d3; }
-        .btn-success { background: #10b981; color: white; }
-        .btn-success:hover { background: #059669; }
-        .btn-danger { background: #ef4444; color: white; }
-        .btn-danger:hover { background: #dc2626; }
-        .btn-secondary { background: #6b7280; color: white; }
-        .btn-secondary:hover { background: #4b5563; }
-        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; vertical-align: middle; }
-        th { background: #f8fafc; font-weight: 600; color: #666; }
-        td.actions { white-space: nowrap; }
-        .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-        .badge-success { background: #d1fae5; color: #047857; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-warning { background: #fef3c7; color: #92400e; }
-        .actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-        nav a { color: white; text-decoration: none; margin-right: 20px; opacity: 0.9; }
-        nav a:hover { opacity: 1; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #667eea; }
-        .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+        .empty-state .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 16px;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+            margin-bottom: 18px;
+            font-size: 12px;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeIn 0.3s ease;
+        }
+
         {{ $styles ?? '' }}
     </style>
 </head>
+
 <body>
-    <div class="container">
-        {{ $slot }}
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>✈️ FM Travel</h1>
+                <p>Management System</p>
+            </div>
+
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="/dashboard" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                            <span class="icon">🏠</span>
+                            <span>Home</span>
+                        </a>
+                    </li>
+
+                    <div class="nav-divider"></div>
+                    <div class="nav-section-title">Sales & Customers</div>
+
+                    <li class="nav-item">
+                        <a href="/customers" class="nav-link {{ request()->is('customers*') ? 'active' : '' }}">
+                            <span class="icon">👥</span>
+                            <span>Customers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/incomes" class="nav-link {{ request()->is('incomes*') ? 'active' : '' }}">
+                            <span class="icon">💰</span>
+                            <span>Sales</span>
+                        </a>
+                    </li>
+
+                    <div class="nav-divider"></div>
+                    <div class="nav-section-title">Purchases & Suppliers</div>
+
+                    <li class="nav-item">
+                        <a href="/suppliers" class="nav-link {{ request()->is('suppliers*') ? 'active' : '' }}">
+                            <span class="icon">🏢</span>
+                            <span>Suppliers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/purchases" class="nav-link {{ request()->is('purchases*') ? 'active' : '' }}">
+                            <span class="icon">🛒</span>
+                            <span>Purchases</span>
+                        </a>
+                    </li>
+
+                    <div class="nav-divider"></div>
+                    <div class="nav-section-title">More</div>
+
+                    <li class="nav-item">
+                        <a href="/items" class="nav-link {{ request()->is('items*') ? 'active' : '' }}">
+                            <span class="icon">📦</span>
+                            <span>Items</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/expenses" class="nav-link {{ request()->is('expenses*') ? 'active' : '' }}">
+                            <span class="icon">💸</span>
+                            <span>Expenses</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/reports" class="nav-link {{ request()->is('reports*') ? 'active' : '' }}">
+                            <span class="icon">📊</span>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="page-title">{{ $pageTitle ?? 'Dashboard' }}</h1>
+                    <p class="page-subtitle">{{ $pageSubtitle ?? 'Welcome to FM Travel Manager' }}</p>
+                </div>
+                <div class="user-menu">
+                    <div class="user-avatar">{{ substr(Auth::user()->name ?? 'A', 0, 1) }}</div>
+                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            {{ $slot }}
+        </main>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()">☰</button>
     </div>
-    <script src="/js/mobile-menu.js"></script>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const toggle = document.getElementById('mobileMenuToggle');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+            toggle.textContent = sidebar.classList.contains('open') ? '✕' : '☰';
+        }
+
+        document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
+    </script>
 </body>
+
 </html>
