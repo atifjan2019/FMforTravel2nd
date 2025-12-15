@@ -1,126 +1,79 @@
-<x-layout title="📦 Item Details - Al Nafi Travels">
-    <x-page-header
-        title="📦 Item Details"
-        icon="📦"
-        backUrl="/items"
-    />
-
-    <style>
+<x-layout title="Item Details - FM Travel Manager" pageTitle="{{ $item->name }}"
+    pageSubtitle="View item/service details">
+    <x-slot:styles>
         .item-header {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: var(--accent);
+        padding: 24px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        text-align: center;
         }
-        .item-header h2 {
-            font-size: 24px;
-            margin: 0;
-        }
-        .item-header .status {
-            margin-top: 10px;
-        }
-        
+
+        .item-header .icon { font-size: 48px; margin-bottom: 12px; }
+        .item-header h2 { font-size: 22px; margin-bottom: 8px; }
+
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
         }
-        
+
         .info-card {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #3b82f6;
+        background: #f9f5eb;
+        padding: 16px;
+        border-radius: 12px;
+        border-left: 4px solid var(--primary);
         }
-        
-        .info-label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
+
+        .info-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 600;
+        margin-bottom: 6px; }
+        .info-value { font-size: 14px; color: var(--text); font-weight: 600; }
+
+        .desc-box {
+        background: #f9f5eb;
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        color: var(--text);
         }
-        
-        .info-value {
-            font-size: 16px;
-            color: #333;
-            font-weight: 600;
-        }
-        
-        .description-box {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #3b82f6;
-            margin-bottom: 20px;
-        }
-        
-        .description-box .label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
-        
-        .description-box .text {
-            font-size: 15px;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 768px) {
-            .item-header h2 { font-size: 20px; }
-            .info-grid { grid-template-columns: 1fr; gap: 15px; }
-            .info-card { padding: 15px; }
-            .description-box { padding: 15px; }
-        }
-    </style>
+    </x-slot:styles>
 
     <div class="item-header">
+        <div class="icon">📦</div>
         <h2>{{ $item->name }}</h2>
-        <div class="status">
-            <span class="badge badge-success">{{ ucfirst($item->status) }}</span>
-        </div>
+        <span
+            class="badge {{ $item->status == 'active' ? 'badge-success' : 'badge-danger' }}">{{ ucfirst($item->status) }}</span>
     </div>
 
     <div class="card">
-        <h3 style="margin-bottom: 20px; color: #3b82f6;">📋 Item Information</h3>
-        
+        <h3 class="card-title" style="margin-bottom: 16px;">📋 Item Information</h3>
         <div class="info-grid">
             <div class="info-card">
                 <div class="info-label">📁 Category</div>
                 <div class="info-value">{{ $item->category ?? 'Not specified' }}</div>
             </div>
-            
             <div class="info-card">
-                <div class="info-label">📏 Unit of Measurement</div>
+                <div class="info-label">📏 Unit</div>
                 <div class="info-value">{{ $item->unit }}</div>
             </div>
+            <div class="info-card">
+                <div class="info-label">🏷️ Status</div>
+                <div class="info-value">{{ ucfirst($item->status) }}</div>
+            </div>
         </div>
-        
+
         @if($item->description)
-        <div class="description-box">
-            <div class="label">📝 Description</div>
-            <div class="text">{{ $item->description }}</div>
-        </div>
+            <h3 class="card-title" style="margin: 20px 0 12px;">📝 Description</h3>
+            <div class="desc-box">{{ $item->description }}</div>
         @endif
     </div>
 
     <div class="card">
-        <div class="action-buttons">
-            <a href="/items/{{ $item->id }}/edit" class="btn btn-success">✏️ Edit Item</a>
-            <a href="/items" class="btn btn-secondary">← Back to Items</a>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/items/{{ $item->id }}/edit" class="btn btn-success">✏️ Edit</a>
+            <a href="/items" class="btn btn-secondary">← Back</a>
         </div>
     </div>
 </x-layout>

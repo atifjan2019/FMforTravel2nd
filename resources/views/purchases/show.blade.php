@@ -1,233 +1,150 @@
-<x-layout title="🛒 Purchase Details - Al Nafi Travels">
-    <x-page-header
-        title="🛒 Purchase Details"
-        icon="🛒"
-        backUrl="/purchases"
-    />
-
-    <style>
+<x-layout title="Purchase Details - FM Travel Manager" pageTitle="Purchase Details"
+    pageSubtitle="View purchase transaction details">
+    <x-slot:styles>
         .purchase-header {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
+        background: linear-gradient(135deg, #5d4e37 0%, #8b7355 100%);
+        color: white;
+        padding: 24px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        text-align: center;
         }
-        .purchase-header .amount {
-            font-size: 36px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        .purchase-header .date {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
+
+        .purchase-header .date { font-size: 12px; opacity: 0.9; margin-bottom: 8px; }
+        .purchase-header .amount { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+        .purchase-header .badges { display: flex; justify-content: center; gap: 8px; }
+
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
         }
-        
+
         .info-card {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #8b5cf6;
+        background: #f9f5eb;
+        padding: 16px;
+        border-radius: 12px;
+        border-left: 4px solid #8b7355;
         }
-        
-        .info-label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-        
-        .info-value {
-            font-size: 16px;
-            color: #333;
-            font-weight: 600;
-        }
-        
-        .purchase-breakdown {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .purchase-breakdown h3 {
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-        
+
+        .info-card.success { border-left-color: #2e7d32; }
+        .info-card.danger { border-left-color: #c62828; }
+
+        .info-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 600;
+        margin-bottom: 6px; }
+        .info-value { font-size: 14px; color: var(--text); font-weight: 600; }
+        .info-value.success { color: #2e7d32; }
+        .info-value.danger { color: #c62828; }
+
+        .section-title { font-size: 14px; font-weight: 600; color: var(--text); margin: 20px 0 15px; padding-bottom:
+        8px; border-bottom: 1px solid var(--border); }
+
         .breakdown-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        background: linear-gradient(135deg, #8b7355 0%, #6b5b4a 100%);
+        padding: 20px;
+        border-radius: 14px;
+        margin-bottom: 20px;
         }
-        
-        .breakdown-item {
-            text-align: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-        }
-        
-        .breakdown-item .label {
-            font-size: 12px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        
-        .breakdown-item .value {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .notes-box {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #8b5cf6;
-            margin-bottom: 20px;
-        }
-        
-        .notes-box .label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
-        
-        .notes-box .text {
-            font-size: 15px;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 768px) {
-            .purchase-header .amount { font-size: 28px; }
-            .info-grid { grid-template-columns: 1fr; gap: 15px; }
-            .breakdown-grid { grid-template-columns: 1fr; gap: 15px; }
-            .breakdown-item .value { font-size: 20px; }
-            .info-card { padding: 15px; }
-            .notes-box { padding: 15px; }
-        }
-    </style>
+
+        .breakdown-item { text-align: center; padding: 14px; background: rgba(255,255,255,0.15); border-radius: 10px;
+        color: white; }
+        .breakdown-item .label { font-size: 10px; opacity: 0.9; margin-bottom: 6px; text-transform: uppercase; }
+        .breakdown-item .value { font-size: 18px; font-weight: bold; }
+
+        @media (max-width: 640px) { .breakdown-grid { grid-template-columns: 1fr; } }
+    </x-slot:styles>
 
     <div class="purchase-header">
         <div class="date">📅 {{ $purchase->purchase_date->format('d M Y') }}</div>
         <div class="amount">Rs {{ number_format($purchase->total_amount) }}</div>
-        <div style="margin-top: 10px;">
+        <div class="badges">
             @if($purchase->payment_status == 'paid')
-                <span style="background: rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-size: 14px;">✓ Paid</span>
+                <span class="badge badge-success">✓ Paid</span>
             @elseif($purchase->payment_status == 'partial')
-                <span style="background: rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-size: 14px;">◐ Partial Payment</span>
+                <span class="badge badge-warning">◐ Partial</span>
             @else
-                <span style="background: rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-size: 14px;">✗ Unpaid</span>
+                <span class="badge badge-danger">✗ Unpaid</span>
             @endif
         </div>
     </div>
 
     <div class="card">
-        <h3 style="margin-bottom: 20px; color: #8b5cf6;">📋 Purchase Information</h3>
-        
+        <h3 class="section-title">📋 Purchase Information</h3>
         <div class="info-grid">
             <div class="info-card">
                 <div class="info-label">🏢 Supplier</div>
                 <div class="info-value">
-                    <a href="{{ route('suppliers.ledger', $purchase->supplier->id) }}" style="color:#2563eb; text-decoration:none;">
-                        {{ $purchase->supplier->name }}
-                    </a>
+                    <a href="{{ route('suppliers.ledger', $purchase->supplier->id) }}"
+                        style="color: var(--primary-dark);">{{ $purchase->supplier->name }}</a>
                 </div>
             </div>
-            
             <div class="info-card">
                 <div class="info-label">📦 Item</div>
                 <div class="info-value">{{ $purchase->item->name }}</div>
             </div>
-            
             <div class="info-card">
-                <div class="info-label">🔖 Reference Number</div>
-                <div class="info-value">{{ $purchase->reference_no ?? 'Not provided' }}</div>
+                <div class="info-label">🏷️ Reference</div>
+                <div class="info-value">{{ $purchase->reference_no ?? 'N/A' }}</div>
             </div>
         </div>
     </div>
 
-    <div class="purchase-breakdown">
-        <h3>📊 Purchase Breakdown</h3>
-        <div class="breakdown-grid">
-            <div class="breakdown-item">
-                <div class="label">Quantity</div>
-                <div class="value">{{ $purchase->quantity }}</div>
-            </div>
-            
-            <div class="breakdown-item">
-                <div class="label">Unit Price</div>
-                <div class="value">Rs {{ number_format($purchase->unit_price) }}</div>
-            </div>
-            
-            <div class="breakdown-item">
-                <div class="label">Total Amount</div>
-                <div class="value">Rs {{ number_format($purchase->total_amount) }}</div>
-            </div>
+    <div class="breakdown-grid">
+        <div class="breakdown-item">
+            <div class="label">Quantity</div>
+            <div class="value">{{ $purchase->quantity }}</div>
         </div>
-        
-        <h3 style="margin-top: 30px; margin-bottom: 20px;">💰 Payment Information</h3>
-        <div class="breakdown-grid">
-            <div class="breakdown-item">
-                <div class="label">Paid Amount</div>
-                <div class="value">Rs {{ number_format($purchase->paid_amount) }}</div>
+        <div class="breakdown-item">
+            <div class="label">Unit Price</div>
+            <div class="value">Rs {{ number_format($purchase->unit_price) }}</div>
+        </div>
+        <div class="breakdown-item">
+            <div class="label">Total</div>
+            <div class="value">Rs {{ number_format($purchase->total_amount) }}</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 class="section-title">💰 Payment Information</h3>
+        <div class="info-grid">
+            <div class="info-card success">
+                <div class="info-label">✓ Paid</div>
+                <div class="info-value success">Rs {{ number_format($purchase->paid_amount) }}</div>
             </div>
-            
-            <div class="breakdown-item">
-                <div class="label">Balance Due</div>
-                <div class="value">Rs {{ number_format($purchase->remaining_amount) }}</div>
+            <div class="info-card {{ $purchase->remaining_amount > 0 ? 'danger' : 'success' }}">
+                <div class="info-label">📊 Remaining</div>
+                <div class="info-value {{ $purchase->remaining_amount > 0 ? 'danger' : 'success' }}">Rs
+                    {{ number_format($purchase->remaining_amount) }}</div>
             </div>
-            
-            <div class="breakdown-item">
-                <div class="label">Payment Status</div>
-                <div class="value" style="font-size: 18px;">
+            <div class="info-card">
+                <div class="info-label">🏷️ Status</div>
+                <div class="info-value">
                     @if($purchase->payment_status == 'paid')
-                        ✓ Paid
+                        <span class="badge badge-success">✓ Paid</span>
                     @elseif($purchase->payment_status == 'partial')
-                        ◐ Partial
+                        <span class="badge badge-warning">◐ Partial</span>
                     @else
-                        ✗ Unpaid
+                        <span class="badge badge-danger">✗ Unpaid</span>
                     @endif
                 </div>
             </div>
         </div>
+
+        @if($purchase->notes)
+            <h3 class="section-title">📝 Notes</h3>
+            <div style="background: #f9f5eb; padding: 14px; border-radius: 10px; font-size: 13px;">{{ $purchase->notes }}
+            </div>
+        @endif
     </div>
 
-    @if($purchase->notes)
     <div class="card">
-        <div class="notes-box">
-            <div class="label">📝 Notes</div>
-            <div class="text">{{ $purchase->notes }}</div>
-        </div>
-    </div>
-    @endif
-
-    <div class="card">
-        <div class="action-buttons">
-            <a href="/purchases/{{ $purchase->id }}/edit" class="btn btn-success">✏️ Edit Purchase</a>
-            <a href="/purchases" class="btn btn-secondary">← Back to Purchases</a>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/purchases/{{ $purchase->id }}/edit" class="btn btn-success">✏️ Edit</a>
+            <a href="/purchases" class="btn btn-secondary">← Back</a>
         </div>
     </div>
 </x-layout>

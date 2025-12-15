@@ -1,146 +1,181 @@
-<x-layout title="🛍️ Sales Report - Al Nafi Travels">
-    <x-page-header
-        title="🛍️ Sales Report"
-        icon="💰"
-        backUrl="/reports"
-    />
+<x-layout title="Sales Report - FM Travel Manager" pageTitle="Sales Report"
+    pageSubtitle="Revenue analysis and top performers">
+    <x-slot:styles>
+        .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 24px;
+        }
 
+        .metric-card {
+        background: var(--card-bg);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+        }
 
-    <style>
-        .report-section { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 32px; }
-        .report-card-metric { flex: 1 1 220px; min-width: 220px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 28px 24px 20px 24px; display: flex; flex-direction: column; align-items: flex-start; position: relative; }
-        .report-card-metric .metric-label { font-size: 15px; color: #888; margin-bottom: 8px; font-weight: 500; }
-        .report-card-metric .metric-value { font-size: 2.1rem; font-weight: 700; margin-bottom: 0; }
-        .report-card-metric.sales { border-left: 6px solid #10b981; }
-        .report-card-metric.transactions { border-left: 6px solid #6366f1; }
-        .report-card-metric.average { border-left: 6px solid #f59e0b; }
-        .report-card-metric .metric-icon { font-size: 2.2rem; position: absolute; top: 18px; right: 18px; opacity: 0.13; }
-        .report-section-title { font-size: 1.2rem; font-weight: 600; color: #333; margin-bottom: 18px; margin-top: 10px; }
-        .report-table-card { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 28px 24px 20px 24px; margin-bottom: 32px; }
-        .report-table-card table { width: 100%; border-collapse: collapse; }
-        .report-table-card th, .report-table-card td { padding: 12px 10px; border-bottom: 1px solid #f1f1f1; text-align: left; }
-        .report-table-card th { background: #f8fafc; color: #667eea; font-weight: 700; font-size: 15px; }
-        .report-table-card td.sales { color: #10b981; font-weight: 600; }
-        .report-table-card td { font-size: 15px; }
-        @media (max-width: 900px) { .report-section { flex-direction: column; gap: 18px; } .report-card-metric { min-width: 0; width: 100%; } }
-        @media (max-width: 600px) { .report-table-card { padding: 12px 4px; } .report-card-metric { padding: 18px 10px; } }
-    </style>
+        .metric-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+        .metric-card.sales::before { background: #2e7d32; }
+        .metric-card.trans::before { background: #1565c0; }
+        .metric-card.avg::before { background: var(--primary); }
 
-    <div class="report-section">
-        <div class="report-card-metric sales">
-            <span class="metric-label">Total Sales (This Month)</span>
-            <span class="metric-value">Rs {{ number_format($currentMonthSales) }}</span>
-            <span class="metric-icon">💰</span>
+        .metric-label { font-size: 11px; color: var(--text-light); text-transform: uppercase; font-weight: 600;
+        margin-bottom: 6px; }
+        .metric-value { font-size: 22px; font-weight: 700; color: var(--text); }
+        .metric-value.sales { color: #2e7d32; }
+        .metric-icon { position: absolute; top: 14px; right: 14px; font-size: 28px; opacity: 0.15; }
+
+        .section-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
+
+        .table-card {
+        background: var(--card-bg);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        overflow-x: auto;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: #f9f5eb; font-weight: 600; font-size: 10px; color: var(--text-light); text-transform:
+        uppercase; }
+        .sales { color: #2e7d32; font-weight: 600; }
+        .customer-link { color: var(--primary-dark); text-decoration: none; font-weight: 600; }
+        .customer-link:hover { text-decoration: underline; }
+    </x-slot:styles>
+
+    <div class="metrics-grid">
+        <div class="metric-card sales">
+            <div class="metric-label">Sales (This Month)</div>
+            <div class="metric-value sales">Rs {{ number_format($currentMonthSales) }}</div>
+            <div class="metric-icon">💰</div>
         </div>
-        <div class="report-card-metric transactions">
-            <span class="metric-label">Total Transactions (This Month)</span>
-            <span class="metric-value">{{ $currentMonthTransactions }}</span>
-            <span class="metric-icon">🧾</span>
+        <div class="metric-card trans">
+            <div class="metric-label">Transactions</div>
+            <div class="metric-value">{{ $currentMonthTransactions }}</div>
+            <div class="metric-icon">🧾</div>
         </div>
-        <div class="report-card-metric average">
-            <span class="metric-label">Average Sale (This Month)</span>
-            <span class="metric-value">Rs {{ number_format($currentMonthAverageSale) }}</span>
-            <span class="metric-icon">📊</span>
+        <div class="metric-card avg">
+            <div class="metric-label">Avg Sale</div>
+            <div class="metric-value">Rs {{ number_format($currentMonthAverageSale) }}</div>
+            <div class="metric-icon">📊</div>
         </div>
     </div>
 
-    <div class="report-table-card">
-        <div class="report-section-title">Monthly Sales</div>
+    <div class="table-card">
+        <div class="section-title">📊 Monthly Sales</div>
         <table>
             <thead>
-                <tr><th>Month</th><th>Transactions</th><th>Total Sales</th><th>Average</th></tr>
+                <tr>
+                    <th>Month</th>
+                    <th>Transactions</th>
+                    <th>Total Sales</th>
+                    <th>Average</th>
+                </tr>
             </thead>
             <tbody>
                 @foreach($monthlySales as $sale)
-                <tr>
-                    <td><strong>{{ $sale['month'] }}</strong></td>
-                    <td>{{ $sale['count'] }}</td>
-                    <td class="sales">Rs {{ number_format($sale['total']) }}</td>
-                    <td>Rs {{ number_format($sale['average']) }}</td>
-                </tr>
+                    <tr>
+                        <td><strong>{{ $sale['month'] }}</strong></td>
+                        <td>{{ $sale['count'] }}</td>
+                        <td class="sales">Rs {{ number_format($sale['total']) }}</td>
+                        <td>Rs {{ number_format($sale['average']) }}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 
-    <div class="report-table-card">
-        <div class="report-section-title">Sales by Item/Service</div>
+    <div class="table-card">
+        <div class="section-title">📦 Sales by Item/Service</div>
         <table>
             <thead>
-                <tr><th>Item/Service</th><th>Transactions</th><th>Total Sales</th></tr>
+                <tr>
+                    <th>Item/Service</th>
+                    <th>Transactions</th>
+                    <th>Total Sales</th>
+                </tr>
             </thead>
             <tbody>
                 @foreach($salesByItem as $item)
-                <tr>
-                    <td><strong>{{ $item->item_name ?? 'N/A' }}</strong></td>
-                    <td>{{ $item->count }}</td>
-                    <td class="sales">Rs {{ number_format($item->total) }}</td>
-                </tr>
+                    <tr>
+                        <td><strong>{{ $item->item_name ?? 'N/A' }}</strong></td>
+                        <td>{{ $item->count }}</td>
+                        <td class="sales">Rs {{ number_format($item->total) }}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 
-    <div class="report-table-card">
-        <div class="report-section-title">Top Customers</div>
+    <div class="table-card">
+        <div class="section-title">🏆 Top Customers</div>
         <table>
             <thead>
-                <tr><th>Customer</th><th>Transactions</th><th>Total Amount</th></tr>
+                <tr>
+                    <th>Customer</th>
+                    <th>Transactions</th>
+                    <th>Total</th>
+                </tr>
             </thead>
             <tbody>
                 @foreach($topCustomers as $customer)
-                <tr>
-                    <td><strong>{{ $customer->customer_name }}</strong></td>
-                    <td>{{ $customer->count }}</td>
-                    <td class="sales">Rs {{ number_format($customer->total) }}</td>
-                </tr>
+                    <tr>
+                        <td><strong>{{ $customer->customer_name }}</strong></td>
+                        <td>{{ $customer->count }}</td>
+                        <td class="sales">Rs {{ number_format($customer->total) }}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 
-    <div class="report-table-card">
-        <div class="report-section-title">Recent Transactions</div>
+    <div class="table-card">
+        <div class="section-title">📋 Recent Transactions</div>
         <table>
             <thead>
-                <tr><th>Date</th><th>Customer</th><th>Item</th><th>Amount</th><th>Paid</th><th>Payment Status</th><th>Service Status</th></tr>
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Item</th>
+                    <th>Amount</th>
+                    <th>Paid</th>
+                    <th>Status</th>
+                </tr>
             </thead>
             <tbody>
                 @foreach($recentTransactions as $transaction)
-                <tr>
-                    <td>{{ $transaction->income_date->format('d M Y') }}</td>
-                    <td>
-                        @if($transaction->customer)
-                            <strong>
-                                <a href="{{ route('customers.ledger', $transaction->customer->id) }}" style="color:#4f46e5; text-decoration:none;">
-                                    {{ $transaction->customer->name }}
-                                </a>
-                            </strong>
-                        @else
-                            N/A
-                        @endif
-                    </td>
-                    <td>{{ $transaction->item->name ?? 'N/A' }}</td>
-                    <td class="sales">Rs {{ number_format($transaction->amount) }}</td>
-                    <td style="color: #3b82f6; font-weight: 600;">Rs {{ number_format($transaction->paid_amount) }}</td>
-                    <td>
-                        @if($transaction->payment_status == 'paid')
-                            <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✓ Paid</span>
-                        @elseif($transaction->payment_status == 'partial')
-                            <span style="background: #f59e0b; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">◐ Partial</span>
-                        @else
-                            <span style="background: #ef4444; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">✗ Unpaid</span>
-                        @endif
-                    </td>
-                    <td>
-                        <span style="color: {{ $transaction->status == 'completed' ? '#10b981' : ($transaction->status == 'cancelled' ? '#ef4444' : '#f59e0b') }}; font-weight: 600;">
-                            {{ ucfirst($transaction->status) }}
-                        </span>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{ $transaction->income_date->format('d M Y') }}</td>
+                        <td>
+                            @if($transaction->customer)
+                                <a href="{{ route('customers.ledger', $transaction->customer->id) }}"
+                                    class="customer-link">{{ $transaction->customer->name }}</a>
+                            @else
+                                N/A
+                            @endif
+                        </td>
+                        <td>{{ $transaction->item->name ?? 'N/A' }}</td>
+                        <td class="sales">Rs {{ number_format($transaction->amount) }}</td>
+                        <td>Rs {{ number_format($transaction->paid_amount) }}</td>
+                        <td>
+                            @if($transaction->payment_status == 'paid')
+                                <span class="badge badge-success">✓ Paid</span>
+                            @elseif($transaction->payment_status == 'partial')
+                                <span class="badge badge-warning">◐ Partial</span>
+                            @else
+                                <span class="badge badge-danger">✗ Unpaid</span>
+                            @endif
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-<script src="/js/mobile-menu.js"></script>
+
+    <a href="/reports" class="btn btn-secondary">← Back to Reports</a>
 </x-layout>

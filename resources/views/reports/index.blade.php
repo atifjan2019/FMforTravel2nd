@@ -1,102 +1,167 @@
-<x-layout title="📊 Reports Dashboard - Al Nafi Travels">
-    <x-page-header
-        title="📊 Reports Dashboard"
-        icon="📊"
-        backUrl="/"
-    />
-
-    <style>
+<x-layout title="Reports - FM Travel Manager" pageTitle="Reports" pageSubtitle="View business reports and analytics">
+    <x-slot:styles>
         .report-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
         }
+
         .report-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s;
-            display: block;
+        background: var(--card-bg);
+        padding: 22px;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        color: var(--text);
+        transition: all 0.3s ease;
+        display: block;
+        border: 2px solid transparent;
         }
+
         .report-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--primary);
         }
-        .report-card .icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+
+        .report-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 14px;
         }
-        .report-card h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #667eea;
+
+        .report-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
         }
-        .report-card p {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.6;
+
+        .report-icon.profit { background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%); }
+        .report-icon.customer { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); }
+        .report-icon.supplier { background: linear-gradient(135deg, #5d4e37 0%, #8b7355 100%); }
+        .report-icon.cash { background: linear-gradient(135deg, #1565c0 0%, #42a5f5 100%); }
+        .report-icon.sales { background: linear-gradient(135deg, #7b1fa2 0%, #ab47bc 100%); }
+        .report-icon.purchase { background: linear-gradient(135deg, #c62828 0%, #ef5350 100%); }
+
+        .report-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 3px;
         }
-        
-        @media (max-width: 768px) {
-            .report-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            .report-card {
-                padding: 20px;
-            }
-            .report-card .icon {
-                font-size: 36px;
-                margin-bottom: 10px;
-            }
-            .report-card h2 {
-                font-size: 18px;
-            }
-            .report-card p {
-                font-size: 13px;
-            }
+
+        .report-subtitle {
+        font-size: 11px;
+        color: var(--text-light);
         }
-    </style>
+
+        .report-desc {
+        font-size: 12px;
+        color: var(--text-light);
+        line-height: 1.6;
+        padding: 14px;
+        background: #f9f5eb;
+        border-radius: 10px;
+        }
+
+        .report-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 14px;
+        font-size: 12px;
+        color: var(--primary);
+        font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+        .report-grid {
+        grid-template-columns: 1fr;
+        }
+        }
+    </x-slot:styles>
 
     <div class="report-grid">
-            <a href="/reports/profit-loss" class="report-card">
-                <div class="icon">💹</div>
-                <h2>Profit & Loss Report</h2>
-                <p>View income, expenses, and net profit for any date range. Analyze your business profitability.</p>
-            </a>
+        <a href="/reports/profit-loss" class="report-card">
+            <div class="report-header">
+                <div class="report-icon profit">💹</div>
+                <div>
+                    <div class="report-title">Profit & Loss</div>
+                    <div class="report-subtitle">Financial Summary</div>
+                </div>
+            </div>
+            <p class="report-desc">View income, expenses, and net profit for any date range. Analyze your business
+                profitability.</p>
+            <div class="report-arrow">View Report →</div>
+        </a>
 
-            <a href="/reports/customer-ledger" class="report-card">
-                <div class="icon">👥</div>
-                <h2>Customer Ledger</h2>
-                <p>Detailed transaction history for each customer. View all incomes and payments with running balances.</p>
-            </a>
+        <a href="/reports/customer-ledger" class="report-card">
+            <div class="report-header">
+                <div class="report-icon customer">👥</div>
+                <div>
+                    <div class="report-title">Customer Ledger</div>
+                    <div class="report-subtitle">Receivables Tracking</div>
+                </div>
+            </div>
+            <p class="report-desc">Detailed transaction history for each customer. View all sales and payments with
+                running balances.</p>
+            <div class="report-arrow">View Report →</div>
+        </a>
 
-            <a href="/reports/supplier-ledger" class="report-card">
-                <div class="icon">🏢</div>
-                <h2>Supplier Ledger</h2>
-                <p>Complete supplier transaction records. Track all purchases and payments made to suppliers.</p>
-            </a>
+        <a href="/reports/supplier-ledger" class="report-card">
+            <div class="report-header">
+                <div class="report-icon supplier">🏢</div>
+                <div>
+                    <div class="report-title">Supplier Ledger</div>
+                    <div class="report-subtitle">Payables Tracking</div>
+                </div>
+            </div>
+            <p class="report-desc">Complete supplier transaction records. Track all purchases and payments made to
+                suppliers.</p>
+            <div class="report-arrow">View Report →</div>
+        </a>
 
-            <a href="/reports/cash-flow" class="report-card">
-                <div class="icon">💰</div>
-                <h2>Cash Flow Report</h2>
-                <p>Monitor cash inflows and outflows. See actual money movements in your business.</p>
-            </a>
+        <a href="/reports/cash-flow" class="report-card">
+            <div class="report-header">
+                <div class="report-icon cash">💰</div>
+                <div>
+                    <div class="report-title">Cash Flow</div>
+                    <div class="report-subtitle">Money Movement</div>
+                </div>
+            </div>
+            <p class="report-desc">Monitor cash inflows and outflows. See actual money movements in your business.</p>
+            <div class="report-arrow">View Report →</div>
+        </a>
 
-            <a href="/reports/sales" class="report-card">
-                <div class="icon">📈</div>
-                <h2>Sales Report</h2>
-                <p>Analyze sales by customer and item. Identify your top performers and revenue sources.</p>
-            </a>
+        <a href="/reports/sales" class="report-card">
+            <div class="report-header">
+                <div class="report-icon sales">📈</div>
+                <div>
+                    <div class="report-title">Sales Report</div>
+                    <div class="report-subtitle">Revenue Analysis</div>
+                </div>
+            </div>
+            <p class="report-desc">Analyze sales by customer and item. Identify your top performers and revenue sources.
+            </p>
+            <div class="report-arrow">View Report →</div>
+        </a>
 
-            <a href="/reports/purchases" class="report-card">
-                <div class="icon">🛒</div>
-                <h2>Purchase Report</h2>
-                <p>Review purchases by supplier and item. Track spending patterns and supplier performance.</p>
-            </a>
-        </div>
+        <a href="/reports/purchases" class="report-card">
+            <div class="report-header">
+                <div class="report-icon purchase">🛒</div>
+                <div>
+                    <div class="report-title">Purchase Report</div>
+                    <div class="report-subtitle">Expense Analysis</div>
+                </div>
+            </div>
+            <p class="report-desc">Review purchases by supplier and item. Track spending patterns and supplier
+                performance.</p>
+            <div class="report-arrow">View Report →</div>
+        </a>
+    </div>
 </x-layout>

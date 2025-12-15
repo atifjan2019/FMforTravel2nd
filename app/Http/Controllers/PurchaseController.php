@@ -12,7 +12,9 @@ class PurchaseController extends Controller
     public function index()
     {
         $purchases = Purchase::with(['supplier', 'item'])->latest()->paginate(20);
-        return view('purchases.index', compact('purchases'));
+        $suppliers = Supplier::where('status', 'active')->get();
+        $items = Item::where('status', 'active')->get();
+        return view('purchases.index', compact('purchases', 'suppliers', 'items'));
     }
 
     public function create()
@@ -38,7 +40,7 @@ class PurchaseController extends Controller
         $validated['total_amount'] = $validated['quantity'] * $validated['unit_price'];
         $validated['paid_amount'] = $validated['paid_amount'] ?? 0;
         $validated['remaining_amount'] = $validated['total_amount'] - $validated['paid_amount'];
-        
+
         $purchase = Purchase::create($validated);
         $purchase->updatePaymentStatus();
 
@@ -75,7 +77,7 @@ class PurchaseController extends Controller
         $validated['total_amount'] = $validated['quantity'] * $validated['unit_price'];
         $validated['paid_amount'] = $validated['paid_amount'] ?? $purchase->paid_amount;
         $validated['remaining_amount'] = $validated['total_amount'] - $validated['paid_amount'];
-        
+
         $purchase->update($validated);
         $purchase->updatePaymentStatus();
 
@@ -107,10 +109,10 @@ class PurchaseController extends Controller
                 'person_reference' => $validated['person_reference'] ?? null,
                 'payment_date' => $validated['payment_date']
             ]);
-            
+
             // Update purchase paid amount
             $purchase->addPayment($validated['amount']);
-            
+
             return redirect()->back()
                 ->with('success', 'Payment added successfully');
         } catch (\Exception $e) {
@@ -118,7 +120,7 @@ class PurchaseController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
-    
+
     public function paymentHistory(Purchase $purchase)
     {
         $purchase->load(['supplier', 'item', 'paymentHistory']);

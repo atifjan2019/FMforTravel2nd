@@ -1,133 +1,85 @@
-<x-layout title="💸 Expense Details - Al Nafi Travels">
-    <x-page-header
-        title="💸 Expense Details"
-        icon="💸"
-        backUrl="/expenses"
-    />
-
-    <style>
+<x-layout title="Expense Details - FM Travel Manager" pageTitle="Expense Details"
+    pageSubtitle="View expense transaction details">
+    <x-slot:styles>
         .expense-header {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
+        background: linear-gradient(135deg, var(--accent) 0%, #3d3d3d 100%);
+        color: white;
+        padding: 24px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        text-align: center;
         }
-        .expense-header .amount {
-            font-size: 36px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        .expense-header .date {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        .expense-header .status {
-            margin-top: 10px;
-        }
-        
+
+        .expense-header .date { font-size: 12px; opacity: 0.9; margin-bottom: 8px; }
+        .expense-header .amount { font-size: 32px; font-weight: bold; margin-bottom: 10px; color: #ef5350; }
+        .expense-header .category { font-size: 14px; opacity: 0.9; }
+
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
         }
-        
+
         .info-card {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #ef4444;
+        background: #f9f5eb;
+        padding: 16px;
+        border-radius: 12px;
+        border-left: 4px solid var(--accent);
         }
-        
-        .info-label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
+
+        .info-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 600;
+        margin-bottom: 6px; }
+        .info-value { font-size: 14px; color: var(--text); font-weight: 600; }
+
+        .desc-box {
+        background: #f9f5eb;
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        color: var(--text);
         }
-        
-        .info-value {
-            font-size: 16px;
-            color: #333;
-            font-weight: 600;
-        }
-        
-        .description-box {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #ef4444;
-            margin-bottom: 20px;
-        }
-        
-        .description-box .label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
-        
-        .description-box .text {
-            font-size: 15px;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 768px) {
-            .expense-header .amount { font-size: 28px; }
-            .info-grid { grid-template-columns: 1fr; gap: 15px; }
-            .info-card { padding: 15px; }
-            .description-box { padding: 15px; }
-        }
-    </style>
+    </x-slot:styles>
 
     <div class="expense-header">
         <div class="date">📅 {{ $expense->expense_date->format('d M Y') }}</div>
-        <div class="amount">Rs {{ number_format($expense->amount) }}</div>
-        <div class="status">
-            <span class="badge badge-success">{{ ucfirst($expense->status) }}</span>
+        <div class="amount">-Rs {{ number_format($expense->amount) }}</div>
+        <div class="category">
+            {{ $expense->category }} •
+            <span
+                class="badge {{ $expense->status == 'paid' ? 'badge-success' : ($expense->status == 'pending' ? 'badge-warning' : 'badge-danger') }}">
+                {{ ucfirst($expense->status) }}
+            </span>
         </div>
     </div>
 
     <div class="card">
-        <h3 style="margin-bottom: 20px; color: #ef4444;">📋 Expense Details</h3>
-        
+        <h3 class="card-title" style="margin-bottom: 16px;">📋 Expense Details</h3>
         <div class="info-grid">
             <div class="info-card">
                 <div class="info-label">📁 Category</div>
                 <div class="info-value">{{ $expense->category }}</div>
             </div>
-            
             <div class="info-card">
-                <div class="info-label">🔖 Reference Number</div>
-                <div class="info-value">{{ $expense->reference_no ?? 'Not provided' }}</div>
+                <div class="info-label">🏷️ Reference</div>
+                <div class="info-value">{{ $expense->reference_no ?? 'N/A' }}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">📅 Date</div>
+                <div class="info-value">{{ $expense->expense_date->format('d M Y') }}</div>
             </div>
         </div>
-        
+
         @if($expense->description)
-        <div class="description-box">
-            <div class="label">📝 Description</div>
-            <div class="text">{{ $expense->description }}</div>
-        </div>
+            <h3 class="card-title" style="margin: 20px 0 12px;">📝 Description</h3>
+            <div class="desc-box">{{ $expense->description }}</div>
         @endif
     </div>
 
     <div class="card">
-        <div class="action-buttons">
-            <a href="/expenses/{{ $expense->id }}/edit" class="btn btn-success">✏️ Edit Expense</a>
-            <a href="/expenses" class="btn btn-secondary">← Back to Expenses</a>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/expenses/{{ $expense->id }}/edit" class="btn btn-success">✏️ Edit</a>
+            <a href="/expenses" class="btn btn-secondary">← Back</a>
         </div>
     </div>
 </x-layout>

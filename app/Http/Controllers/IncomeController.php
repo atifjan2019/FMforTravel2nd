@@ -12,7 +12,9 @@ class IncomeController extends Controller
     public function index()
     {
         $incomes = Income::with(['customer', 'item'])->latest()->paginate(20);
-        return view('incomes.index', compact('incomes'));
+        $customers = Customer::where('status', 'active')->get();
+        $items = Item::where('status', 'active')->get();
+        return view('incomes.index', compact('incomes', 'customers', 'items'));
     }
 
     public function create()
@@ -40,7 +42,7 @@ class IncomeController extends Controller
         $paidAmount = $validated['paid_amount'] ?? 0;
         $validated['paid_amount'] = $paidAmount;
         $validated['remaining_amount'] = $amount - $paidAmount;
-        
+
         if ($paidAmount == 0) {
             $validated['payment_status'] = 'unpaid';
         } elseif ($paidAmount >= $amount) {
@@ -88,7 +90,7 @@ class IncomeController extends Controller
         $paidAmount = $validated['paid_amount'] ?? $income->paid_amount;
         $validated['paid_amount'] = $paidAmount;
         $validated['remaining_amount'] = $amount - $paidAmount;
-        
+
         if ($paidAmount == 0) {
             $validated['payment_status'] = 'unpaid';
         } elseif ($paidAmount >= $amount) {
@@ -129,7 +131,7 @@ class IncomeController extends Controller
                 'person_reference' => $validated['person_reference'] ?? null,
                 'payment_date' => $validated['payment_date']
             ]);
-            
+
             // Update income paid amount
             $income->addPayment($validated['amount']);
 
@@ -140,7 +142,7 @@ class IncomeController extends Controller
                 ->with('error', 'Error adding payment: ' . $e->getMessage());
         }
     }
-    
+
     public function paymentHistory(Income $income)
     {
         $income->load(['customer', 'item', 'paymentHistory']);

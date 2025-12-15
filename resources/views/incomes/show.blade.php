@@ -1,183 +1,165 @@
-<x-layout title="💰 Income (Sell) Details - Al Nafi Travels">
-    <x-page-header
-        title="💰 Income (Sell) Details"
-        icon="💰"
-        backUrl="/incomes"
-    />
+<x-layout title="Sale Details - FM Travel Manager" pageTitle="Sale Details"
+    pageSubtitle="View sale transaction details">
+    <x-slot:styles>
+        .sale-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: var(--accent);
+        padding: 24px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        text-align: center;
+        }
 
-    <style>
-        .income-header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
+        .sale-header .date {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-bottom: 8px;
         }
-        .income-header .amount {
-            font-size: 36px;
-            font-weight: bold;
-            margin: 10px 0;
+
+        .sale-header .amount {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 10px;
         }
-        .income-header .date {
-            font-size: 14px;
-            opacity: 0.9;
+
+        .sale-header .badges {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
         }
-        .income-header .status {
-            margin-top: 10px;
-        }
-        
+
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
         }
-        
-        .info-card {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #10b981;
-        }
-        
-        .info-label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-        
-        .info-value {
-            font-size: 16px;
-            color: #333;
-            font-weight: 600;
-        }
-        
-        .description-box {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #10b981;
-            margin-bottom: 20px;
-        }
-        
-        .description-box .label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
-        
-        .description-box .text {
-            font-size: 15px;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        @media (max-width: 768px) {
-            .income-header .amount { font-size: 28px; }
-            .info-grid { grid-template-columns: 1fr; gap: 15px; }
-            .info-card { padding: 15px; }
-            .description-box { padding: 15px; }
-        }
-    </style>
 
-    <div class="income-header">
+        .info-card {
+        background: #f9f5eb;
+        padding: 16px;
+        border-radius: 12px;
+        border-left: 4px solid var(--primary);
+        }
+
+        .info-card.success { border-left-color: #2e7d32; }
+        .info-card.warning { border-left-color: #f57c00; }
+        .info-card.danger { border-left-color: #c62828; }
+
+        .info-label {
+        font-size: 10px;
+        color: var(--text-light);
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 6px;
+        }
+
+        .info-value {
+        font-size: 14px;
+        color: var(--text);
+        font-weight: 600;
+        }
+
+        .info-value.success { color: #2e7d32; }
+        .info-value.warning { color: #f57c00; }
+        .info-value.danger { color: #c62828; }
+
+        .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+        margin: 20px 0 15px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+        }
+
+        .desc-box {
+        background: #f9f5eb;
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        color: var(--text);
+        margin-bottom: 20px;
+        }
+    </x-slot:styles>
+
+    <div class="sale-header">
         <div class="date">📅 {{ $income->income_date->format('d M Y') }}</div>
         <div class="amount">Rs {{ number_format($income->amount) }}</div>
-        <div class="status">
-            <span class="badge badge-success">{{ ucfirst($income->status) }}</span>
+        <div class="badges">
+            <span class="badge badge-info">{{ ucfirst($income->status) }}</span>
             @if($income->payment_status == 'paid')
-                <span class="badge" style="background: #10b981; color: white; margin-left: 8px;">✓ Paid</span>
+                <span class="badge badge-success">✓ Paid</span>
             @elseif($income->payment_status == 'partial')
-                <span class="badge" style="background: #f59e0b; color: white; margin-left: 8px;">◐ Partial Payment</span>
+                <span class="badge badge-warning">◐ Partial</span>
             @else
-                <span class="badge" style="background: #ef4444; color: white; margin-left: 8px;">✗ Unpaid</span>
+                <span class="badge badge-danger">✗ Unpaid</span>
             @endif
         </div>
     </div>
 
     <div class="card">
-        <h3 style="margin-bottom: 20px; color: #10b981;">📋 Transaction Details</h3>
-        
+        <h3 class="section-title">📋 Transaction Details</h3>
         <div class="info-grid">
             <div class="info-card">
                 <div class="info-label">👤 Customer</div>
                 <div class="info-value">
-                    <a href="{{ route('customers.ledger', $income->customer->id) }}" style="color:#2563eb; text-decoration:none;">
+                    <a href="{{ route('customers.ledger', $income->customer->id) }}"
+                        style="color: var(--primary-dark); text-decoration: none;">
                         {{ $income->customer->name }}
                     </a>
                 </div>
             </div>
-            
             <div class="info-card">
-                <div class="info-label">📦 Item/Service</div>
-                <div class="info-value">{{ $income->item->name ?? 'Not specified' }}</div>
+                <div class="info-label">📦 Item</div>
+                <div class="info-value">{{ $income->item->name ?? 'N/A' }}</div>
             </div>
-            
             <div class="info-card">
-                <div class="info-label">🔖 Reference Number</div>
-                <div class="info-value">{{ $income->reference_no ?? 'Not provided' }}</div>
+                <div class="info-label">🏷️ Reference</div>
+                <div class="info-value">{{ $income->reference_no ?? 'N/A' }}</div>
             </div>
         </div>
 
-        <h3 style="margin: 30px 0 20px; color: #10b981;">💰 Payment Information</h3>
-        
+        <h3 class="section-title">💰 Payment Information</h3>
         <div class="info-grid">
-            <div class="info-card" style="border-left-color: #10b981;">
-                <div class="info-label">💵 Total Amount</div>
-                <div class="info-value" style="color: #10b981;">Rs {{ number_format($income->amount) }}</div>
+            <div class="info-card success">
+                <div class="info-label">💵 Total</div>
+                <div class="info-value success">Rs {{ number_format($income->amount) }}</div>
             </div>
-            
-            <div class="info-card" style="border-left-color: #3b82f6;">
-                <div class="info-label">✓ Paid Amount</div>
-                <div class="info-value" style="color: #3b82f6;">Rs {{ number_format($income->paid_amount) }}</div>
+            <div class="info-card">
+                <div class="info-label">✓ Paid</div>
+                <div class="info-value">Rs {{ number_format($income->paid_amount) }}</div>
             </div>
-            
-            <div class="info-card" style="border-left-color: {{ $income->remaining_amount > 0 ? '#ef4444' : '#10b981' }};">
-                <div class="info-label">📊 Remaining Amount</div>
-                <div class="info-value" style="color: {{ $income->remaining_amount > 0 ? '#ef4444' : '#10b981' }};">
+            <div class="info-card {{ $income->remaining_amount > 0 ? 'danger' : 'success' }}">
+                <div class="info-label">📊 Remaining</div>
+                <div class="info-value {{ $income->remaining_amount > 0 ? 'danger' : 'success' }}">
                     Rs {{ number_format($income->remaining_amount) }}
                 </div>
             </div>
-            
-            <div class="info-card" style="border-left-color: {{ $income->payment_status == 'paid' ? '#10b981' : ($income->payment_status == 'partial' ? '#f59e0b' : '#ef4444') }};">
-                <div class="info-label">🏷️ Payment Status</div>
+            <div class="info-card">
+                <div class="info-label">🏷️ Status</div>
                 <div class="info-value">
                     @if($income->payment_status == 'paid')
-                        <span style="color: #10b981; font-weight: bold;">✓ Fully Paid</span>
+                        <span class="badge badge-success">✓ Paid</span>
                     @elseif($income->payment_status == 'partial')
-                        <span style="color: #f59e0b; font-weight: bold;">◐ Partially Paid</span>
+                        <span class="badge badge-warning">◐ Partial</span>
                     @else
-                        <span style="color: #ef4444; font-weight: bold;">✗ Unpaid</span>
+                        <span class="badge badge-danger">✗ Unpaid</span>
                     @endif
                 </div>
             </div>
         </div>
-        
+
         @if($income->description)
-        <div class="description-box">
-            <div class="label">📝 Description</div>
-            <div class="text">{{ $income->description }}</div>
-        </div>
+            <h3 class="section-title">📝 Description</h3>
+            <div class="desc-box">{{ $income->description }}</div>
         @endif
     </div>
 
     <div class="card">
-        <div class="action-buttons">
-            <a href="/incomes/{{ $income->id }}/edit" class="btn btn-success">✏️ Edit Income (Sell)</a>
-            <a href="/incomes" class="btn btn-secondary">← Back to Incomes (Sell)</a>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/incomes/{{ $income->id }}/edit" class="btn btn-success">✏️ Edit</a>
+            <a href="/incomes" class="btn btn-secondary">← Back</a>
         </div>
     </div>
 </x-layout>

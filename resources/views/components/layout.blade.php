@@ -51,88 +51,142 @@
 
         /* Sidebar */
         .sidebar {
-            width: 220px;
-            background: var(--accent);
-            padding: 15px 0;
+            width: 240px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
+            padding: 0;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
             z-index: 1000;
             transition: transform 0.3s ease;
+            box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
         }
 
         .sidebar-header {
-            padding: 8px 15px 20px;
+            padding: 24px 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, rgba(212, 160, 23, 0.15) 0%, rgba(245, 197, 24, 0.05) 100%);
+            border-bottom: 1px solid rgba(212, 160, 23, 0.2);
+            margin-bottom: 8px;
+        }
+
+        .sidebar-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.4);
         }
 
         .sidebar-header h1 {
-            color: var(--primary-light);
-            font-size: 16px;
-            font-weight: 600;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .sidebar-header p {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 10px;
-            margin-top: 3px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: 400;
         }
 
         .nav-menu {
             list-style: none;
+            padding: 8px 12px;
         }
 
         .nav-item {
-            margin: 3px 10px;
+            margin: 4px 0;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            color: rgba(255, 255, 255, 0.8);
+            gap: 12px;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 13px;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .nav-link:hover,
-        .nav-link.active {
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
             background: var(--primary);
-            color: var(--accent);
-            transform: translateX(3px);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(212, 160, 23, 0.2) 0%, rgba(212, 160, 23, 0.1) 100%);
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .nav-link.active::before {
+            transform: scaleY(1);
         }
 
         .nav-link .icon {
-            font-size: 16px;
-            width: 24px;
-            text-align: center;
+            font-size: 18px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover .icon,
+        .nav-link.active .icon {
+            background: rgba(212, 160, 23, 0.25);
+            transform: scale(1.05);
         }
 
         .nav-divider {
             height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 10px 15px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+            margin: 16px 16px;
         }
 
         .nav-section-title {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 9px;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 8px 15px 3px;
+            letter-spacing: 1.5px;
+            padding: 12px 16px 6px;
             font-weight: 600;
         }
 
         /* Main Content */
         .main-content {
             flex: 1;
-            margin-left: 220px;
+            margin-left: 240px;
             padding: 20px;
             min-height: 100vh;
             background: var(--bg);
@@ -572,7 +626,8 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h1>✈️ FM Travel</h1>
+                <div class="sidebar-logo">✈️</div>
+                <h1>FM Travel</h1>
                 <p>Management System</p>
             </div>
 

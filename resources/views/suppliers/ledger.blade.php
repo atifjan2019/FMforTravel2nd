@@ -1,773 +1,317 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supplier Ledger · {{ $supplier->name }}</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-        :root {
-            --indigo: #4f46e5;
-            --indigo-dark: #312e81;
-            --teal: #14b8a6;
-            --amber: #f59e0b;
-            --slate-50: #f8fafc;
-            --slate-100: #e2e8f0;
-            --slate-500: #64748b;
-            --slate-700: #334155;
-            --danger: #ef4444;
-        }
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 65%, #ecfeff 100%);
-            color: #0f172a;
-        }
-        .page {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 32px 20px 80px;
-            position: relative;
-            transition: opacity 0.2s ease;
-        }
-        .page.is-loading {
-            opacity: 0.55;
-            pointer-events: none;
-        }
-        .page.is-loading::after {
-            content: 'Updating...';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(15,23,42,0.9);
-            color: #fff;
-            padding: 12px 18px;
-            border-radius: 999px;
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
-        }
-        a { text-decoration: none; color: inherit; }
-        .hero {
-            background: radial-gradient(circle at top right, rgba(99,102,241,0.30), rgba(255,255,255,0) 40%), var(--indigo);
-            border-radius: 28px;
-            padding: 32px;
-            color: #fff;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 28px;
-            pointer-events: none;
-        }
-        .hero__text {
-            max-width: 600px;
-        }
-        .hero__details {
-            display: none;
-        }
-        .eyebrow {
-            font-size: 0.88rem;
-            letter-spacing: 0.07em;
-            text-transform: uppercase;
-            opacity: 0.8;
-            margin-bottom: 6px;
-        }
-        h1 {
-            font-size: clamp(2rem, 4vw, 2.8rem);
-            margin: 0 0 12px 0;
-        }
-        .hero__subtitle {
-            margin: 0;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-        .hero__actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            border: none;
-            border-radius: 999px;
-            padding: 12px 22px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            text-decoration: none;
-        }
-        .btn-ghost {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
-        }
-        .btn-white {
-            background: #fff;
-            color: var(--indigo);
-            box-shadow: 0 15px 25px rgba(15,23,42,0.15);
-        }
-        .btn:hover { transform: translateY(-2px); }
-        .btn:focus { outline: 3px solid rgba(255,255,255,0.45); }
-        .card {
-            background: #fff;
-            border-radius: 22px;
-            padding: 28px;
-            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.08);
-            margin-top: 32px;
-        }
-        .card--glass {
-            background: rgba(255,255,255,0.65);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(15,23,42,0.05);
-        }
+<x-layout title="Supplier Ledger - FM Travel Manager" pageTitle="{{ $supplier->name }}"
+    pageSubtitle="Purchase and payment history">
+    <x-slot:styles>
         .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
-            margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 24px;
         }
+
         .summary-card {
-            border-radius: 18px;
-            padding: 22px;
-            background: #0f172a;
-            color: #fff;
-            position: relative;
-            overflow: hidden;
+        background: var(--card-bg);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        border-left: 4px solid #8b7355;
         }
-        .summary-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.12);
-            opacity: 0.6;
-            pointer-events: none;
+
+        .summary-card.purchase { border-left-color: #c62828; }
+        .summary-card.payment { border-left-color: #2e7d32; }
+        .summary-card.balance { border-left-color: #f57c00; }
+
+        .summary-label { font-size: 11px; color: var(--text-light); text-transform: uppercase; font-weight: 600;
+        margin-bottom: 6px; }
+        .summary-value { font-size: 22px; font-weight: 700; }
+        .summary-value.purchase { color: #c62828; }
+        .summary-value.payment { color: #2e7d32; }
+        .summary-value.balance { color: #f57c00; }
+        .summary-small { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+        .supplier-info {
+        background: #f9f5eb;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
         }
-        .summary-card:nth-child(1) { background: linear-gradient(135deg, #fef08a, #facc15); color: #422006; }
-        .summary-card:nth-child(2) { background: linear-gradient(135deg, #a7f3d0, #34d399); color: #064e3b; }
-        .summary-card:nth-child(3) { background: linear-gradient(135deg, #c7d2fe, #4338ca); }
-        .summary-card h3 {
-            margin: 0;
-            font-size: 0.9rem;
-            letter-spacing: 0.07em;
-            text-transform: uppercase;
-            opacity: 0.85;
+
+        .info-item { font-size: 12px; }
+        .info-item strong { color: var(--text-light); font-size: 10px; text-transform: uppercase; display: block;
+        margin-bottom: 3px; }
+
+        .table-card {
+        background: var(--card-bg);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        overflow-x: auto;
         }
-        .summary-card strong {
-            display: block;
-            font-size: 1.8rem;
-            margin-top: 16px;
-        }
-        .bulk-pay {
-            background: linear-gradient(135deg, #f97316, #facc15);
-            color: #431407;
-            border: none;
-            border-radius: 18px;
-            padding: 18px 26px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 16px 30px rgba(249, 115, 22, 0.25);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .bulk-pay:hover { transform: translateY(-3px); box-shadow: 0 24px 40px rgba(249, 115, 22, 0.35); }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-        }
-        thead th {
-            text-align: left;
-            font-size: 0.78rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--slate-500);
-            padding: 14px 12px;
-            border-bottom: 1px solid var(--slate-100);
-            background: #f8fafc;
-        }
-        tbody td {
-            padding: 18px 12px;
-            border-bottom: 1px solid rgba(15,23,42,0.06);
-            font-size: 0.97rem;
-        }
-        tbody tr:hover {
-            background: #f8fafc;
-        }
-        .transaction-type {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .transaction-type--purchase {
-            background: rgba(239,68,68,0.12);
-            color: var(--danger);
-        }
-        .transaction-type--payment {
-            background: rgba(20,184,166,0.12);
-            color: var(--teal);
-        }
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-size: 0.78rem;
-            font-weight: 600;
-        }
-        .badge-success { background: rgba(16,185,129,0.15); color: #047857; }
-        .badge-warning { background: rgba(251,191,36,0.2); color: #92400e; }
-        .badge-muted { background: rgba(148,163,184,0.2); color: #475569; }
-        .print-header {
-            display: none;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #0f172a;
-        }
-        .print-header img { height: 70px; flex-shrink: 0; }
-        .print-header .print-meta {
-            font-size: 12px;
-            color: #475569;
-            line-height: 1.4;
-        }
-        .print-footer {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px 16px;
-            font-size: 11px;
-            color: #475569;
-            border-top: 1px solid #cbd5f5;
-            padding-top: 8px;
-            margin-top: auto;
-            text-align: center;
-        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: #f9f5eb; font-weight: 600; font-size: 10px; color: var(--text-light); text-transform:
+        uppercase; }
+        .purchase { color: #c62828; font-weight: 600; }
+        .payment { color: #2e7d32; font-weight: 600; }
+
         .floating-print-btn {
-            position: fixed;
-            bottom: 28px;
-            right: 28px;
-            border: none;
-            border-radius: 999px;
-            background: #0ea5e9;
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 14px 22px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            box-shadow: 0 18px 35px rgba(14,165,233,0.35);
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #8b7355;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 12px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 100;
         }
-        .floating-print-btn:hover {
-            transform: translateY(-2px);
+
+        .floating-print-btn:hover { transform: translateY(-2px); }
+
+        .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
         }
-        .developer-credit {
-            text-align: center;
-            margin: 40px 0 0;
-            font-size: 12px;
-            color: #94a3b8;
+
+        .modal-content {
+        background: #fffdf7;
+        padding: 24px;
+        border-radius: 18px;
+        width: 100%;
+        max-width: 400px;
+        margin: 15px;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        position: relative;
         }
-        .developer-credit a {
-            color: inherit;
-            text-decoration: none;
-        }
-        .filter-panel {
-            margin: 20px 0 16px;
-            background: #fff;
-            border-radius: 16px;
-            padding: 18px 22px;
-            box-shadow: 0 18px 30px rgba(15,23,42,0.08);
-        }
-        .filter-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            align-items: end;
-        }
-        .filter-form .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .filter-form label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #475569;
-        }
-        .filter-form select,
-        .filter-form input[type="date"] {
-            padding: 10px 12px;
-            border-radius: 12px;
-            border: 1px solid #cbd5f5;
-            font-size: 0.95rem;
-            background: #fff;
-        }
-        .custom-date-fields {
-            display: none;
-            gap: 12px;
-        }
-        .custom-date-fields.active {
-            display: flex;
-        }
-        .filter-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .filter-status {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: #475569;
-            font-weight: 600;
-        }
-        @media (max-width: 720px) {
-            .filter-form {
-                grid-template-columns: 1fr;
-            }
-            .filter-actions {
-                width: 100%;
-            }
-            .filter-actions .btn {
-                flex: 1;
-                justify-content: center;
-                text-align: center;
-            }
-            .custom-date-fields {
-                flex-direction: column;
-            }
-        }
+
+        .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 22px;
+        color: var(--text-light); cursor: pointer; }
+
         @media (max-width: 640px) {
-            .hero { padding: 24px; }
-            .hero__actions { width: 100%; }
-            .summary-card strong { font-size: 1.5rem; }
-            .card { padding: 20px; }
-            tbody td, thead th { padding: 12px 8px; }
-            .floating-print-btn { width: calc(100% - 40px); left: 20px; right: 20px; justify-content: center; }
+        .summary-grid { grid-template-columns: 1fr; }
+        .summary-value { font-size: 18px; }
         }
+
         @media print {
-            body { background: #fff; }
-            .page { padding: 0 10px; min-height: 100vh; display: flex; flex-direction: column; color: #111827; }
-            .hero, .floating-print-btn { display: none !important; }
-            .card { box-shadow: none; border: 1px solid #cbd5f5; border-radius: 6px; margin-top: 12px; padding: 14px; background: #fff !important; color: #111827 !important; }
-            .summary-card { border: 1px solid #cbd5f5; box-shadow: none; padding: 14px; background: #fff !important; color: #111827 !important; }
-            .summary-card h3, .summary-card strong, .summary-card small { color: #111827 !important; }
-            .summary-card::after { display: none; }
-            .print-header { display: flex !important; margin-bottom: 12px; }
-            table { font-size: 12px; color: #111827; }
-            thead th { font-size: 0.72rem; padding: 9px 6px; color: #111827; background: #f5f5f5 !important; }
-            tbody td { padding: 9px 6px; color: #111827; }
-            .print-footer { display: flex !important; justify-content: center; }
-            .print-hide { display: none !important; }
-            .developer-credit { display: none !important; }
-            a { color: inherit !important; text-decoration: none !important; }
+        .floating-print-btn, .modal-overlay, .no-print { display: none !important; }
+        .card, .table-card { box-shadow: none; border: 1px solid #ddd; }
         }
-    </style>
-</head>
-<body>
-    @php
-        $transactions = collect();
-        foreach ($supplier->purchases as $purchase) {
-            $createdTimestamp = $purchase->created_at instanceof \Carbon\Carbon ? $purchase->created_at->timestamp : ($purchase->created_at ? strtotime($purchase->created_at) : 0);
-            $dateTimestamp = $purchase->purchase_date instanceof \Carbon\Carbon ? $purchase->purchase_date->timestamp : ($purchase->purchase_date ? strtotime($purchase->purchase_date) : 0);
-            $sortPrimary = $createdTimestamp ?: $dateTimestamp;
-            $secondaryTimestamp = $dateTimestamp ?: $createdTimestamp;
-            $transactions->push([
-                'date' => $purchase->purchase_date,
-                'type' => 'purchase',
-                'description' => $purchase->item->name ?? 'Purchase',
-                'credit' => $purchase->total_amount,
-                'debit' => 0,
-                'reference' => $purchase->reference_no,
-                'status' => $purchase->payment_status,
-                'purchase_id' => $purchase->id,
-                'paid_amount' => $purchase->paid_amount,
-                'sort_primary' => $sortPrimary,
-                'sort_secondary' => $secondaryTimestamp,
-            ]);
-        }
-        foreach ($supplier->payments as $payment) {
-            $createdTimestamp = $payment->created_at instanceof \Carbon\Carbon ? $payment->created_at->timestamp : ($payment->created_at ? strtotime($payment->created_at) : 0);
-            $dateTimestamp = $payment->payment_date instanceof \Carbon\Carbon ? $payment->payment_date->timestamp : ($payment->payment_date ? strtotime($payment->payment_date) : 0);
-            $sortPrimary = $createdTimestamp ?: $dateTimestamp;
-            $secondaryTimestamp = $dateTimestamp ?: $createdTimestamp;
-            $transactions->push([
-                'date' => $payment->payment_date,
-                'type' => 'payment',
-                'description' => $payment->payment_method,
-                'credit' => 0,
-                'debit' => $payment->amount,
-                'reference' => $payment->reference_no,
-                'status' => null,
-                'purchase_id' => null,
-                'paid_amount' => null,
-                'sort_primary' => $sortPrimary,
-                'sort_secondary' => $secondaryTimestamp,
-            ]);
-        }
-        $transactions = $transactions->sort(function ($a, $b) {
-            $primaryComparison = ($b['sort_primary'] ?? 0) <=> ($a['sort_primary'] ?? 0);
-            if ($primaryComparison !== 0) {
-                return $primaryComparison;
-            }
-            return ($b['sort_secondary'] ?? 0) <=> ($a['sort_secondary'] ?? 0);
-        })->values();
-        $selectedRange = $activeRange ?? 'all';
-        $filterStartValue = $filterStart ?? '';
-        $filterEndValue = $filterEnd ?? '';
-        $displayRangeLabel = $rangeLabel ?? 'All time';
-    @endphp
+    </x-slot:styles>
 
-    <div class="page" id="ledgerPage">
-        <div class="print-header">
-            <img src="/images/alnafi.png" alt="Al Nafi Travels logo">
-            <div style="flex:1; text-align:right;">
-                <h2 style="margin:0;">Supplier Ledger</h2>
-                @if($supplier->name || $supplier->phone || $supplier->email || $supplier->address)
-                    <div class="print-meta">
-                        @if($supplier->name)
-                            <div><strong>{{ $supplier->name }}</strong></div>
-                        @endif
-                        @if($supplier->phone)
-                            <div>📞 {{ $supplier->phone }}</div>
-                        @endif
-                        @if($supplier->email)
-                            <div>✉️ {{ $supplier->email }}</div>
-                        @endif
-                        @if($supplier->address)
-                            <div>📍 {{ $supplier->address }}</div>
-                        @endif
-                    </div>
-                @endif
-            </div>
+    @if($supplier->balance > 0)
+        <div style="margin-bottom: 18px;">
+            <button class="btn btn-success no-print"
+                onclick="openPaymentModal({{ $supplier->id }}, {{ $supplier->balance }})">
+                💸 Record Bulk Payment
+            </button>
         </div>
+    @endif
 
-        <header class="hero">
-            <div class="hero__text">
-                <p class="eyebrow">Suppliers / Ledger</p>
-                <h1>Ledger for {{ $supplier->name }}</h1>
-                <p class="hero__subtitle">Complete breakdown of purchases, payments, and outstanding exposure.</p>
-                <div class="hero__details"></div>
-            </div>
-            <div class="hero__actions">
-                <a href="/" class="btn btn-ghost">🏠 Dashboard</a>
-                <a href="/suppliers" class="btn btn-ghost">← Back to Suppliers</a>
-                @if($supplier->balance > 0)
-                    <button type="button" class="btn btn-white" onclick="openSupplierPaymentModal({{ $supplier->id }}, {{ $supplier->balance }}, true)">
-                        💸 Record Bulk Payment
-                    </button>
-                @endif
-            </div>
-        </header>
-
-        <div class="filter-panel">
-            <form method="GET" action="{{ route('suppliers.ledger', $supplier) }}" class="filter-form" id="supplierFilterForm">
-                <div class="form-group">
-                    <label for="filterRange">Filter By</label>
-                    <select name="range" id="filterRange">
-                        <option value="all" {{ $selectedRange === 'all' ? 'selected' : '' }}>All Time</option>
-                        <option value="today" {{ $selectedRange === 'today' ? 'selected' : '' }}>Today</option>
-                        <option value="yesterday" {{ $selectedRange === 'yesterday' ? 'selected' : '' }}>Yesterday</option>
-                        <option value="last7" {{ $selectedRange === 'last7' ? 'selected' : '' }}>Last 7 Days</option>
-                        <option value="last30" {{ $selectedRange === 'last30' ? 'selected' : '' }}>Last 30 Days</option>
-                        <option value="custom" {{ $selectedRange === 'custom' ? 'selected' : '' }}>Custom Range</option>
-                    </select>
-                </div>
-                <div id="customDateFields" class="custom-date-fields {{ $selectedRange === 'custom' ? 'active' : '' }}">
-                    <div class="form-group">
-                        <label for="start_date">From</label>
-                        <input type="date" id="start_date" name="start_date" value="{{ $filterStartValue }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="end_date">To</label>
-                        <input type="date" id="end_date" name="end_date" value="{{ $filterEndValue }}">
-                    </div>
-                </div>
-                <input type="hidden" name="instant" value="1">
-            </form>
-            <div class="filter-status">
-                Showing: {{ $displayRangeLabel }}
-            </div>
+    <div class="supplier-info">
+        <div class="info-item">
+            <strong>📞 Phone</strong>
+            {{ $supplier->phone ?? 'Not provided' }}
         </div>
-
-        <section class="card card--glass">
-            <div class="summary-grid">
-                <div class="summary-card">
-                    <h3>Total Amount</h3>
-                    <strong>Rs {{ number_format($supplier->total_purchases) }}</strong>
-                    <small>{{ $supplier->purchases->count() }} purchases</small>
-                </div>
-                <div class="summary-card">
-                    <h3>Total Paid</h3>
-                    <strong>Rs {{ number_format($supplier->total_paid) }}</strong>
-                    <small>{{ $supplier->payments->count() }} payments</small>
-                </div>
-                <div class="summary-card">
-                    <h3>Balance Due</h3>
-                    <strong>Rs {{ number_format($supplier->balance) }}</strong>
-                    <small>{{ $supplier->balance > 0 ? 'Outstanding with supplier' : 'All settled' }}</small>
-                </div>
-            </div>
-        </section>
-
-        <section class="card" style="margin-top:28px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:10px;">
-                <div>
-                    <h2 style="margin:0; font-size:1.25rem;">Transaction History</h2>
-                    <p style="margin:6px 0 0 0; color:var(--slate-500);">Latest purchases and payments are shown first.</p>
-                </div>
-            </div>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="min-width:120px;">Date</th>
-                            <th class="print-hide" style="min-width:120px;">Reference</th>
-                            <th style="min-width:140px;">Type</th>
-                            <th>Description</th>
-                            <th style="min-width:130px;">Purchase (+)</th>
-                            <th style="min-width:130px;">Payment (-)</th>
-                            <th class="print-hide" style="min-width:140px;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($transactions as $transaction)
-                            <tr>
-                                <td>{{ $transaction['date'] ? $transaction['date']->format('d M Y') : '-' }}</td>
-                                <td class="print-hide">{{ $transaction['reference'] ?? '—' }}</td>
-                                <td class="print-hide">
-                                    @php $typeClass = $transaction['type'] === 'purchase' ? 'transaction-type--purchase' : 'transaction-type--payment'; @endphp
-                                    <span class="transaction-type {{ $typeClass }}">
-                                        {{ ucfirst($transaction['type']) }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @if($transaction['type'] === 'purchase' && $transaction['purchase_id'])
-                                        <a href="/purchases/{{ $transaction['purchase_id'] }}/payment-history" style="color:var(--indigo); text-decoration:underline;">
-                                            {{ $transaction['description'] }}
-                                        </a>
-                                    @else
-                                        {{ $transaction['description'] }}
-                                    @endif
-                                </td>
-                                <td style="color:var(--danger); font-weight:600;">
-                                    {{ $transaction['credit'] > 0 ? 'Rs ' . number_format($transaction['credit']) : '—' }}
-                                    @if($transaction['credit'] > 0 && $transaction['paid_amount'])
-                                        <div style="font-size:0.78rem; color:var(--slate-500);">Paid: Rs {{ number_format($transaction['paid_amount']) }}</div>
-                                    @endif
-                                </td>
-                                <td style="color:var(--teal); font-weight:600;">
-                                    {{ $transaction['debit'] > 0 ? 'Rs ' . number_format($transaction['debit']) : '—' }}
-                                </td>
-                                <td>
-                                    @if($transaction['type'] === 'purchase')
-                                        @php
-                                            $status = $transaction['status'] ?? 'pending';
-                                            $statusLabel = ucwords(str_replace('_', ' ', $status));
-                                            $statusClass = 'badge-muted';
-                                            if ($status === 'paid') {
-                                                $statusClass = 'badge-success';
-                                            } elseif ($status === 'partial') {
-                                                $statusClass = 'badge-warning';
-                                            }
-                                        @endphp
-                                        <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
-                                    @else
-                                        <span class="badge badge-success">Payment</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" style="text-align:center; padding:40px; color:var(--slate-500);">
-                                    No transactions recorded yet.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <div class="print-footer">
-            <span>📞 +92 312 544 6922</span>
-            <span>✉️ alnafitravels24@gmail.com</span>
-            <span>📍 Office no C9, 3rd Floor, Abbas Khan Block, Ghafoor Market Charsadda, Pakistan</span>
-            <span style="font-size:10px; color:#94a3b8; display:inline-block; width:100%;">Developed by webspires.com.pk</span>
+        <div class="info-item">
+            <strong>📧 Email</strong>
+            {{ $supplier->email ?? 'Not provided' }}
+        </div>
+        <div class="info-item">
+            <strong>📍 Address</strong>
+            {{ $supplier->address ?? 'Not provided' }}
         </div>
     </div>
 
-    <div class="developer-credit">
-        Developed by <a href="https://webspires.com.pk" target="_blank" rel="noopener">webspires.com.pk</a>
+    <div class="summary-grid">
+        <div class="summary-card purchase">
+            <div class="summary-label">Total Purchases</div>
+            <div class="summary-value purchase">Rs {{ number_format($supplier->total_purchases) }}</div>
+            <div class="summary-small">{{ $supplier->purchases->count() }} purchases</div>
+        </div>
+        <div class="summary-card payment">
+            <div class="summary-label">We Paid</div>
+            <div class="summary-value payment">Rs {{ number_format($supplier->total_paid) }}</div>
+            <div class="summary-small">{{ $supplier->payments->count() }} payments</div>
+        </div>
+        <div class="summary-card balance">
+            <div class="summary-label">Balance Due</div>
+            <div class="summary-value balance">Rs {{ number_format($supplier->balance) }}</div>
+            <div class="summary-small">{{ $supplier->balance > 0 ? 'Outstanding' : 'All settled' }}</div>
+        </div>
     </div>
 
-    <div id="supplierPaymentModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.45); z-index:1200; align-items:center; justify-content:center; padding:20px;">
-        <div style="background:#fff; padding:28px; border-radius:18px; width:min(420px, 100%); box-shadow:0 25px 80px rgba(15,23,42,0.25); position:relative;">
-            <h3 style="margin-top:0; margin-bottom:18px; color:var(--indigo); font-size:1.25rem;">💸 Record Payment</h3>
-            <form id="supplierPaymentForm" method="POST" action="{{ route('supplier-payments.create-direct') }}">
+    <div class="table-card">
+        <h3 style="margin: 0 0 16px; font-size: 14px;">📋 Transaction History</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th class="no-print">Type</th>
+                    <th>Description</th>
+                    <th>Purchase (+)</th>
+                    <th>Payment (-)</th>
+                    <th class="no-print">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $transactions = collect();
+                    foreach ($supplier->purchases as $purchase) {
+                        $transactions->push([
+                            'date' => $purchase->purchase_date,
+                            'type' => 'purchase',
+                            'description' => $purchase->item->name ?? 'Purchase',
+                            'credit' => $purchase->total_amount,
+                            'debit' => 0,
+                            'reference' => $purchase->reference_no,
+                            'status' => $purchase->payment_status,
+                            'purchase_id' => $purchase->id,
+                            'paid_amount' => $purchase->paid_amount,
+                        ]);
+                    }
+                    foreach ($supplier->payments as $payment) {
+                        $transactions->push([
+                            'date' => $payment->payment_date,
+                            'type' => 'payment',
+                            'description' => $payment->payment_method,
+                            'credit' => 0,
+                            'debit' => $payment->amount,
+                            'reference' => $payment->reference_no,
+                            'status' => null,
+                            'purchase_id' => null,
+                            'paid_amount' => null,
+                        ]);
+                    }
+                    $transactions = $transactions->sortByDesc('date');
+                @endphp
+
+                @forelse($transactions as $transaction)
+                    <tr>
+                        <td>{{ $transaction['date'] ? $transaction['date']->format('d M Y') : '-' }}</td>
+                        <td class="no-print">
+                            @if($transaction['type'] == 'purchase')
+                                <span class="badge badge-danger">Purchase</span>
+                            @else
+                                <span class="badge badge-success">Payment</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($transaction['type'] === 'purchase' && $transaction['purchase_id'])
+                                <a href="/purchases/{{ $transaction['purchase_id'] }}/payment-history"
+                                    style="color: var(--primary-dark);">{{ $transaction['description'] }}</a>
+                            @else
+                                {{ $transaction['description'] }}
+                            @endif
+                        </td>
+                        <td class="purchase">
+                            {{ $transaction['credit'] > 0 ? 'Rs ' . number_format($transaction['credit']) : '—' }}
+                            @if($transaction['credit'] > 0 && $transaction['paid_amount'])
+                                <br><small style="color: #2e7d32;">Paid: Rs
+                                    {{ number_format($transaction['paid_amount']) }}</small>
+                            @endif
+                        </td>
+                        <td class="payment">
+                            {{ $transaction['debit'] > 0 ? 'Rs ' . number_format($transaction['debit']) : '—' }}
+                        </td>
+                        <td class="no-print">
+                            @if($transaction['type'] === 'purchase')
+                                @if($transaction['status'] == 'paid')
+                                    <span class="badge badge-success">✓ Paid</span>
+                                @elseif($transaction['status'] == 'partial')
+                                    <span class="badge badge-warning">◐ Partial</span>
+                                @else
+                                    <span class="badge badge-danger">✗ Unpaid</span>
+                                @endif
+                            @else
+                                <span class="badge badge-success">✓ Payment</span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px;">No transactions recorded yet</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a href="/suppliers" class="btn btn-secondary no-print">← Back to Suppliers</a>
+    </div>
+
+    <button onclick="window.print()" class="floating-print-btn no-print">🖨️ Print</button>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+            <h3 style="margin: 0 0 18px; font-size: 16px;">💸 Pay Supplier</h3>
+            <form id="paymentForm" method="POST" action="{{ route('supplier-payments.create-direct') }}">
                 @csrf
-                <input type="hidden" name="supplier_id" id="supplier_payment_supplier_id" value="{{ $supplier->id }}">
-
-                <div style="margin-bottom:16px;">
-                    <label for="supplier_payment_amount" style="display:block; font-weight:600; margin-bottom:6px;">Amount (Rs) *</label>
-                    <input type="number" name="amount" id="supplier_payment_amount" min="1" step="0.01" required style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e2e8f0;">
-                    <small style="color:var(--slate-500); display:block; margin-top:4px;">Outstanding: Rs <span id="supplier_modal_remaining">{{ number_format($supplier->balance) }}</span></small>
+                <input type="hidden" name="supplier_id" value="{{ $supplier->id }}">
+                <div class="form-group">
+                    <label>Amount (Rs) *</label>
+                    <input type="number" id="payment_amount" name="amount" min="1" step="0.01" required>
+                    <small>Outstanding: Rs <span
+                            id="modal_remaining">{{ number_format($supplier->balance) }}</span></small>
                 </div>
-
-                <div style="margin-bottom:16px;">
-                    <label for="supplier_payment_method" style="display:block; font-weight:600; margin-bottom:6px;">Payment Method *</label>
-                    <select name="payment_method" id="supplier_payment_method" required style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e2e8f0;">
-                        <option value="Cash">Cash</option>
-                        <option value="Bank Transfer">Bank Transfer</option>
-                        <option value="Check">Check</option>
-                        <option value="Online">Online</option>
-                        <option value="Other">Other</option>
+                <div class="form-group">
+                    <label>Method *</label>
+                    <select name="payment_method" required>
+                        <option value="Cash">💵 Cash</option>
+                        <option value="Bank Transfer">🏦 Bank Transfer</option>
+                        <option value="Online">📱 Online</option>
+                        <option value="Check">📝 Check</option>
                     </select>
                 </div>
-
-                <div style="margin-bottom:16px;">
-                    <label for="supplier_payment_reference" style="display:block; font-weight:600; margin-bottom:6px;">Reference / Notes</label>
-                    <input type="text" name="reference_no" id="supplier_payment_reference" placeholder="e.g. Bank Slip #123" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e2e8f0; margin-bottom:10px;">
-                    <textarea name="notes" id="supplier_payment_notes" rows="3" placeholder="Internal notes (optional)" style="width:100%; padding:10px 12px; border-radius:12px; border:1px solid #e2e8f0; resize:vertical;"></textarea>
+                <div class="form-group">
+                    <label>Reference</label>
+                    <input type="text" name="reference_no" placeholder="Bank Slip #, etc.">
                 </div>
-
-                <div style="margin-bottom:18px;">
-                    <label for="supplier_payment_date" style="display:block; font-weight:600; margin-bottom:6px;">Date & Time *</label>
-                    <input type="datetime-local" name="payment_date" id="supplier_payment_date" required style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e2e8f0;">
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea name="notes" rows="2" placeholder="Optional notes..."></textarea>
                 </div>
-
-                <div style="display:flex; gap:12px;">
-                    <button type="submit" class="btn btn-white" style="flex:1; justify-content:center;">✔ Save Payment</button>
-                    <button type="button" class="btn btn-ghost" style="flex:1; justify-content:center; background:#e2e8f0; color:#0f172a;" onclick="closeSupplierPaymentModal()">Cancel</button>
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="datetime-local" id="payment_date" name="payment_date" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success" style="flex: 1;">✅ Pay</button>
+                    <button type="button" class="btn btn-secondary" onclick="closePaymentModal()"
+                        style="flex: 1;">Cancel</button>
                 </div>
             </form>
-            <button onclick="closeSupplierPaymentModal()" style="position:absolute; top:14px; right:16px; background:none; border:none; font-size:24px; color:#94a3b8; cursor:pointer;">&times;</button>
         </div>
     </div>
-
-    <button class="floating-print-btn" onclick="window.print()">
-        🖨 Print Ledger
-    </button>
 
     <script>
-        function openSupplierPaymentModal(supplierId, remaining, focusAmount) {
-            const modal = document.getElementById('supplierPaymentModal');
-            modal.style.display = 'flex';
-            document.getElementById('supplier_payment_supplier_id').value = supplierId;
-            const remainingEl = document.getElementById('supplier_modal_remaining');
-            if (typeof remaining !== 'undefined' && remaining !== null && remainingEl) {
-                remainingEl.innerText = Number(remaining).toLocaleString();
-                const amountInput = document.getElementById('supplier_payment_amount');
-                if (amountInput) {
-                    amountInput.max = remaining > 0 ? remaining : null;
-                    if (focusAmount) amountInput.focus();
-                }
-            }
+        function openPaymentModal(suppId, remaining) {
+            document.getElementById('paymentModal').style.display = 'flex';
+            document.getElementById('modal_remaining').innerText = Number(remaining).toLocaleString();
+            document.getElementById('payment_amount').max = remaining;
+            document.getElementById('payment_amount').value = '';
             const now = new Date();
-            const formatted = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            document.getElementById('supplier_payment_date').value = formatted;
+            document.getElementById('payment_date').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
         }
-
-        function closeSupplierPaymentModal() {
-            const modal = document.getElementById('supplierPaymentModal');
-            modal.style.display = 'none';
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeSupplierPaymentModal();
-            }
-        });
-
-        function initSupplierFilter(root = document) {
-            const form = root.getElementById ? root.getElementById('supplierFilterForm') : document.getElementById('supplierFilterForm');
-            const rangeSelect = root.getElementById ? root.getElementById('filterRange') : document.getElementById('filterRange');
-            const customFields = root.getElementById ? root.getElementById('customDateFields') : document.getElementById('customDateFields');
-            if (!form || !rangeSelect || !customFields) {
-                return;
-            }
-            const toggleCustom = () => {
-                if (rangeSelect.value === 'custom') {
-                    customFields.classList.add('active');
-                } else {
-                    customFields.classList.remove('active');
-                }
-            };
-            toggleCustom();
-            rangeSelect.addEventListener('change', toggleCustom);
-
-            const triggerSubmit = () => {
-                submitSupplierFilter(new FormData(form), form.getAttribute('action'));
-            };
-
-            rangeSelect.addEventListener('change', triggerSubmit);
-            const startInput = document.getElementById('start_date');
-            const endInput = document.getElementById('end_date');
-            if (startInput) startInput.addEventListener('change', triggerSubmit);
-            if (endInput) endInput.addEventListener('change', triggerSubmit);
-        }
-
-        async function submitSupplierFilter(formData, actionUrl) {
-            try {
-            const query = params.toString();
-                const url = query ? `${actionUrl}?${query}` : actionUrl;
-                const pageEl = document.getElementById('ledgerPage');
-                if (pageEl) pageEl.classList.add('is-loading');
-                const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-                if (!response.ok) throw new Error('Network error');
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const newPage = doc.getElementById('ledgerPage');
-                if (newPage && pageEl) {
-                    pageEl.replaceWith(newPage);
-                    history.replaceState({}, '', url);
-                    initSupplierFilter(document);
-                } else {
-                    window.location = url;
-                }
-            } catch (error) {
-                console.error(error);
-                const params = new URLSearchParams(formData);
-                const fallbackUrl = params.toString() ? `${actionUrl}?${params.toString()}` : actionUrl;
-                window.location = fallbackUrl;
-            } finally {
-                const pageEl = document.getElementById('ledgerPage');
-                if (pageEl) pageEl.classList.remove('is-loading');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initSupplierFilter();
-        });
+        function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closePaymentModal(); });
     </script>
-</body>
-</html>
+</x-layout>
