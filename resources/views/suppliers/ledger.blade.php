@@ -109,9 +109,40 @@
         }
 
         @media print {
-        .floating-print-btn, .modal-overlay, .no-print { display: none !important; }
-        .card, .table-card { box-shadow: none; border: 1px solid #ddd; }
+        .floating-print-btn, .modal-overlay, .no-print, .sidebar, .top-bar { display: none !important; }
+        .card, .table-card { box-shadow: none; border: none !important; padding: 0 !important; }
+        body { background: white; }
+        .main-content { margin: 0 !important; padding: 0 !important; }
+
+        .print-header {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #8b7355;
+        padding-bottom: 20px;
         }
+        .section-title { font-size: 16px; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-top: 20px;}
+
+        .summary-grid {
+        gap: 20px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+        }
+        .summary-card {
+        background: white !important;
+        border: 1px solid #ddd;
+        box-shadow: none !important;
+        padding: 10px !important;
+        }
+        .summary-value { font-size: 18px !important; }
+
+        table th { background: #eee !important; color: black !important; border-bottom: 2px solid #ccc !important; }
+        table td { border-bottom: 1px solid #eee !important; color: black !important; }
+        }
+
+        .print-header { display: none; }
     </x-slot:styles>
 
     @if($supplier->balance > 0)
@@ -123,7 +154,7 @@
         </div>
     @endif
 
-    <div class="supplier-info">
+    <div class="supplier-info no-print">
         <div class="info-item">
             <strong>📞 Phone</strong>
             {{ $supplier->phone ?? 'Not provided' }}
@@ -138,7 +169,24 @@
         </div>
     </div>
 
-    <div class="summary-grid">
+    <!-- Print Header -->
+    <div class="print-header">
+        <div class="logo">
+            <span style="font-size: 32px;">✈️</span>
+            <div>
+                <h1 style="margin: 0; font-size: 24px; color: var(--text);">FM Travel</h1>
+                <p style="margin: 2px 0 0; font-size: 12px; color: var(--text-light);">Management System</p>
+            </div>
+        </div>
+        <div class="invoice-details" style="text-align: right;">
+            <h2 style="margin: 0 0 4px; font-size: 20px; color: #8b7355;">SUPPLIER LEDGER</h2>
+            <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">{{ $supplier->name }}</div>
+            <p style="margin: 0; font-size: 11px; color: var(--text);">{{ $supplier->phone }}</p>
+            <p style="margin: 0; font-size: 11px; color: var(--text);">Date: {{ now()->format('d M Y') }}</p>
+        </div>
+    </div>
+
+    <div class="summary-grid fit-print">
         <div class="summary-card purchase">
             <div class="summary-label">Total Purchases</div>
             <div class="summary-value purchase">Rs {{ number_format($supplier->total_purchases) }}</div>
