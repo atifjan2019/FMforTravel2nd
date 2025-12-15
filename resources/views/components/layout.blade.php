@@ -617,6 +617,74 @@
             animation: fadeIn 0.3s ease;
         }
 
+        /* Collapsed Sidebar */
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .sidebar-header {
+            padding: 24px 10px;
+        }
+
+        .sidebar.collapsed .sidebar-header h1,
+        .sidebar.collapsed .sidebar-header p,
+        .sidebar.collapsed .nav-section-title,
+        .sidebar.collapsed .nav-link span:not(.icon) {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-logo {
+            margin-bottom: 0;
+            width: 44px;
+            height: 44px;
+            font-size: 20px;
+        }
+
+        .sidebar.collapsed .nav-link {
+            justify-content: center;
+            padding: 12px;
+        }
+
+        .sidebar.collapsed .nav-link .icon {
+            margin: 0;
+            font-size: 20px;
+        }
+        
+        /* Adjust Main Content */
+        .app-container.sidebar-collapsed .main-content {
+            margin-left: 80px;
+        }
+
+        /* Toggle Button */
+        .sidebar-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 15px;
+            padding: 4px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: rgba(0,0,0,0.05);
+            color: var(--primary-dark);
+        }
+
+        @media (max-width: 1024px) {
+            .app-container.sidebar-collapsed .main-content {
+                margin-left: 0;
+            }
+            .sidebar-toggle-btn {
+                display: none; /* Hide desktop toggle on mobile */
+            }
+        }
+
         {{ $styles ?? '' }}
     </style>
 </head>
@@ -704,9 +772,12 @@
         <main class="main-content">
             <!-- Top Bar -->
             <div class="top-bar">
-                <div>
-                    <h1 class="page-title">{{ $pageTitle ?? 'Dashboard' }}</h1>
-                    <p class="page-subtitle">{{ $pageSubtitle ?? 'Welcome to FM Travel Manager' }}</p>
+                <div style="display: flex; align-items: center;">
+                    <button id="sidebarToggle" class="sidebar-toggle-btn">☰</button>
+                    <div>
+                        <h1 class="page-title">{{ $pageTitle ?? 'Dashboard' }}</h1>
+                        <p class="page-subtitle">{{ $pageSubtitle ?? 'Welcome to FM Travel Manager' }}</p>
+                    </div>
                 </div>
                 <div class="user-menu">
                     <div class="user-avatar">{{ substr(Auth::user()->name ?? 'A', 0, 1) }}</div>
@@ -726,10 +797,28 @@
     </div>
 
     <script>
+        const sidebar = document.getElementById('sidebar');
+        const container = document.querySelector('.app-container');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        
+        // Load persisted state
+        if (localStorage.getItem('sidebar-collapsed') === 'true') {
+            sidebar.classList.add('collapsed');
+            container.classList.add('sidebar-collapsed');
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                container.classList.toggle('sidebar-collapsed');
+                localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+            });
+        }
+
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             const toggle = document.getElementById('mobileMenuToggle');
+            const sidebar = document.getElementById('sidebar'); // Ensure we select it here if not using global variable in this scope
 
             sidebar.classList.toggle('open');
             overlay.classList.toggle('show');
