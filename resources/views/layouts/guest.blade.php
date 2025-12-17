@@ -255,38 +255,7 @@
         </div>
 
         <div class="login-right">
-            <h2>Welcome Back! 👋</h2>
-            <p class="subtitle">Please login to your account</p>
-
-            @if ($errors->any())
-                <div class="error-msg">
-                    @foreach ($errors->all() as $error)
-                        {{ $error }}
-                    @endforeach
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}"
-                        placeholder="Enter your email" required autofocus>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-
-                <div class="remember-row">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Remember me</label>
-                </div>
-
-                <button type="submit" class="login-btn">Login →</button>
-            </form>
+            {{ $slot }}
         </div>
     </div>
 </body>
