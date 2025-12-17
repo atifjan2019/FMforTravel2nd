@@ -1,135 +1,218 @@
-<x-layout title="Supplier Details - FM Travel Manager" pageTitle="{{ $supplier->name }}"
-    pageSubtitle="Supplier profile and financial summary">
+<x-layout title="Supplier Details - FM Travel Manager" pageTitle="Supplier Details"
+    pageSubtitle="View supplier profile and financial summary">
+
     <x-slot:styles>
+        /* Polished Profile Card */
+        .profile-box {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e5e7eb;
+        max-width: 900px;
+        margin: 0 auto 24px auto;
+        overflow: hidden;
+        }
+
+        /* Header Section */
         .profile-header {
-        background: linear-gradient(135deg, #5d4e37 0%, #8b7355 100%);
-        color: white;
-        padding: 24px;
-        border-radius: 16px;
-        margin-bottom: 20px;
+        padding: 40px;
+        background: linear-gradient(to right, #ffffff, #f9fafb);
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        }
+
+        .profile-identity {
         display: flex;
         align-items: center;
         gap: 20px;
-        flex-wrap: wrap;
         }
 
-        .profile-avatar {
-        width: 70px;
-        height: 70px;
-        border-radius: 18px;
+        .avatar-circle {
+        width: 80px;
+        height: 80px;
         background: var(--primary);
+        color: var(--accent);
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--accent);
-        font-size: 28px;
-        font-weight: 600;
+        font-size: 32px;
+        font-weight: 700;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .profile-info h2 { font-size: 22px; margin-bottom: 6px; }
-        .profile-info p { opacity: 0.8; font-size: 13px; }
+        .identity-text h1 {
+        font-size: 24px;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 4px;
+        }
 
-        .profile-actions { margin-left: auto; display: flex; gap: 10px; }
+        .identity-text .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        }
+        .status-badge.active { background: #d1fae5; color: #065f46; }
+        .status-badge.inactive { background: #fee2e2; color: #991b1b; }
+
+        .header-actions {
+        display: flex;
+        gap: 10px;
+        }
+
+        /* Body Content */
+        .profile-body {
+        padding: 40px;
+        }
+
+        .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        }
+
+        .section-title::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e5e7eb;
+        }
 
         .info-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-bottom: 20px;
+        grid-template-columns: repeat(3, 1fr); /* 3 Columns for Contact Info */
+        gap: 30px;
+        margin-bottom: 40px;
         }
 
-        .info-card {
-        background: #f9f5eb;
-        padding: 16px;
+        .info-item h4 {
+        font-size: 12px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        }
+
+        .info-item p {
+        font-size: 16px;
+        color: #1f2937;
+        font-weight: 500;
+        }
+
+        /* Financial Bar */
+        .financial-bar {
+        background: #fff;
+        border: 1px solid #e5e7eb;
         border-radius: 12px;
-        border-left: 4px solid #8b7355;
+        padding: 30px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        .info-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; font-weight: 600;
-        margin-bottom: 6px; }
-        .info-value { font-size: 14px; color: var(--text); font-weight: 600; }
-
-        .financial-summary {
-        background: linear-gradient(135deg, #c62828 0%, #e74c3c 100%);
-        color: white;
-        padding: 24px;
-        border-radius: 16px;
-        margin-bottom: 20px;
-        }
-
-        .financial-summary h3 { margin-bottom: 18px; font-size: 16px; }
-
-        .financial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-
-        .financial-item {
+        .fin-stat {
         text-align: center;
-        padding: 14px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
         }
 
-        .financial-item .label { font-size: 10px; opacity: 0.9; margin-bottom: 6px; text-transform: uppercase; }
-        .financial-item .amount { font-size: 20px; font-weight: bold; }
+        .fin-stat .label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #6b7280;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+        }
 
-        @media (max-width: 768px) {
-        .profile-header { flex-direction: column; text-align: center; }
-        .profile-actions { margin-left: 0; }
-        .financial-grid { grid-template-columns: 1fr; }
+        .fin-stat .value {
+        font-size: 26px;
+        font-weight: 800;
+        color: #111827;
+        }
+
+        .fin-stat.purchases .value { color: #4b5563; }
+        .fin-stat.paid .value { color: #059669; }
+        .fin-stat.balance .value { color: #dc2626; }
+
+        .back-nav {
+        max-width: 900px;
+        margin: 0 auto;
         }
     </x-slot:styles>
 
-    <div class="profile-header">
-        <div class="profile-avatar">{{ strtoupper(substr($supplier->name, 0, 1)) }}</div>
-        <div class="profile-info">
-            <h2>{{ $supplier->name }}</h2>
-            <p>📱 {{ $supplier->phone ?? 'No phone' }} •
-                <span
-                    class="badge {{ $supplier->status == 'active' ? 'badge-success' : 'badge-danger' }}">{{ ucfirst($supplier->status) }}</span>
-            </p>
+    <div class="profile-box">
+        <!-- Header -->
+        <div class="profile-header">
+            <div class="profile-identity">
+                <div class="avatar-circle">
+                    {{ strtoupper(substr($supplier->name, 0, 1)) }}
+                </div>
+                <div class="identity-text">
+                    <h1>{{ $supplier->name }}</h1>
+                    <span class="status-badge {{ $supplier->status == 'active' ? 'active' : 'inactive' }}">
+                        {{ $supplier->status }}
+                    </span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="{{ route('suppliers.ledger', $supplier->id) }}" class="btn btn-success">📒 Ledger</a>
+                <a href="/suppliers/{{ $supplier->id }}/edit" class="btn btn-secondary">✏️ Edit</a>
+            </div>
         </div>
-        <div class="profile-actions">
-            <a href="{{ route('suppliers.ledger', $supplier->id) }}" class="btn btn-success">📒 Ledger</a>
-            <a href="/suppliers/{{ $supplier->id }}/edit" class="btn btn-secondary">✏️ Edit</a>
+
+        <!-- Body -->
+        <div class="profile-body">
+
+            <div class="section-title">Contact Information</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h4>Phone</h4>
+                    <p>{{ $supplier->phone ?? 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <h4>Email</h4>
+                    <p>{{ $supplier->email ?? 'Not provided' }}</p>
+                </div>
+                <div class="info-item">
+                    <h4>Address</h4>
+                    <p>{{ $supplier->address ?? 'Not provided' }}</p>
+                </div>
+            </div>
+
+            <div class="section-title">Financial Overview</div>
+            <div class="financial-bar">
+                <div class="fin-stat purchases">
+                    <div class="label">Total Purchases</div>
+                    <div class="value">Rs {{ number_format($supplier->total_purchases) }}</div>
+                </div>
+                <div class="fin-stat paid">
+                    <div class="label">Total Paid</div>
+                    <div class="value">Rs {{ number_format($supplier->total_paid) }}</div>
+                </div>
+                <div class="fin-stat balance">
+                    <div class="label">Balance Due</div>
+                    <div class="value">Rs {{ number_format($supplier->balance) }}</div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <div class="card">
-        <h3 class="card-title" style="margin-bottom: 16px;">📋 Contact Information</h3>
-        <div class="info-grid">
-            <div class="info-card">
-                <div class="info-label">📞 Phone</div>
-                <div class="info-value">{{ $supplier->phone ?? 'Not provided' }}</div>
-            </div>
-            <div class="info-card">
-                <div class="info-label">📧 Email</div>
-                <div class="info-value">{{ $supplier->email ?? 'Not provided' }}</div>
-            </div>
-            <div class="info-card">
-                <div class="info-label">📍 Address</div>
-                <div class="info-value">{{ $supplier->address ?? 'Not provided' }}</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="financial-summary">
-        <h3>💰 Financial Summary (Payables)</h3>
-        <div class="financial-grid">
-            <div class="financial-item">
-                <div class="label">Total Purchases</div>
-                <div class="amount">Rs {{ number_format($supplier->total_purchases) }}</div>
-            </div>
-            <div class="financial-item">
-                <div class="label">Total Paid</div>
-                <div class="amount">Rs {{ number_format($supplier->total_paid) }}</div>
-            </div>
-            <div class="financial-item">
-                <div class="label">Balance Due</div>
-                <div class="amount">Rs {{ number_format($supplier->balance) }}</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
+    <div class="back-nav">
         <a href="/suppliers" class="btn btn-secondary">← Back to Suppliers</a>
     </div>
+
 </x-layout>
