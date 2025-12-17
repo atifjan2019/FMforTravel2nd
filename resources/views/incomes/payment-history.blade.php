@@ -157,13 +157,14 @@
         .app-container { display: block !important; margin: 0 !important; }
         .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
 
-        /* Remove Box Styles */
+        /* Remove Box Styles & Backgrounds */
         .card, .table-card, .summary-card, .history-card {
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background: white !important; /* Force white */
+            background-color: white !important;
         }
 
         /* Header Styling */

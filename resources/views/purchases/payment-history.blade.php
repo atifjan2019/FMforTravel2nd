@@ -154,15 +154,15 @@
         .no-print, .sidebar, .top-bar, .actions, .btn, .action-buttons, .card-title, .supplier-avatar, .summary-info {
         display: none !important; }
         .app-container { display: block !important; margin: 0 !important; }
-        .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
-
-        /* Remove Box Styles */
+        .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; /* Remove Box Styles &
+        Backgrounds */
         .card, .table-card, .summary-card, .history-card {
         box-shadow: none !important;
         border: none !important;
         padding: 0 !important;
         margin: 0 !important;
-        background: transparent !important;
+        background: white !important; /* Force white */
+        background-color: white !important;
         }
 
         /* Header Styling */
@@ -321,9 +321,9 @@
                             <td><strong style="color: #ef4444;">Rs {{ number_format($payment->amount) }}</strong></td>
                             <td>
                                 <span class="badge 
-                                                    {{ $payment->payment_method == 'Cash' ? 'badge-success' : '' }}
-                                                    {{ $payment->payment_method == 'Online' ? 'badge-info' : '' }}
-                                                    {{ $payment->payment_method == 'Check' ? 'badge-warning' : '' }}">
+                                                        {{ $payment->payment_method == 'Cash' ? 'badge-success' : '' }}
+                                                        {{ $payment->payment_method == 'Online' ? 'badge-info' : '' }}
+                                                        {{ $payment->payment_method == 'Check' ? 'badge-warning' : '' }}">
                                     {{ $payment->payment_method }}
                                 </span>
                             </td>
