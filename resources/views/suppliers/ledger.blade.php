@@ -109,39 +109,51 @@
         }
 
         @media print {
-        .floating-print-btn, .modal-overlay, .no-print, .sidebar, .top-bar { display: none !important; }
-        .card, .table-card { box-shadow: none; border: none !important; padding: 0 !important; }
-        body { background: white; }
-        .main-content { margin: 0 !important; padding: 0 !important; }
+        @page { margin: 1cm; size: A4; }
+        body { background: white !important; color: black !important; }
+        .no-print, .sidebar, .top-bar, .actions, .btn, .floating-print-btn, .modal-overlay { display: none !important; }
+        .app-container { display: block !important; margin: 0 !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        .card, .table-card, .summary-card {
+        box-shadow: none !important;
+        border: 1px solid #eee !important;
+        padding: 10px !important;
+        margin-bottom: 20px !important;
+        break-inside: avoid;
+        background: white !important;
+        }
+        .summary-card { border-left-width: 4px !important; }
 
+        /* Header Visibility */
         .print-header {
         display: flex !important;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 30px;
-        border-bottom: 2px solid #8b7355;
-        padding-bottom: 20px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
         }
-        .section-title { font-size: 16px; border-bottom: 2px solid #ccc; padding-bottom: 5px; margin-top: 20px;}
+        .company-branding { display: flex; align-items: center; gap: 15px; }
+        .company-logo { font-size: 32px; }
+        .company-info h1 { margin: 0; font-size: 24px; font-weight: bold; color: black !important; letter-spacing: 1px;
+        }
+        .company-info p { margin: 2px 0 0; font-size: 11px; color: #555 !important; text-transform: uppercase;
+        letter-spacing: 2px;}
+        .document-info { text-align: right; }
+        .document-info h2 { margin: 0 0 5px; font-size: 18px; font-weight: bold; text-transform: uppercase; color: black
+        !important; }
+        .document-info p { margin: 0; font-size: 12px; color: #333 !important; }
 
-        .summary-grid {
-        gap: 20px;
-        margin-bottom: 30px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 20px;
-        }
-        .summary-card {
-        background: white !important;
-        border: 1px solid #ddd;
-        box-shadow: none !important;
-        padding: 10px !important;
-        }
-        .summary-value { font-size: 18px !important; }
+        /* Table Improvements */
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 9pt !important; }
+        th { background: #f8f8f8 !important; color: black !important; font-weight: bold !important; border-bottom: 2px
+        solid #000 !important; padding: 8px !important; }
+        td { border-bottom: 1px solid #ddd !important; padding: 8px !important; color: black !important; }
+        tr:last-child td { border-bottom: none !important; }
 
-        table th { background: #eee !important; color: black !important; border-bottom: 2px solid #ccc !important; }
-        table td { border-bottom: 1px solid #eee !important; color: black !important; }
+        .summary-grid { gap: 20px; margin-bottom: 30px; display: grid; grid-template-columns: repeat(3, 1fr); }
+        .summary-value { font-size: 20px !important; color: black !important; }
         }
-
         .print-header { display: none; }
     </x-slot:styles>
 
@@ -171,18 +183,18 @@
 
     <!-- Print Header -->
     <div class="print-header">
-        <div class="logo">
-            <span style="font-size: 32px;">✈️</span>
-            <div>
-                <h1 style="margin: 0; font-size: 24px; color: var(--text);">FM Travel</h1>
-                <p style="margin: 2px 0 0; font-size: 12px; color: var(--text-light);">Management System</p>
+        <div class="company-branding">
+            <div class="company-logo">✈️</div>
+            <div class="company-info">
+                <h1>FM Travel</h1>
+                <p>Management System</p>
             </div>
         </div>
-        <div class="invoice-details" style="text-align: right;">
-            <h2 style="margin: 0 0 4px; font-size: 20px; color: #8b7355;">SUPPLIER LEDGER</h2>
+        <div class="document-info">
+            <h2>Supplier Ledger</h2>
             <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">{{ $supplier->name }}</div>
-            <p style="margin: 0; font-size: 11px; color: var(--text);">{{ $supplier->phone }}</p>
-            <p style="margin: 0; font-size: 11px; color: var(--text);">Date: {{ now()->format('d M Y') }}</p>
+            <p>{{ $supplier->phone ?? 'No Phone' }}</p>
+            <p>Date: {{ now()->format('d M Y') }}</p>
         </div>
     </div>
 
