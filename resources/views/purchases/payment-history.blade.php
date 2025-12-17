@@ -193,15 +193,9 @@
     <!-- Print Header -->
     <div class="print-header">
         <div class="company-branding">
-            <div class="company-logo">✈️</div>
-            <div class="company-info">
-                <h1>FM Travel</h1>
-                <p>Management System</p>
-            </div>
+            <img src="/images/alnafi.png" alt="Al Nafi Travels" style="height: 80px; width: auto;">
         </div>
         <div class="document-info">
-            <h2>Payment History</h2>
-            <p><strong>Supplier:</strong> {{ $purchase->supplier->name }}</p>
             <p><strong>Date:</strong> {{ now()->format('d M Y') }}</p>
         </div>
     </div>
@@ -271,9 +265,9 @@
                             <td><strong style="color: #ef4444;">Rs {{ number_format($payment->amount) }}</strong></td>
                             <td>
                                 <span class="badge 
-                                    {{ $payment->payment_method == 'Cash' ? 'badge-success' : '' }}
-                                    {{ $payment->payment_method == 'Online' ? 'badge-info' : '' }}
-                                    {{ $payment->payment_method == 'Check' ? 'badge-warning' : '' }}">
+                                            {{ $payment->payment_method == 'Cash' ? 'badge-success' : '' }}
+                                            {{ $payment->payment_method == 'Online' ? 'badge-info' : '' }}
+                                            {{ $payment->payment_method == 'Check' ? 'badge-warning' : '' }}">
                                     {{ $payment->payment_method }}
                                 </span>
                             </td>

@@ -174,11 +174,7 @@
     <!-- Print Header -->
     <div class="print-header">
         <div class="company-branding">
-            <div class="company-logo">✈️</div>
-            <div class="company-info">
-                <h1>FM Travel</h1>
-                <p>Management System</p>
-            </div>
+            <img src="/images/alnafi.png" alt="Al Nafi Travels" style="height: 80px; width: auto;">
         </div>
         <div class="document-info">
             <h2>Customer Ledger</h2>
