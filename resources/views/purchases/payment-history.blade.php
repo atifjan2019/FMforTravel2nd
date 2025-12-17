@@ -146,46 +146,62 @@
         /* Print Styles */
         @media print {
         @page { margin: 1cm; size: A4; }
-        body { background: white !important; color: black !important; }
+        body {
+        background: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        }
         .no-print, .sidebar, .top-bar, .actions, .btn, .action-buttons { display: none !important; }
         .app-container { display: block !important; margin: 0 !important; }
         .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+
         .card, .table-card, .summary-card, .history-card {
         box-shadow: none !important;
         border: 1px solid #eee !important;
-        padding: 10px !important;
+        padding: 15px !important;
         margin-bottom: 20px !important;
         break-inside: avoid;
-        background: white !important;
         }
-        .summary-card { border-left-width: 4px !important; }
+        .summary-card {
+        border-left-width: 4px !important;
+        background-color: #f9fafb !important;
+        }
 
         /* Header Visibility */
         .print-header {
         display: flex !important;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 2px solid #000;
+        border-bottom: 3px solid var(--primary);
         padding-bottom: 15px;
         margin-bottom: 25px;
         }
         .company-branding { display: flex; align-items: center; gap: 15px; }
-        .company-logo { font-size: 32px; }
-        .company-info h1 { margin: 0; font-size: 24px; font-weight: bold; color: black !important; letter-spacing: 1px;
-        }
-        .company-info p { margin: 2px 0 0; font-size: 11px; color: #555 !important; text-transform: uppercase;
-        letter-spacing: 2px;}
         .document-info { text-align: right; }
-        .document-info h2 { margin: 0 0 5px; font-size: 18px; font-weight: bold; text-transform: uppercase; color: black
-        !important; }
-        .document-info p { margin: 0; font-size: 12px; color: #333 !important; }
+        .document-info p { margin: 0; font-size: 14px; color: #333; }
 
         /* Table Improvements */
-        table { width: 100% !important; border-collapse: collapse !important; font-size: 9pt !important; }
-        th { background: #f8f8f8 !important; color: black !important; font-weight: bold !important; border-bottom: 2px
-        solid #000 !important; padding: 8px !important; }
-        td { border-bottom: 1px solid #ddd !important; padding: 8px !important; color: black !important; }
-        tr:last-child td { border-bottom: none !important; }
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 10pt !important; }
+        th {
+        background: var(--primary) !important;
+        color: white !important;
+        font-weight: bold !important;
+        border: none !important;
+        padding: 10px !important;
+        }
+        td {
+        border-bottom: 1px solid #eee !important;
+        padding: 8px !important;
+        color: #333;
+        }
+        tr:nth-child(even) { background-color: #f9fafb !important; }
+
+        /* Badges & Highlights */
+        .badge { border: 1px solid #ddd !important; }
+        .badge-success { background-color: #d1fae5 !important; color: #065f46 !important; }
+        .badge-warning { background-color: #fef3c7 !important; color: #92400e !important; }
+        .badge-danger { background-color: #fee2e2 !important; color: #991b1b !important; }
+        .badge-info { background-color: #dbeafe !important; color: #1e40af !important; }
         }
         .print-header { display: none; }
     </x-slot:styles>
@@ -265,9 +281,9 @@
                             <td><strong style="color: #ef4444;">Rs {{ number_format($payment->amount) }}</strong></td>
                             <td>
                                 <span class="badge 
-                                            {{ $payment->payment_method == 'Cash' ? 'badge-success' : '' }}
-                                            {{ $payment->payment_method == 'Online' ? 'badge-info' : '' }}
-                                            {{ $payment->payment_method == 'Check' ? 'badge-warning' : '' }}">
+                                                {{ $payment->payment_method == 'Cash' ? 'badge-success' : '' }}
+                                                {{ $payment->payment_method == 'Online' ? 'badge-info' : '' }}
+                                                {{ $payment->payment_method == 'Check' ? 'badge-warning' : '' }}">
                                     {{ $payment->payment_method }}
                                 </span>
                             </td>
