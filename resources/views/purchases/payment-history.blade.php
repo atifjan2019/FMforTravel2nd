@@ -1,248 +1,379 @@
-<x-layout title="Payment History - Al Nafi Travels">
-    <x-page-header
-        title="💰 Payment History"
-        icon="💵"
-        backUrl="/suppliers/{{ $purchase->supplier_id }}/ledger"
-    />
+<x-layout title="Payment History - FM Travel Manager" pageTitle="Payment History"
+    pageSubtitle="Tracking payments for Purchase: {{ $purchase->item->name ?? 'Item' }}">
 
-    <div style="margin-bottom: 20px; text-align: right;">
-        <a href="/purchases/create" class="btn btn-primary" style="background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600; font-size: 14px; margin-right: 10px;">+ New Purchase</a>
-        @if($purchase->remaining_amount > 0)
-            <button onclick="openPurchasePaymentModal()" class="btn btn-warning" style="background: #f59e0b; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; margin-right: 10px;">💰 Add Payment</button>
-        @endif
-        <button onclick="window.print()" class="btn btn-success" style="background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px;">🖨️ Print History</button>
+    <x-slot:styles>
+        .summary-card {
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+        }
+
+        .summary-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        }
+
+        .supplier-avatar {
+        width: 60px;
+        height: 60px;
+        background: #ef4444;
+        color: white;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        }
+
+        .info-group h2 {
+        font-size: 20px;
+        color: var(--text);
+        font-weight: 700;
+        margin-bottom: 4px;
+        }
+
+        .info-group p {
+        color: var(--text-light);
+        font-size: 13px;
+        }
+
+        .financial-stats {
+        display: flex;
+        gap: 15px;
+        }
+
+        .stat-badge {
+        padding: 10px 16px;
+        border-radius: 10px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        text-align: center;
+        }
+
+        .stat-badge .label {
+        font-size: 10px;
+        text-transform: uppercase;
+        color: var(--text-light);
+        margin-bottom: 2px;
+        }
+
+        .stat-badge .value {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text);
+        }
+
+        .stat-badge.highlight .value {
+        color: #ef4444;
+        }
+
+        .history-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        }
+
+        .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid var(--border);
+        }
+
+        .action-buttons {
+        display: flex;
+        gap: 10px;
+        }
+
+        /* Modal Styles */
+        .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+        background: white;
+        width: 100%;
+        max-width: 500px;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+        padding: 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        }
+
+        .modal-header h3 {
+        font-size: 18px;
+        font-weight: 600;
+        }
+
+        .modal-body {
+        padding: 24px;
+        }
+
+        @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Print Styles */
+        @media print {
+        @page { margin: 1cm; size: A4; }
+        body { background: white !important; color: black !important; }
+        .no-print, .sidebar, .top-bar, .actions, .btn, .action-buttons { display: none !important; }
+        .app-container { display: block !important; margin: 0 !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        .card, .table-card, .summary-card, .history-card {
+        box-shadow: none !important;
+        border: 1px solid #eee !important;
+        padding: 10px !important;
+        margin-bottom: 20px !important;
+        break-inside: avoid;
+        background: white !important;
+        }
+        .summary-card { border-left-width: 4px !important; }
+
+        /* Header Visibility */
+        .print-header {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+        }
+        .company-branding { display: flex; align-items: center; gap: 15px; }
+        .company-logo { font-size: 32px; }
+        .company-info h1 { margin: 0; font-size: 24px; font-weight: bold; color: black !important; letter-spacing: 1px;
+        }
+        .company-info p { margin: 2px 0 0; font-size: 11px; color: #555 !important; text-transform: uppercase;
+        letter-spacing: 2px;}
+        .document-info { text-align: right; }
+        .document-info h2 { margin: 0 0 5px; font-size: 18px; font-weight: bold; text-transform: uppercase; color: black
+        !important; }
+        .document-info p { margin: 0; font-size: 12px; color: #333 !important; }
+
+        /* Table Improvements */
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 9pt !important; }
+        th { background: #f8f8f8 !important; color: black !important; font-weight: bold !important; border-bottom: 2px
+        solid #000 !important; padding: 8px !important; }
+        td { border-bottom: 1px solid #ddd !important; padding: 8px !important; color: black !important; }
+        tr:last-child td { border-bottom: none !important; }
+        }
+        .print-header { display: none; }
+    </x-slot:styles>
+
+    <!-- Print Header -->
+    <div class="print-header">
+        <div class="company-branding">
+            <div class="company-logo">✈️</div>
+            <div class="company-info">
+                <h1>FM Travel</h1>
+                <p>Management System</p>
+            </div>
+        </div>
+        <div class="document-info">
+            <h2>Payment History</h2>
+            <p><strong>Supplier:</strong> {{ $purchase->supplier->name }}</p>
+            <p><strong>Date:</strong> {{ now()->format('d M Y') }}</p>
+        </div>
     </div>
 
-    <style>
-        .purchase-info {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .purchase-info h2 {
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-        .purchase-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .detail-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 12px;
-            border-radius: 6px;
-        }
-        .detail-label {
-            font-size: 12px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-        .detail-value {
-            font-size: 16px;
-            font-weight: 600;
-        }
-        .payment-summary {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .summary-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .summary-card .label {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .summary-card .value {
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .summary-card .value.total { color: #ef4444; }
-        .summary-card .value.paid { color: #3b82f6; }
-        .summary-card .value.remaining { color: #f59e0b; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f8fafc; font-weight: 600; color: #666; }
-        .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-        .badge-cash { background: #d1fae5; color: #047857; }
-        .badge-online { background: #dbeafe; color: #1e40af; }
-        .badge-check { background: #fef3c7; color: #92400e; }
-        
-        @media print {
-            body { background: white; }
-            header, nav, .page-header .btn, button, a.btn { display: none !important; }
-            .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
-            .purchase-info { 
-                background: #ef4444 !important; 
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact; 
-            }
-            .summary-card { border: 1px solid #ddd; }
-            th { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .badge-cash, .badge-online, .badge-check { 
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact; 
-            }
-            @page { margin: 1cm; }
-        }
-    </style>
+    <!-- Top Summary Card -->
+    <div class="summary-card">
+        <div class="summary-info">
+            <div class="supplier-avatar">
+                {{ strtoupper(substr($purchase->supplier->name, 0, 1)) }}
+            </div>
+            <div class="info-group">
+                <h2>{{ $purchase->supplier->name }}</h2>
+                <p>Ref: {{ $purchase->reference_no ?? 'N/A' }} • Date: {{ $purchase->purchase_date->format('d M Y') }}
+                </p>
+            </div>
+        </div>
 
-    <div class="purchase-info">
-        <h2>Purchase Details</h2>
-        <div class="purchase-details">
-            <div class="detail-item">
-                <div class="detail-label">Supplier</div>
-                <div class="detail-value">
-                    <a href="{{ route('suppliers.ledger', $purchase->supplier->id) }}" style="color:#2563eb; text-decoration:none;">
-                        {{ $purchase->supplier->name }}
-                    </a>
+        <div class="financial-stats">
+            <div class="stat-badge">
+                <div class="label">Total Amount</div>
+                <div class="value">Rs {{ number_format($purchase->total_amount) }}</div>
+            </div>
+            <div class="stat-badge">
+                <div class="label">Paid</div>
+                <div class="value" style="color: var(--success)">Rs {{ number_format($purchase->paid_amount) }}</div>
+            </div>
+            <div class="stat-badge highlight">
+                <div class="label">Remaining</div>
+                <div class="value" style="color: var(--danger)">Rs {{ number_format($purchase->remaining_amount) }}
                 </div>
             </div>
-            <div class="detail-item">
-                <div class="detail-label">Item</div>
-                <div class="detail-value">{{ $purchase->item->name ?? 'N/A' }}</div>
+        </div>
+    </div>
+
+    <!-- History Table Card -->
+    <div class="history-card">
+        <div class="action-bar">
+            <h3 class="card-title">Transaction History</h3>
+            <div class="action-buttons no-print">
+                @if($purchase->remaining_amount > 0)
+                    <button onclick="openPurchasePaymentModal()" class="btn btn-warning"
+                        style="background: #f59e0b; color: white;">
+                        💰 Add Payment
+                    </button>
+                @endif
+                <button onclick="window.print()" class="btn btn-secondary">
+                    🖨️ Print
+                </button>
             </div>
-            <div class="detail-item">
-                <div class="detail-label">Purchase Date</div>
-                <div class="detail-value">{{ $purchase->purchase_date->format('d M Y') }}</div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Reference / Person</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($purchase->paymentHistory as $payment)
+                        <tr>
+                            <td>{{ $payment->payment_date->format('d M Y, h:i A') }}</td>
+                            <td><strong style="color: #ef4444;">Rs {{ number_format($payment->amount) }}</strong></td>
+                            <td>
+                                <span class="badge 
+                                    {{ $payment->payment_method == 'Cash' ? 'badge-success' : '' }}
+                                    {{ $payment->payment_method == 'Online' ? 'badge-info' : '' }}
+                                    {{ $payment->payment_method == 'Check' ? 'badge-warning' : '' }}">
+                                    {{ $payment->payment_method }}
+                                </span>
+                            </td>
+                            <td>{{ $payment->person_reference ?? '-' }}</td>
+                            <td>{{ $payment->notes ?? '-' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <div class="icon" style="font-size: 30px; margin-bottom: 10px;">💸</div>
+                                <p>No payments recorded yet.</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="margin-top: 24px;" class="no-print">
+        <a href="{{ route('suppliers.ledger', $purchase->supplier_id) }}" class="btn btn-secondary">← Back to Ledger</a>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="purchasePaymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Payment</h3>
+                <button onclick="closePurchasePaymentModal()"
+                    style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
             </div>
-            <div class="detail-item">
-                <div class="detail-label">Reference No</div>
-                <div class="detail-value">{{ $purchase->reference_no ?? 'N/A' }}</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="payment-summary">
-        <div class="summary-card">
-            <div class="label">Total Amount</div>
-            <div class="value total">Rs {{ number_format($purchase->total_amount) }}</div>
-        </div>
-        <div class="summary-card">
-            <div class="label">Total Paid</div>
-            <div class="value paid">Rs {{ number_format($purchase->paid_amount) }}</div>
-        </div>
-        <div class="summary-card">
-            <div class="label">Remaining</div>
-            <div class="value remaining">Rs {{ number_format($purchase->remaining_amount) }}</div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2 style="margin-bottom: 20px;">💰 Payment History</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date & Time</th>
-                    <th>Amount</th>
-                    <th>Payment Method</th>
-                    <th>Person + Reference</th>
-                    <th>Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($purchase->paymentHistory as $payment)
-                <tr>
-                    <td>{{ $payment->payment_date->format('d M Y, h:i A') }}</td>
-                    <td><strong style="color: #10b981;">Rs {{ number_format($payment->amount) }}</strong></td>
-                    <td>
-                        @if($payment->payment_method == 'Cash')
-                            <span class="badge badge-cash">💵 Cash</span>
-                        @elseif($payment->payment_method == 'Online')
-                            <span class="badge badge-online">💳 Online</span>
-                        @else
-                            <span class="badge badge-check">🏦 Check</span>
-                        @endif
-                    </td>
-                    <td>{{ $payment->person_reference ?? '-' }}</td>
-                    <td>{{ $payment->notes ?? '-' }}</td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" style="text-align: center; color: #999; padding: 40px;">No payments recorded yet</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <div class="card" style="margin-top: 20px;">
-        <a href="/suppliers/{{ $purchase->supplier_id }}/ledger" class="btn btn-secondary">← Back to Supplier Ledger</a>
-        <a href="/purchases/{{ $purchase->id }}" class="btn btn-primary" style="margin-left: 10px;">View Purchase Details</a>
-    </div>
-
-    <!-- Purchase Payment Modal -->
-    <div id="purchasePaymentModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
-        <div style="background:white; padding:30px; border-radius:10px; min-width:400px; max-width:90vw; box-shadow:0 4px 12px rgba(0,0,0,0.3); position:relative;">
-            <h3 style="margin-bottom:20px; color:#ef4444;">💰 Add Payment to Supplier</h3>
             <form id="purchasePaymentForm" action="/purchases/{{ $purchase->id }}/add-payment" method="POST">
                 @csrf
-                
-                <div style="margin-bottom:15px;">
-                    <label for="purchase_payment_amount" style="display:block; margin-bottom:5px; font-weight:600;">Amount (Rs) *</label>
-                    <input type="number" id="purchase_payment_amount" name="amount" min="1" step="0.01" max="{{ $purchase->remaining_amount }}" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
-                    <small style="color:#666; font-size:12px;">Remaining: Rs {{ number_format($purchase->remaining_amount) }}</small>
-                </div>
-                
-                <div style="margin-bottom:15px;">
-                    <label for="purchase_payment_method" style="display:block; margin-bottom:5px; font-weight:600;">Payment Method *</label>
-                    <select id="purchase_payment_method" name="payment_method" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
-                        <option value="Cash" selected>Cash</option>
-                        <option value="Online">Online</option>
-                        <option value="Check">Check</option>
-                    </select>
-                </div>
-                
-                <div style="margin-bottom:15px;">
-                    <label for="purchase_person_reference" style="display:block; margin-bottom:5px; font-weight:600;">Person + Reference</label>
-                    <input type="text" id="purchase_person_reference" name="person_reference" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;" placeholder="e.g., John Doe - PO-123">
-                </div>
-                
-                <div style="margin-bottom:20px;">
-                    <label for="purchase_payment_date" style="display:block; margin-bottom:5px; font-weight:600;">Date & Time *</label>
-                    <input type="datetime-local" id="purchase_payment_date" name="payment_date" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd;">
-                </div>
-                
-                <div style="display:flex; gap:10px;">
-                    <button type="submit" class="btn btn-primary" style="flex:1;">Add Payment</button>
-                    <button type="button" class="btn btn-secondary" onclick="closePurchasePaymentModal()" style="flex:1;">Cancel</button>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Amount (Rs) <span style="color:var(--danger)">*</span></label>
+                        <input type="number" name="amount" min="1" step="0.01" max="{{ $purchase->remaining_amount }}"
+                            value="{{ $purchase->remaining_amount }}" required autofocus>
+                        <small style="color:var(--text-light); margin-top:4px; display:block;">
+                            Max Payable: Rs {{ number_format($purchase->remaining_amount) }}
+                        </small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Payment Method</label>
+                            <select name="payment_method" required>
+                                <option value="Cash">Cash</option>
+                                <option value="Online">Online</option>
+                                <option value="Check">Check</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Date</label>
+                            <input type="datetime-local" id="purchase_payment_date" name="payment_date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Reference / Person</label>
+                        <input type="text" name="person_reference" placeholder="e.g. John Doe / PO-001">
+                    </div>
+
+                    <div class="form-actions" style="justify-content: flex-end; margin-top: 10px;">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closePurchasePaymentModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary"
+                            style="background: #f59e0b; border-color: #f59e0b;">Confirm Payment</button>
+                    </div>
                 </div>
             </form>
-            <button onclick="closePurchasePaymentModal()" style="position:absolute; top:10px; right:15px; background:none; border:none; font-size:24px; color:#888; cursor:pointer;">&times;</button>
         </div>
     </div>
 
     <script>
-    function openPurchasePaymentModal() {
-        document.getElementById('purchasePaymentModal').style.display = 'flex';
-        
-        // Set current date and time
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('purchase_payment_date').value = `${year}-${month}-${day}T${hours}:${minutes}`;
-    }
-    
-    function closePurchasePaymentModal() {
-        document.getElementById('purchasePaymentModal').style.display = 'none';
-    }
-    
-    // Close modal on ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closePurchasePaymentModal();
-    });
+        function openPurchasePaymentModal() {
+            const modal = document.getElementById('purchasePaymentModal');
+            modal.style.display = 'flex';
+
+            // Set current date/time
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('purchase_payment_date').value = now.toISOString().slice(0, 16);
+        }
+
+        function closePurchasePaymentModal() {
+            document.getElementById('purchasePaymentModal').style.display = 'none';
+        }
+
+        // Close on outside click
+        window.onclick = function (event) {
+            const modal = document.getElementById('purchasePaymentModal');
+            if (event.target == modal) {
+                closePurchasePaymentModal();
+            }
+        }
+
+        // Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closePurchasePaymentModal();
+        });
     </script>
 </x-layout>

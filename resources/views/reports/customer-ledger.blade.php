@@ -24,27 +24,54 @@
         .customer-link:hover { text-decoration: underline; }
 
         @media print {
-        body { background: white; }
-        header, nav, .page-header .btn, button, .no-print { display: none !important; }
-        .card, .table-card { box-shadow: none; border: 1px solid #ddd; }
+        @page { margin: 1cm; size: landscape; }
+        body { background: white !important; color: black !important; }
+        .no-print, .sidebar, .top-bar, .actions, .btn { display: none !important; }
+        .app-container { display: block !important; margin: 0 !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        .card, .table-card { box-shadow: none !important; border: 1px solid #eee !important; padding: 10px !important;
+        margin-bottom: 20px !important; break-inside: avoid; }
+
+        /* Header Visibility */
         .print-header {
         display: flex !important;
         justify-content: space-between;
-        align-items: flex-start;
-        padding: 10px 0;
-        border-bottom: 2px solid #333;
-        margin-bottom: 16px;
+        align-items: center;
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
         }
-        .print-header img { height: 60px; }
-        @page { margin: 1cm; size: landscape; }
+        .company-branding { display: flex; align-items: center; gap: 15px; }
+        .company-logo { font-size: 32px; }
+        .company-info h1 { margin: 0; font-size: 24px; font-weight: bold; color: black !important; letter-spacing: 1px;
+        }
+        .company-info p { margin: 2px 0 0; font-size: 11px; color: #555 !important; text-transform: uppercase;
+        letter-spacing: 2px;}
+        .document-info { text-align: right; }
+        .document-info h2 { margin: 0 0 5px; font-size: 18px; font-weight: bold; text-transform: uppercase; color: black
+        !important; }
+        .document-info p { margin: 0; font-size: 12px; color: #333 !important; }
+
+        /* Table Improvements */
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 9pt !important; }
+        th { background: #f8f8f8 !important; color: black !important; font-weight: bold !important; border-bottom: 2px
+        solid #000 !important; padding: 8px !important; }
+        td { border-bottom: 1px solid #ddd !important; padding: 8px !important; color: black !important; }
+        tr:last-child td { border-bottom: none !important; }
         }
     </x-slot:styles>
 
     <div class="print-header">
-        <img src="/images/alnafi.png" alt="Logo">
-        <div style="flex:1;">
-            <div style="font-size:18px; font-weight:700;">Customer Ledger Report</div>
-            <div style="font-size:11px; color:#666;">Generated: {{ now()->format('d M Y') }}</div>
+        <div class="company-branding">
+            <div class="company-logo">✈️</div>
+            <div class="company-info">
+                <h1>FM Travel</h1>
+                <p>Management System</p>
+            </div>
+        </div>
+        <div class="document-info">
+            <h2>Customer Balances Report</h2>
+            <p>Generated: {{ now()->format('d M Y') }}</p>
         </div>
     </div>
 

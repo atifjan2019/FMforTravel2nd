@@ -85,35 +85,54 @@
         .print-only, .print-header, .print-footer { display: none; }
 
         @media print {
-        body { background: white; -webkit-print-color-adjust: exact; }
-        .no-print, .sidebar, .top-bar, .sale-header { display: none !important; }
-        .print-only { display: block; }
+        @page { margin: 1cm; size: A4; }
+        body { background: white !important; color: black !important; }
+        .no-print, .sidebar, .top-bar, .actions, .btn, .sale-header { display: none !important; }
+        .app-container { display: block !important; margin: 0 !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        .card {
+        box-shadow: none !important;
+        border: 1px solid #eee !important;
+        padding: 0 !important;
+        margin-bottom: 20px !important;
+        break-inside: avoid;
+        background: white !important;
+        }
 
+        /* Header Visibility */
         .print-header {
-        display: flex;
+        display: flex !important;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 30px;
-        border-bottom: 2px solid var(--primary);
-        padding-bottom: 20px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
         }
+        .company-branding { display: flex; align-items: center; gap: 15px; }
+        .company-logo { font-size: 32px; }
+        .company-info h1 { margin: 0; font-size: 24px; font-weight: bold; color: black !important; letter-spacing: 1px;
+        }
+        .company-info p { margin: 2px 0 0; font-size: 11px; color: #555 !important; text-transform: uppercase;
+        letter-spacing: 2px;}
+        .document-info { text-align: right; }
+        .document-info h2 { margin: 0 0 5px; font-size: 18px; font-weight: bold; text-transform: uppercase; color: black
+        !important; padding: 5px 10px; border: 2px solid #000; display: inline-block;}
+        .document-info p { margin: 4px 0 0; font-size: 12px; color: #333 !important; }
+
+        .info-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; margin-bottom: 20px
+        !important; }
+        .info-card { background: white !important; border: 1px solid #ddd !important; padding: 15px !important; }
+        .section-title { font-size: 14px !important; margin-top: 20px !important; border-bottom: 1px solid #000
+        !important; margin-bottom: 15px !important; }
 
         .print-footer {
         display: block;
         text-align: center;
         margin-top: 50px;
-        padding-top: 20px;
-        border-top: 1px solid #ddd;
-        font-size: 12px;
-        color: #666;
+        padding-top: 10px;
+        border-top: 1px solid #000;
+        font-size: 10px;
         }
-
-        .main-content { margin: 0; padding: 0; }
-        .card { box-shadow: none; border: none; padding: 0; }
-
-        .info-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .info-card { background: white; border: 1px solid #ddd; padding: 15px; }
-        .section-title { font-size: 16px; margin-top: 30px; border-bottom: 2px solid #eee; }
         }
     </x-slot:styles>
 
@@ -134,18 +153,17 @@
 
     <!-- Print Header (Visible only on print) -->
     <div class="print-header">
-        <div class="logo">
-            <span style="font-size: 32px;">✈️</span>
-            <div>
-                <h1 style="margin: 0; font-size: 24px; color: var(--text);">FM Travel</h1>
-                <p style="margin: 2px 0 0; font-size: 12px; color: var(--text-light);">Management System</p>
+        <div class="company-branding">
+            <div class="company-logo">✈️</div>
+            <div class="company-info">
+                <h1>FM Travel</h1>
+                <p>Management System</p>
             </div>
         </div>
-        <div class="invoice-details" style="text-align: right;">
-            <h2 style="margin: 0 0 4px; font-size: 20px; color: var(--primary-dark);">INVOICE</h2>
-            <p style="margin: 0; font-size: 12px; color: var(--text);">Date: {{ $income->income_date->format('d M Y') }}
-            </p>
-            <p style="margin: 0; font-size: 12px; color: var(--text);">Ref: {{ $income->reference_no ?? 'N/A' }}</p>
+        <div class="document-info">
+            <h2>INVOICE</h2>
+            <p><strong>Ref:</strong> {{ $income->reference_no ?? 'N/A' }}</p>
+            <p><strong>Date:</strong> {{ $income->income_date->format('d M Y') }}</p>
         </div>
     </div>
 
