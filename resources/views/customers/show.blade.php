@@ -1,172 +1,279 @@
 <x-layout title="Customer Details - FM Travel Manager" pageTitle="{{ $customer->name }}"
     pageSubtitle="Customer profile and financial summary">
     <x-slot:styles>
-        .profile-header {
-        background: linear-gradient(135deg, var(--accent) 0%, #3d3d3d 100%);
-        color: white;
-        padding: 24px;
+        .profile-card {
+        background: white;
         border-radius: 16px;
-        margin-bottom: 20px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        }
+
+        .profile-left {
         display: flex;
         align-items: center;
         gap: 20px;
-        flex-wrap: wrap;
         }
 
-        .profile-avatar {
-        width: 70px;
-        height: 70px;
-        border-radius: 18px;
-        background: var(--primary);
+        .avatar-large {
+        width: 80px;
+        height: 80px;
+        background: var(--primary); /* Warm Yellow */
+        color: var(--accent); /* Dark Grey */
+        font-size: 32px;
+        font-weight: 700;
+        border-radius: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--accent);
-        font-size: 28px;
-        font-weight: 600;
+        box-shadow: 0 8px 20px rgba(212, 160, 23, 0.3);
         }
 
-        .profile-info h2 {
-        font-size: 22px;
-        margin-bottom: 6px;
+        .profile-details h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 4px;
         }
 
-        .profile-info p {
-        opacity: 0.8;
-        font-size: 13px;
-        }
-
-        .profile-actions {
-        margin-left: auto;
+        .profile-meta {
         display: flex;
-        gap: 10px;
+        align-items: center;
+        gap: 12px;
+        color: var(--text-light);
+        font-size: 14px;
         }
 
-        .info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        .stats-container {
+        display: flex;
         gap: 15px;
-        margin-bottom: 20px;
         }
 
-        .info-card {
-        background: #f9f5eb;
-        padding: 16px;
+        .stat-box {
+        background: var(--bg);
+        padding: 15px 20px;
         border-radius: 12px;
-        border-left: 4px solid var(--primary);
+        text-align: center;
+        border: 1px solid var(--border);
+        min-width: 120px;
         }
 
-        .info-label {
-        font-size: 10px;
+        .stat-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--text-light);
+        font-weight: 600;
+        margin-bottom: 4px;
+        }
+
+        .stat-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+        }
+
+        .stat-value.highlight {
+        color: var(--primary-dark);
+        }
+
+        .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        }
+
+        .info-list {
+        list-style: none;
+        }
+
+        .info-list li {
+        padding: 15px 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        }
+
+        .info-list li:last-child {
+        border-bottom: none;
+        }
+
+        .info-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--bg);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: var(--primary-dark);
+        }
+
+        .info-content label {
+        display: block;
+        font-size: 11px;
         color: var(--text-light);
         text-transform: uppercase;
-        font-weight: 600;
-        margin-bottom: 6px;
+        margin-bottom: 2px;
         }
 
-        .info-value {
-        font-size: 14px;
+        .info-content span {
+        font-size: 15px;
+        font-weight: 500;
         color: var(--text);
-        font-weight: 600;
         }
 
-        .financial-summary {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        color: var(--accent);
-        padding: 24px;
-        border-radius: 16px;
+        .action-card {
+        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        color: white;
+        }
+
+        .action-card .card-title {
+        color: white;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 15px;
         margin-bottom: 20px;
         }
 
-        .financial-summary h3 {
-        margin-bottom: 18px;
-        font-size: 16px;
-        }
-
-        .financial-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-        }
-
-        .financial-item {
-        text-align: center;
-        padding: 14px;
-        background: rgba(255, 255, 255, 0.2);
+        .quick-action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: rgba(255,255,255,0.05);
+        color: white;
+        padding: 15px;
         border-radius: 10px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .financial-item .label {
-        font-size: 10px;
-        opacity: 0.9;
-        margin-bottom: 6px;
-        text-transform: uppercase;
+        .quick-action-btn:hover {
+        background: var(--primary);
+        color: var(--accent);
+        transform: translateX(5px);
         }
 
-        .financial-item .amount {
-        font-size: 20px;
-        font-weight: bold;
+        @media (max-width: 900px) {
+        .profile-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+        padding: 20px;
         }
-
-        @media (max-width: 768px) {
-        .profile-header { flex-direction: column; text-align: center; }
-        .profile-actions { margin-left: 0; }
-        .financial-grid { grid-template-columns: 1fr; }
+        .profile-left {
+        flex-direction: column;
+        }
+        .stats-container {
+        width: 100%;
+        justify-content: space-between;
+        }
+        .stat-box {
+        flex: 1;
+        min-width: auto;
+        padding: 10px;
+        }
+        .content-grid {
+        grid-template-columns: 1fr;
+        }
         }
     </x-slot:styles>
 
-    <div class="profile-header">
-        <div class="profile-avatar">{{ strtoupper(substr($customer->name, 0, 1)) }}</div>
-        <div class="profile-info">
-            <h2>{{ $customer->name }}</h2>
-            <p>📱 {{ $customer->phone ?? 'No phone' }} •
-                <span
-                    class="badge {{ $customer->status == 'active' ? 'badge-success' : 'badge-danger' }}">{{ ucfirst($customer->status) }}</span>
-            </p>
+    <!-- Hero Section -->
+    <div class="profile-card">
+        <div class="profile-left">
+            <div class="avatar-large">
+                {{ strtoupper(substr($customer->name, 0, 1)) }}
+            </div>
+            <div class="profile-details">
+                <h2>{{ $customer->name }}</h2>
+                <div class="profile-meta">
+                    <span class="badge {{ $customer->status == 'active' ? 'badge-success' : 'badge-danger' }}">
+                        {{ ucfirst($customer->status) }}
+                    </span>
+                    <span>• Balance Due: <strong style="color: var(--danger)">Rs
+                            {{ number_format($customer->balance) }}</strong></span>
+                </div>
+            </div>
         </div>
-        <div class="profile-actions">
-            <a href="{{ route('customers.ledger', $customer->id) }}" class="btn btn-success">📒 Ledger</a>
-            <a href="/customers/{{ $customer->id }}/edit" class="btn btn-secondary">✏️ Edit</a>
-        </div>
-    </div>
 
-    <div class="card">
-        <h3 class="card-title" style="margin-bottom: 16px;">📋 Contact Information</h3>
-        <div class="info-grid">
-            <div class="info-card">
-                <div class="info-label">📞 Phone</div>
-                <div class="info-value">{{ $customer->phone ?? 'Not provided' }}</div>
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-label">Total Sales</div>
+                <div class="stat-value">Rs {{ number_format($customer->total_income) }}</div>
             </div>
-            <div class="info-card">
-                <div class="info-label">📧 Email</div>
-                <div class="info-value">{{ $customer->email ?? 'Not provided' }}</div>
-            </div>
-            <div class="info-card">
-                <div class="info-label">📍 Address</div>
-                <div class="info-value">{{ $customer->address ?? 'Not provided' }}</div>
+            <div class="stat-box">
+                <div class="stat-label">Total Paid</div>
+                <div class="stat-value">Rs {{ number_format($customer->total_paid) }}</div>
             </div>
         </div>
     </div>
 
-    <div class="financial-summary">
-        <h3>💰 Financial Summary</h3>
-        <div class="financial-grid">
-            <div class="financial-item">
-                <div class="label">Total Sales</div>
-                <div class="amount">Rs {{ number_format($customer->total_income) }}</div>
-            </div>
-            <div class="financial-item">
-                <div class="label">Total Paid</div>
-                <div class="amount">Rs {{ number_format($customer->total_paid) }}</div>
-            </div>
-            <div class="financial-item">
-                <div class="label">Balance Due</div>
-                <div class="amount">Rs {{ number_format($customer->balance) }}</div>
+    <div class="content-grid">
+        <!-- Contact Information -->
+        <div class="card">
+            <h3 class="card-title" style="margin-bottom: 5px;">Contact Details</h3>
+            <ul class="info-list">
+                <li>
+                    <div class="info-icon">📞</div>
+                    <div class="info-content">
+                        <label>Phone Number</label>
+                        <span>{{ $customer->phone ?? 'Not provided' }}</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="info-icon">📧</div>
+                    <div class="info-content">
+                        <label>Email Address</label>
+                        <span>{{ $customer->email ?? 'Not provided' }}</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="info-icon">📍</div>
+                    <div class="info-content">
+                        <label>Address</label>
+                        <span>{{ $customer->address ?? 'Not provided' }}</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card action-card">
+            <h3 class="card-title">Quick Actions</h3>
+
+            <a href="{{ route('customers.ledger', $customer->id) }}" class="quick-action-btn">
+                <span>View Full Ledger</span>
+                <span>→</span>
+            </a>
+
+            <a href="{{ route('customers.edit', $customer->id) }}" class="quick-action-btn">
+                <span>Edit Profile</span>
+                <span>✎</span>
+            </a>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <form action="{{ route('customers.destroy', $customer->id) }}" method="POST"
+                    onsubmit="return confirm('Are you sure? This cannot be undone.');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" style="width: 100%;">Delete Customer</button>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <a href="/customers" class="btn btn-secondary">← Back to Customers</a>
+    <div style="margin-top: 20px;">
+        <a href="{{ route('customers.index') }}" class="btn btn-secondary">← Back to Customers List</a>
     </div>
+
 </x-layout>
