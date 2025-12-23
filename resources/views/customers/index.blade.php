@@ -29,38 +29,33 @@
         margin-bottom: 14px;
         }
 
-        .customer-avatar {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        background: var(--accent);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--primary-light);
-        font-size: 16px;
-        font-weight: 600;
-        }
 
         .customer-name {
         font-size: 14px;
         font-weight: 600;
         color: var(--text);
         margin-bottom: 2px;
+        text-transform: capitalize;
         }
 
         .customer-phone {
         font-size: 11px;
         color: var(--text-light);
+        text-decoration: none;
+        display: inline-block;
+        }
+
+        .customer-phone:hover {
+        color: var(--primary-dark);
         }
 
         .customer-stats {
         display: flex;
-        gap: 12px;
-        margin-bottom: 14px;
-        padding: 12px;
-        background: #f9f5eb;
-        border-radius: 10px;
+        gap: 15px;
+        margin-bottom: 12px;
+        padding: 4px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
         }
 
         .customer-stat {
@@ -76,10 +71,10 @@
         }
 
         .customer-stat .value {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 700;
         color: var(--text);
-        margin-top: 2px;
+        margin-top: 1px;
         }
 
         .customer-stat .value.green { color: #2e7d32; }
@@ -123,12 +118,10 @@
             @forelse($customers as $customer)
                 <div class="customer-card" data-name="{{ strtolower($customer->name) }}">
                     <div class="customer-header">
-                        <div class="customer-avatar">
-                            {{ strtoupper(substr($customer->name, 0, 1)) }}
-                        </div>
                         <div>
                             <div class="customer-name">{{ $customer->name }}</div>
-                            <div class="customer-phone">📱 {{ $customer->phone ?? 'No phone' }}</div>
+                            <a href="tel:{{ $customer->phone }}" class="customer-phone">📱
+                                {{ $customer->phone ?? 'No phone' }}</a>
                         </div>
                         <span class="badge {{ $customer->status == 'active' ? 'badge-success' : 'badge-danger' }}"
                             style="margin-left: auto;">
