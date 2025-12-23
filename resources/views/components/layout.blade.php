@@ -52,7 +52,7 @@
         /* Sidebar */
         .sidebar {
             width: 240px;
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
+            background: #111111;
             padding: 0;
             position: fixed;
             height: 100vh;
@@ -63,23 +63,30 @@
         }
 
         .sidebar-header {
-            padding: 24px 20px;
+            padding: 20px;
             text-align: center;
-            background: linear-gradient(135deg, rgba(212, 160, 23, 0.15) 0%, rgba(245, 197, 24, 0.05) 100%);
-            border-bottom: 1px solid rgba(212, 160, 23, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             margin-bottom: 8px;
         }
 
         .sidebar-logo {
-            width: 40px;
-            height: 40px;
+            width: 80px;
+            height: 80px;
             background: white;
-            border-radius: 10px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        .sidebar-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .sidebar-header h1 {
@@ -110,7 +117,7 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            color: rgba(255, 255, 255, 0.7);
+            color: #ffffff;
             text-decoration: none;
             border-radius: 12px;
             font-size: 13px;
@@ -695,12 +702,9 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-logo p-1 overflow-hidden bg-white">
-                    <img src="{{ asset('images/alnafi.jpeg') }}" class="w-full h-full object-contain"
-                        alt="Al Nafi Logo">
+                <div class="sidebar-logo">
+                    <img src="{{ asset('images/alnafi.jpeg') }}" alt="Al Nafi Logo">
                 </div>
-                <h1>Al Nafi</h1>
-                <p>Travels</p>
             </div>
 
             <nav>
