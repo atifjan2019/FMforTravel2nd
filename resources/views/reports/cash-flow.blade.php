@@ -1,4 +1,4 @@
-<x-layout title="Cash Flow - FM Travel Manager" pageTitle="Cash Flow" pageSubtitle="Monitor cash inflows and outflows">
+<x-layout title="Cash Flow - Al Nafi Travels" pageTitle="Cash Flow" pageSubtitle="Monitor cash inflows and outflows">
     <x-slot:styles>
         .metrics-grid {
         display: grid;

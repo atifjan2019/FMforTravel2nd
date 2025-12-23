@@ -1,4 +1,4 @@
-<x-layout title="Customer Details - FM Travel Manager" pageTitle="{{ $customer->name }}"
+<x-layout title="Customer Details - Al Nafi Travels" pageTitle="{{ $customer->name }}"
     pageSubtitle="Customer profile and financial summary">
     <x-slot:styles>
         .profile-card {

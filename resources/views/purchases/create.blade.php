@@ -1,4 +1,4 @@
-<x-layout title="Add Purchase - FM Travel Manager" pageTitle="Add Purchase" pageSubtitle="Record a new purchase">
+<x-layout title="Add Purchase - Al Nafi Travels" pageTitle="Add Purchase" pageSubtitle="Record a new purchase">
     <x-slot:styles>
         .form-card { max-width: 550px; }
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }

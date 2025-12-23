@@ -1,4 +1,4 @@
-<x-layout title="Reports - FM Travel Manager" pageTitle="Reports" pageSubtitle="View business reports and analytics">
+<x-layout title="Reports - Al Nafi Travels" pageTitle="Reports" pageSubtitle="View business reports and analytics">
     <x-slot:styles>
         .report-grid {
         display: grid;

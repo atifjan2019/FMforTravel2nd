@@ -1,4 +1,4 @@
-<x-layout title="Profit & Loss - FM Travel Manager" pageTitle="Profit & Loss"
+<x-layout title="Profit & Loss - Al Nafi Travels" pageTitle="Profit & Loss"
     pageSubtitle="Financial summary and profitability analysis">
     <x-slot:styles>
         .metrics-grid {

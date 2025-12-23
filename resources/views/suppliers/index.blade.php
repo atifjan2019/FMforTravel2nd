@@ -1,4 +1,4 @@
-<x-layout title="Suppliers - FM Travel Manager" pageTitle="Suppliers" pageSubtitle="Manage your suppliers and vendors">
+<x-layout title="Suppliers - Al Nafi Travels" pageTitle="Suppliers" pageSubtitle="Manage your suppliers and vendors">
     <x-slot:styles>
         .supplier-grid {
         display: grid;

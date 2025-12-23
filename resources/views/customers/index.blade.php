@@ -1,4 +1,4 @@
-<x-layout title="Customers - FM Travel Manager" pageTitle="Customers" pageSubtitle="Manage all your customers here">
+<x-layout title="Customers - Al Nafi Travels" pageTitle="Customers" pageSubtitle="Manage all your customers here">
     <x-slot:styles>
         .customer-grid {
         display: grid;

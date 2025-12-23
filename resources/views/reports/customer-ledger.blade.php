@@ -1,4 +1,4 @@
-<x-layout title="Customer Ledger - FM Travel Manager" pageTitle="Customer Ledger"
+<x-layout title="Customer Ledger - Al Nafi Travels" pageTitle="Customer Ledger"
     pageSubtitle="Receivables tracking and customer balances">
     <x-slot:styles>
         .print-header { display: none; }
@@ -65,7 +65,7 @@
         <div class="company-branding">
             <div class="company-logo">✈️</div>
             <div class="company-info">
-                <h1>FM Travel</h1>
+                <h1>Al Nafi Travels</h1>
                 <p>Management System</p>
             </div>
         </div>

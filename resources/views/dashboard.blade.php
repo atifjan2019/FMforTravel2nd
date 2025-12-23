@@ -1,4 +1,4 @@
-<x-layout title="Dashboard - FM Travel Manager" pageTitle="Dashboard"
+<x-layout title="Dashboard - Al Nafi Travels" pageTitle="Dashboard"
     pageSubtitle="Welcome back! Here's your business overview">
     <x-slot:styles>
         .quick-actions {

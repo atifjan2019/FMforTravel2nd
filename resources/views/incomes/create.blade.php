@@ -1,4 +1,4 @@
-<x-layout title="Add Sale - FM Travel Manager" pageTitle="Add New Sale" pageSubtitle="Record a new sale/income">
+<x-layout title="Add Sale - Al Nafi Travels" pageTitle="Add New Sale" pageSubtitle="Record a new sale/income">
     <x-slot:styles>
         .form-card {
         max-width: 600px;

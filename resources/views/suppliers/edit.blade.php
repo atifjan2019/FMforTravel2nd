@@ -1,4 +1,4 @@
-<x-layout title="Edit Supplier - FM Travel Manager" pageTitle="Edit Supplier" pageSubtitle="Update supplier details">
+<x-layout title="Edit Supplier - Al Nafi Travels" pageTitle="Edit Supplier" pageSubtitle="Update supplier details">
     <x-slot:styles>
         .form-card { max-width: 500px; }
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }

@@ -1,4 +1,4 @@
-<x-layout title="Purchases - FM Travel Manager" pageTitle="Purchases"
+<x-layout title="Purchases - Al Nafi Travels" pageTitle="Purchases"
     pageSubtitle="Track all your purchases from suppliers">
     <x-slot:styles>
         .page-actions {

@@ -1,4 +1,4 @@
-<x-layout title="Sales Report - FM Travel Manager" pageTitle="Sales Report"
+<x-layout title="Sales Report - Al Nafi Travels" pageTitle="Sales Report"
     pageSubtitle="Revenue analysis and top performers">
     <x-slot:styles>
         .metrics-grid {

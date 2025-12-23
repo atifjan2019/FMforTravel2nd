@@ -1,4 +1,4 @@
-<x-layout title="Expense Details - FM Travel Manager" pageTitle="Expense Details"
+<x-layout title="Expense Details - Al Nafi Travels" pageTitle="Expense Details"
     pageSubtitle="View expense transaction details">
     <x-slot:styles>
         .expense-header {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'FM Travel Manager' }}</title>
+    <title>{{ $title ?? 'Al Nafi Travels' }}</title>
     <link rel="icon" type="image/png" href="{{ asset('images/alnafi.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
@@ -649,7 +649,7 @@
             margin: 0;
             font-size: 20px;
         }
-        
+
         /* Adjust Main Content */
         .app-container.sidebar-collapsed .main-content {
             margin-left: 80px;
@@ -672,7 +672,7 @@
         }
 
         .sidebar-toggle-btn:hover {
-            background: rgba(0,0,0,0.05);
+            background: rgba(0, 0, 0, 0.05);
             color: var(--primary-dark);
         }
 
@@ -680,8 +680,10 @@
             .app-container.sidebar-collapsed .main-content {
                 margin-left: 0;
             }
+
             .sidebar-toggle-btn {
-                display: none; /* Hide desktop toggle on mobile */
+                display: none;
+                /* Hide desktop toggle on mobile */
             }
         }
 
@@ -694,9 +696,11 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-logo">✈️</div>
-                <h1>FM Travel</h1>
-                <p>Management System</p>
+                <div class="sidebar-logo p-1 overflow-hidden bg-white">
+                    <img src="{{ asset('images/alnafi.png') }}" class="w-full h-full object-contain" alt="Al Nafi Logo">
+                </div>
+                <h1>Al Nafi</h1>
+                <p>Travels</p>
             </div>
 
             <nav>
@@ -776,7 +780,7 @@
                     <button id="sidebarToggle" class="sidebar-toggle-btn">☰</button>
                     <div>
                         <h1 class="page-title">{{ $pageTitle ?? 'Dashboard' }}</h1>
-                        <p class="page-subtitle">{{ $pageSubtitle ?? 'Welcome to FM Travel Manager' }}</p>
+                        <p class="page-subtitle">{{ $pageSubtitle ?? 'Welcome to Al Nafi Travels' }}</p>
                     </div>
                 </div>
                 <div class="user-menu">
@@ -800,7 +804,7 @@
         const sidebar = document.getElementById('sidebar');
         const container = document.querySelector('.app-container');
         const toggleBtn = document.getElementById('sidebarToggle');
-        
+
         // Load persisted state
         if (localStorage.getItem('sidebar-collapsed') === 'true') {
             sidebar.classList.add('collapsed');

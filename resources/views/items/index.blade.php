@@ -1,4 +1,4 @@
-<x-layout title="Items - FM Travel Manager" pageTitle="Items" pageSubtitle="Manage your products and services">
+<x-layout title="Items - Al Nafi Travels" pageTitle="Items" pageSubtitle="Manage your products and services">
     <x-slot:styles>
         .page-actions {
         display: flex;

@@ -1,4 +1,4 @@
-<x-layout title="Supplier Details - FM Travel Manager" pageTitle="Supplier Details"
+<x-layout title="Supplier Details - Al Nafi Travels" pageTitle="Supplier Details"
     pageSubtitle="View supplier profile and financial summary">
 
     <x-slot:styles>

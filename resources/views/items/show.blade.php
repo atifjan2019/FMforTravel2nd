@@ -1,4 +1,4 @@
-<x-layout title="Item Details - FM Travel Manager" pageTitle="{{ $item->name }}"
+<x-layout title="Item Details - Al Nafi Travels" pageTitle="{{ $item->name }}"
     pageSubtitle="View item/service details">
     <x-slot:styles>
         .item-header {

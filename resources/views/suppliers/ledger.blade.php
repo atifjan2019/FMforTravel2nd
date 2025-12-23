@@ -1,4 +1,4 @@
-<x-layout title="Supplier Ledger - FM Travel Manager" pageTitle="{{ $supplier->name }}"
+<x-layout title="Supplier Ledger - Al Nafi Travels" pageTitle="{{ $supplier->name }}"
     pageSubtitle="Purchase and payment history">
     <x-slot:styles>
         .summary-grid {

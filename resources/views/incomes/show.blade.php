@@ -1,4 +1,4 @@
-<x-layout title="Sale Details - FM Travel Manager" pageTitle="Sale Details"
+<x-layout title="Sale Details - Al Nafi Travels" pageTitle="Sale Details"
     pageSubtitle="View sale transaction details for Item: {{ $income->item->name ?? 'BS' }}">
 
     <x-slot:styles>
@@ -183,7 +183,7 @@
             <div class="company-brand">
                 <img src="/images/alnafi.png" alt="Logo" class="print-logo">
                 <h1 class="no-print">INVOICE</h1>
-                <div class="subtitle">FM Travel Management System</div>
+                <div class="subtitle">Al Nafi Travels Management System</div>
             </div>
             <div class="invoice-details">
                 <div class="invoice-title">#{{ $income->reference_no ?? $income->id }}</div>

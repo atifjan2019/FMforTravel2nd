@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Login - FM Travel Manager</title>
+    <title>Login - Al Nafi Travels</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/alnafi.png') }}">
@@ -230,8 +230,10 @@
 <body>
     <div class="login-container">
         <div class="login-left">
-            <div class="icon">✈️</div>
-            <h1>FM Travel Manager</h1>
+            <div class="login-logo mb-6 bg-white p-2 rounded-2xl w-24 h-24 overflow-hidden mx-auto shadow-lg">
+                <img src="{{ asset('images/alnafi.png') }}" class="w-full h-full object-contain" alt="Al Nafi Logo">
+            </div>
+            <h1>Al Nafi Travels</h1>
             <p>Your simple solution for managing travel business finances</p>
 
             <div class="features">

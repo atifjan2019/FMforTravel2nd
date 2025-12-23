@@ -1,4 +1,4 @@
-<x-layout title="Add Expense - FM Travel Manager" pageTitle="Add Expense" pageSubtitle="Record a new expense">
+<x-layout title="Add Expense - Al Nafi Travels" pageTitle="Add Expense" pageSubtitle="Record a new expense">
     <x-slot:styles>
         .form-card { max-width: 500px; }
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }

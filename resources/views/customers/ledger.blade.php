@@ -1,4 +1,4 @@
-<x-layout title="Customer Ledger - FM Travel Manager" pageTitle="{{ $customer->name }}"
+<x-layout title="Customer Ledger - Al Nafi Travels" pageTitle="{{ $customer->name }}"
     pageSubtitle="Transaction history and balance summary">
     <x-slot:styles>
         .summary-grid {

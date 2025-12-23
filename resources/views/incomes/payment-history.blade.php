@@ -1,4 +1,4 @@
-<x-layout title="Payment History - FM Travel Manager" pageTitle="Payment History"
+<x-layout title="Payment History - Al Nafi Travels" pageTitle="Payment History"
     pageSubtitle="Tracking payments for Item: {{ $income->item->name ?? 'Service' }}">
 
     <x-slot:styles>
