@@ -19,58 +19,49 @@ class DashboardController extends Controller
         // Current Month dates
         $currentMonthStart = now()->startOfMonth();
         $currentMonthEnd = now()->endOfMonth();
-        
-        // Financial Summary - CURRENT MONTH ONLY
-        $totalIncome = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
-        $totalExpenses = Expense::whereBetween('expense_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
-        $totalPurchases = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])->sum('total_amount');
-        $totalCustomerPayments = CustomerPayment::whereBetween('payment_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
-        $totalSupplierPayments = SupplierPayment::whereBetween('payment_date', [$currentMonthStart, $currentMonthEnd])->sum('amount');
-        
+
+        // Financial Summary - LIFETIME
+        $totalIncome = Income::sum('amount');
+        $totalExpenses = Expense::sum('amount');
+        $totalPurchases = Purchase::sum('total_amount');
+        $totalCustomerPayments = CustomerPayment::sum('amount');
+        $totalSupplierPayments = SupplierPayment::sum('amount');
+
         // Calculate balances - using remaining_amount from incomes for accurate receivables
-        $customerReceivables = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
-            ->whereIn('payment_status', ['unpaid', 'partial'])
+        $customerReceivables = Income::whereIn('payment_status', ['unpaid', 'partial'])
             ->sum('remaining_amount');
         $supplierPayables = $totalPurchases - $totalSupplierPayments;
         $netProfit = $totalIncome - $totalExpenses - $totalPurchases;
-        
-        // Payment status breakdown for current month - INCOMES
-        $totalPaidAmount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])->sum('paid_amount');
-        $paidIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
-            ->where('payment_status', 'paid')->count();
-        $partialIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
-            ->where('payment_status', 'partial')->count();
-        $unpaidIncomesCount = Income::whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
-            ->where('payment_status', 'unpaid')->count();
-        
-        // Payment status breakdown for current month - PURCHASES
-        $totalPurchasesPaid = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])->sum('paid_amount');
-        $supplierPayables = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
-            ->whereIn('payment_status', ['unpaid', 'partial'])
+
+        // Payment status breakdown - INCOMES
+        $totalPaidAmount = Income::sum('paid_amount');
+        $paidIncomesCount = Income::where('payment_status', 'paid')->count();
+        $partialIncomesCount = Income::where('payment_status', 'partial')->count();
+        $unpaidIncomesCount = Income::where('payment_status', 'unpaid')->count();
+        $incomesCount = Income::count(); // Total Transactions
+
+        // Payment status breakdown - PURCHASES
+        $totalPurchasesPaid = Purchase::sum('paid_amount');
+        $supplierPayables = Purchase::whereIn('payment_status', ['unpaid', 'partial'])
             ->sum('remaining_amount');
-        $paidPurchasesCount = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
-            ->where('payment_status', 'paid')->count();
-        $partialPurchasesCount = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
-            ->where('payment_status', 'partial')->count();
-        $unpaidPurchasesCount = Purchase::whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
-            ->where('payment_status', 'unpaid')->count();
-        
-        // Recent transactions - CURRENT MONTH ONLY
+        $paidPurchasesCount = Purchase::where('payment_status', 'paid')->count();
+        $partialPurchasesCount = Purchase::where('payment_status', 'partial')->count();
+        $unpaidPurchasesCount = Purchase::where('payment_status', 'unpaid')->count();
+        $purchasesCount = Purchase::count(); // Total Transactions
+
+        // Recent transactions
         $recentIncomes = Income::with(['customer', 'item'])
-            ->whereBetween('income_date', [$currentMonthStart, $currentMonthEnd])
             ->latest()
             ->take(10)
             ->get();
-        $recentExpenses = Expense::whereBetween('expense_date', [$currentMonthStart, $currentMonthEnd])
-            ->latest()
+        $recentExpenses = Expense::latest()
             ->take(10)
             ->get();
         $recentPurchases = Purchase::with(['supplier', 'item'])
-            ->whereBetween('purchase_date', [$currentMonthStart, $currentMonthEnd])
             ->latest()
             ->take(10)
             ->get();
-        
+
         // Monthly trends (last 6 months) - MySQL compatible
         $monthlyIncome = Income::selectRaw("DATE_FORMAT(income_date, '%Y-%m') as month, SUM(amount) as total")
             ->where('income_date', '>=', now()->subMonths(6))
@@ -83,18 +74,18 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-        
+
         // Top customers and suppliers
         $topCustomers = Customer::withCount('incomes')
             ->orderBy('incomes_count', 'desc')
             ->take(5)
             ->get();
-            
+
         $topSuppliers = Supplier::withCount('purchases')
             ->orderBy('purchases_count', 'desc')
             ->take(5)
             ->get();
-        
+
         return view('dashboard', compact(
             'totalIncome',
             'totalExpenses',
@@ -107,9 +98,11 @@ class DashboardController extends Controller
             'paidIncomesCount',
             'partialIncomesCount',
             'unpaidIncomesCount',
+            'incomesCount',
             'paidPurchasesCount',
             'partialPurchasesCount',
             'unpaidPurchasesCount',
+            'purchasesCount',
             'recentIncomes',
             'recentExpenses',
             'recentPurchases',

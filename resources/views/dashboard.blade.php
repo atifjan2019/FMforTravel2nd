@@ -256,26 +256,26 @@
         <div class="stat-card">
             <div class="stat-icon income">💰</div>
             <div class="stat-info">
-                <h4>This Month Sales</h4>
-                <div class="value positive">Rs {{ number_format($currentMonthIncome ?? 0) }}</div>
-                <div class="change">{{ $incomesThisMonth ?? 0 }} transactions</div>
+                <h4>Total Sales</h4>
+                <div class="value positive">Rs {{ number_format($totalIncome ?? 0) }}</div>
+                <div class="change">{{ $incomesCount ?? 0 }} transactions</div>
             </div>
         </div>
 
         <div class="stat-card">
             <div class="stat-icon purchase">🛒</div>
             <div class="stat-info">
-                <h4>This Month Purchases</h4>
-                <div class="value">Rs {{ number_format($currentMonthPurchase ?? 0) }}</div>
-                <div class="change">{{ $purchasesThisMonth ?? 0 }} transactions</div>
+                <h4>Total Purchases</h4>
+                <div class="value">Rs {{ number_format($totalPurchases ?? 0) }}</div>
+                <div class="change">{{ $purchasesCount ?? 0 }} transactions</div>
             </div>
         </div>
 
         <div class="stat-card">
             <div class="stat-icon expense">💸</div>
             <div class="stat-info">
-                <h4>This Month Expenses</h4>
-                <div class="value negative">Rs {{ number_format($currentMonthExpense ?? 0) }}</div>
+                <h4>Total Expenses</h4>
+                <div class="value negative">Rs {{ number_format($totalExpenses ?? 0) }}</div>
             </div>
         </div>
 

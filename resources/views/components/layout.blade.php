@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Al Nafi Travels' }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/alnafi.png') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/alnafi.jpeg') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <style>
@@ -71,16 +71,15 @@
         }
 
         .sidebar-logo {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            border-radius: 14px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 24px;
-            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.4);
+            margin: 0 auto 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar-header h1 {
@@ -697,7 +696,8 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo p-1 overflow-hidden bg-white">
-                    <img src="{{ asset('images/alnafi.png') }}" class="w-full h-full object-contain" alt="Al Nafi Logo">
+                    <img src="{{ asset('images/alnafi.jpeg') }}" class="w-full h-full object-contain"
+                        alt="Al Nafi Logo">
                 </div>
                 <h1>Al Nafi</h1>
                 <p>Travels</p>
