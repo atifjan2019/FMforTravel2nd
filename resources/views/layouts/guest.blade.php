@@ -224,14 +224,34 @@
                 padding: 40px 30px;
             }
         }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 16px;
+            padding: 10px;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
     </style>
 </head>
 
 <body>
     <div class="login-container">
         <div class="login-left">
-            <div class="login-logo mb-6 bg-white p-2 rounded-2xl w-24 h-24 overflow-hidden mx-auto shadow-lg">
-                <img src="{{ asset('images/alnafi.jpeg') }}" class="w-full h-full object-contain" alt="Al Nafi Logo">
+            <div class="login-logo">
+                <img src="{{ asset('images/alnafi.jpeg') }}" alt="Al Nafi Logo">
             </div>
             <h1>Al Nafi Travels</h1>
             <p>Your simple solution for managing travel business finances</p>

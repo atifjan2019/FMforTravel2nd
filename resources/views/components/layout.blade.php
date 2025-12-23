@@ -181,7 +181,7 @@
         }
 
         .nav-section-title {
-            color: rgba(255, 255, 255, 0.35);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
